@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @Environment(\.appDependencies) private var dependencies
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
         TabView {
             TodayView()
@@ -17,6 +20,23 @@ struct MainTabView: View {
                 .tabItem {
                     Label("设置", systemImage: "gearshape")
                 }
+        }
+        .onAppear {
+            generateRecurringTasksIfNeeded()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                generateRecurringTasksIfNeeded()
+            }
+        }
+    }
+
+    private func generateRecurringTasksIfNeeded() {
+        guard let dependencies else { return }
+        do {
+            try dependencies.recurringTaskGenerator.generateIfNeeded()
+        } catch {
+            print("Recurring task generation failed: \(error)")
         }
     }
 }
