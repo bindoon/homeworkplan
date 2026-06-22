@@ -11,18 +11,6 @@ struct SettingsView: View {
                         Text("提醒设置")
                     }
                     .accessibilityIdentifier("settings-reminder-link")
-
-                    NavigationLink {
-                        SubjectManagementView()
-                    } label: {
-                        Text("科目管理")
-                    }
-
-                    NavigationLink {
-                        RecurringRulesListView()
-                    } label: {
-                        Text("重复任务")
-                    }
                 }
 
                 Section("AI 解析") {

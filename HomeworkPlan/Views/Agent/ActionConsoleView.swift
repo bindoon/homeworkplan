@@ -142,6 +142,17 @@ struct ActionConsoleView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("试试：")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text("「明天交数学练习册 P15」")
+                Text("「加一门科学」")
+                Text("「每天练字」")
+            }
+            .font(.caption)
+            .foregroundStyle(.tertiary)
+            .padding(.top, 4)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 48)
