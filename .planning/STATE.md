@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
+status: Awaiting next milestone
 stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-06-22T06:20:47.032Z"
-last_activity: 2026-06-22 -- Phase 03 execution complete
+last_updated: "2026-06-22T06:21:40.887Z"
+last_activity: 2026-06-22 — Milestone v1.0 completed and archived
 progress:
   total_phases: 4
   completed_phases: 4
@@ -21,16 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-22)
 
 **Core value:** 手动提供作业内容后，App 能可靠地将信息转化为经用户确认的每日作业清单
-**Current focus:** Phase 03 — Recurring Tasks
+**Current focus:** Planning next milestone (v2.0)
 
 ## Current Position
 
-Phase: 03 (Recurring Tasks) — VERIFICATION (human_needed)
-Plan: 1 of 1
-Status: Executed — awaiting human device verification
-Last activity: 2026-06-22 -- Phase 03 execution complete
-
-Progress: [██████░░░░] 62%
+Phase: Milestone v1.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-06-22 — Milestone v1.0 completed and archived
 
 ## Performance Metrics
 
@@ -70,20 +68,27 @@ None yet.
 
 ### Blockers/Concerns
 
-- xcodebuild blocked: iOS Simulator platform not installed on executor machine
+- xcodebuild blocked: iOS 26.2 Simulator not installed — runtime verification deferred to developer Mac
 
 ## Deferred Items
 
-Items acknowledged and carried forward from previous milestone close:
+Items acknowledged and deferred at milestone close on 2026-06-22:
 
-| Category | Item | Status | Deferred At |
-|----------|------|--------|-------------|
-| Extensions | Share Extension, ReplayKit 录屏 | v2 | MVP scoping |
-| Enhancements | 桌面小组件、历史统计、VLM fallback | v2+ | MVP scoping |
-| Notifications | Recurring rule reminder scheduling | Phase 4 | Phase 3 scope |
+| Category | Item | Status |
+|----------|------|--------|
+| verification | Phase 01 xcodebuild + iCloud sync UAT | human_needed |
+| verification | Phase 02 import/OCR/DeepSeek runtime test | human_needed |
+| verification | Phase 03 recurring generation simulator confirm | human_needed |
+| verification | Phase 04 notification delivery on device | human_needed |
+| Extensions | Share Extension, ReplayKit 录屏 | v2 |
+| Enhancements | 桌面小组件、历史统计、VLM fallback | v2+ |
 
 ## Session Continuity
 
 Last session: 2026-06-22T06:20:47.025Z
 Stopped at: Completed 03-01-PLAN.md
 Resume file: None
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone
