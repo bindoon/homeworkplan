@@ -34,10 +34,10 @@
 
 ### Recurring Tasks
 
-- [ ] **RECUR-01**: User can create recurring rules with subject, content, frequency (daily/weekdays/weekly/custom), and reminder time
-- [ ] **RECUR-02**: System generates homework tasks from active recurring rules when app starts or enters foreground
-- [ ] **RECUR-03**: System avoids generating duplicate tasks for the same rule and date (deterministic generation key)
-- [ ] **RECUR-04**: User can pause, resume, and delete recurring rules
+- [x] **RECUR-01**: User can create recurring rules with subject, content, frequency (daily/weekdays/weekly/custom), and reminder time
+- [x] **RECUR-02**: System generates homework tasks from active recurring rules when app starts or enters foreground
+- [x] **RECUR-03**: System avoids generating duplicate tasks for the same rule and date (deterministic generation key)
+- [x] **RECUR-04**: User can pause, resume, and delete recurring rules
 
 ### Local Reminders
 
@@ -109,10 +109,10 @@
 | PARSE-06 | Phase 2 | Complete |
 | SETT-01 | Phase 2 | Complete |
 | SETT-02 | Phase 2 | Complete |
-| RECUR-01 | Phase 3 | Pending |
-| RECUR-02 | Phase 3 | Pending |
-| RECUR-03 | Phase 3 | Pending |
-| RECUR-04 | Phase 3 | Pending |
+| RECUR-01 | Phase 3 | Complete |
+| RECUR-02 | Phase 3 | Complete |
+| RECUR-03 | Phase 3 | Complete |
+| RECUR-04 | Phase 3 | Complete |
 | REMND-01 | Phase 4 | Pending |
 | REMND-02 | Phase 4 | Pending |
 | REMND-03 | Phase 4 | Pending |

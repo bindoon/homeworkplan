@@ -96,7 +96,11 @@ Plans:
   3. 同一规则在同一日期不会生成重复任务
   4. 用户可暂停、恢复或删除重复规则
 
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+**Wave 1**
+
+- [x] 03-01-PLAN.md — RecurringRule model, generator, Settings CRUD, lifecycle hooks
 **UI hint**: yes
 
 ### Phase 4: Local Reminders
