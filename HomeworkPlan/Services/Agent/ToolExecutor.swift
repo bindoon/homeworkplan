@@ -39,7 +39,11 @@ final class ToolExecutor {
         self.importService = importService
     }
 
-    func execute(toolName: String, argumentsJSON: String) async throws -> ToolExecutionResult {
+    func execute(
+        toolName: String,
+        argumentsJSON: String,
+        attachment: UserMessageAttachment? = nil
+    ) async throws -> ToolExecutionResult {
         guard let tool = AgentToolName(rawValue: toolName) else {
             throw ToolExecutorError.unknownTool(toolName)
         }
@@ -49,6 +53,8 @@ final class ToolExecutor {
         switch tool {
         case .importFromText:
             return try await executeImportFromText(args)
+        case .importFromImage:
+            return try await executeImportFromImage(args, attachment: attachment)
         case .createTask:
             return try executeCreateTask(args)
         case .listTasks:
@@ -202,39 +208,66 @@ final class ToolExecutor {
 
         do {
             let result = try await importService.processPastedText(text)
-            let createCount = result.candidates.filter { $0.action == .create || $0.action == .update }.count
-            let lines = result.candidates.prefix(5).map { candidate in
-                let dateStr = candidate.dueDate.map { formatDate($0) } ?? "未指定"
-                return "• [\(candidate.subjectName)] \(candidate.content)（\(dateStr)）"
-            }
-            var detailLines = Array(lines)
-            if result.candidates.count > 5 {
-                detailLines.append("… 共 \(result.candidates.count) 条")
-            }
-            if result.isDuplicate {
-                detailLines.insert("⚠️ 该内容曾导入过", at: 0)
-            }
-            if result.parseFailed {
-                throw ToolExecutorError.serviceError(result.message ?? "解析失败")
-            }
-
-            let proposal = AgentProposal(
-                kind: .importCandidates,
-                summary: "导入 \(createCount) 条作业候选",
-                detailLines: detailLines,
-                payload: .importCandidates(
-                    ImportCandidatesPayload(
-                        candidates: result.candidates,
-                        rawText: result.rawText,
-                        importRecordID: result.importRecord?.id,
-                        sourceType: result.sourceType
-                    )
-                )
-            )
-            return .proposal(proposal)
+            return try buildImportProposal(from: result)
         } catch let error as ImportServiceError {
             throw ToolExecutorError.serviceError(error.localizedDescription)
         }
+    }
+
+    private func executeImportFromImage(
+        _ args: [String: Any],
+        attachment: UserMessageAttachment?
+    ) async throws -> ToolExecutionResult {
+        guard let ocrText = args["ocr_text"] as? String,
+              !ocrText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw ToolExecutorError.invalidArguments("ocr_text 不能为空")
+        }
+        guard let attachment else {
+            throw ToolExecutorError.invalidArguments("缺少截图附件，请重新发送图片")
+        }
+
+        do {
+            let result = try await importService.processImage(
+                attachment.image,
+                preExtractedText: ocrText
+            )
+            return try buildImportProposal(from: result)
+        } catch let error as ImportServiceError {
+            throw ToolExecutorError.serviceError(error.localizedDescription)
+        }
+    }
+
+    private func buildImportProposal(from result: ImportResult) throws -> ToolExecutionResult {
+        let createCount = result.candidates.filter { $0.action == .create || $0.action == .update }.count
+        let lines = result.candidates.prefix(5).map { candidate in
+            let dateStr = candidate.dueDate.map { formatDate($0) } ?? "未指定"
+            return "• [\(candidate.subjectName)] \(candidate.content)（\(dateStr)）"
+        }
+        var detailLines = Array(lines)
+        if result.candidates.count > 5 {
+            detailLines.append("… 共 \(result.candidates.count) 条")
+        }
+        if result.isDuplicate {
+            detailLines.insert("⚠️ 该内容曾导入过", at: 0)
+        }
+        if result.parseFailed {
+            throw ToolExecutorError.serviceError(result.message ?? "解析失败")
+        }
+
+        let proposal = AgentProposal(
+            kind: .importCandidates,
+            summary: "导入 \(createCount) 条作业候选",
+            detailLines: detailLines,
+            payload: .importCandidates(
+                ImportCandidatesPayload(
+                    candidates: result.candidates,
+                    rawText: result.rawText,
+                    importRecordID: result.importRecord?.id,
+                    sourceType: result.sourceType
+                )
+            )
+        )
+        return .proposal(proposal)
     }
 
     private func executeCreateTask(_ args: [String: Any]) throws -> ToolExecutionResult {

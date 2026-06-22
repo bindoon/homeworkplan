@@ -3,6 +3,7 @@ import Foundation
 enum ToolRegistry {
     static let allDefinitions: [ToolDefinition] = [
         importFromText,
+        importFromImage,
         createTask,
         listTasks,
         toggleTaskComplete,
@@ -45,6 +46,17 @@ enum ToolRegistry {
                 "text": stringProperty(description: "要解析的作业通知或清单文本")
             ],
             required: ["text"]
+        )
+    )
+
+    static let importFromImage = ToolDefinition(
+        name: AgentToolName.importFromImage.rawValue,
+        description: "从截图 OCR 文本导入作业（OCR 已在本地完成，使用提供的 ocr_text，勿重复识别）",
+        parameters: objectSchema(
+            properties: [
+                "ocr_text": stringProperty(description: "本地 Vision OCR 已提取的截图文字")
+            ],
+            required: ["ocr_text"]
         )
     )
 

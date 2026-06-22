@@ -24,6 +24,7 @@ struct ToolDefinition {
 
 enum AgentToolName: String, CaseIterable {
     case importFromText = "import_from_text"
+    case importFromImage = "import_from_image"
     case createTask = "create_task"
     case listTasks = "list_tasks"
     case toggleTaskComplete = "toggle_task_complete"

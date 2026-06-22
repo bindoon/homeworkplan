@@ -48,9 +48,17 @@ final class ImportService {
         self.parseService = parseService
     }
 
-    func processImage(_ image: UIImage) async throws -> ImportResult {
+    func processImage(_ image: UIImage, preExtractedText: String? = nil) async throws -> ImportResult {
         guard let apiKey = resolveAPIKey() else {
             throw ImportServiceError.missingAPIKey
+        }
+
+        if let preExtractedText {
+            let trimmed = preExtractedText.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else {
+                throw ImportServiceError.emptyText
+            }
+            return try await processText(trimmed, sourceType: .screenshot, sourceImage: image)
         }
 
         do {

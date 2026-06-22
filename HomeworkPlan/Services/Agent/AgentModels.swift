@@ -1,4 +1,10 @@
 import Foundation
+import UIKit
+
+struct UserMessageAttachment {
+    let image: UIImage
+    let ocrText: String
+}
 
 enum AgentMessageRole: String, Codable {
     case system
@@ -194,12 +200,20 @@ struct ConversationTurn: Identifiable {
     let role: AgentMessageRole
     let text: String
     let proposal: AgentProposal?
+    let attachedImage: UIImage?
 
-    init(id: UUID = UUID(), role: AgentMessageRole, text: String, proposal: AgentProposal? = nil) {
+    init(
+        id: UUID = UUID(),
+        role: AgentMessageRole,
+        text: String,
+        proposal: AgentProposal? = nil,
+        attachedImage: UIImage? = nil
+    ) {
         self.id = id
         self.role = role
         self.text = text
         self.proposal = proposal
+        self.attachedImage = attachedImage
     }
 }
 

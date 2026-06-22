@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 @MainActor
 final class AgentOrchestrator {
@@ -26,14 +27,27 @@ final class AgentOrchestrator {
     }
 
     func sendUserMessage(_ text: String) async throws -> AgentTurn {
+        try await sendUserMessage(text, attachment: nil)
+    }
+
+    func sendUserMessage(_ text: String, attachment: UserMessageAttachment?) async throws -> AgentTurn {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
+        guard !trimmed.isEmpty || attachment != nil else {
             return AgentTurn(messages: conversationHistory)
         }
 
-        let userMessage = AgentMessage(role: .user, content: trimmed)
+        let displayText = buildUserDisplayText(text: trimmed, attachment: attachment)
+        let llmContent = buildUserLLMContent(text: trimmed, attachment: attachment)
+
+        let userMessage = AgentMessage(role: .user, content: llmContent)
         conversationHistory.append(userMessage)
-        uiTurns.append(ConversationTurn(role: .user, text: trimmed))
+        uiTurns.append(
+            ConversationTurn(
+                role: .user,
+                text: displayText,
+                attachedImage: attachment?.image
+            )
+        )
 
         var turnProposals: [AgentProposal] = []
         var rounds = 0
@@ -73,7 +87,8 @@ final class AgentOrchestrator {
                 do {
                     let execution = try await toolExecutor.execute(
                         toolName: toolCall.name,
-                        argumentsJSON: toolCall.argumentsJSON
+                        argumentsJSON: toolCall.argumentsJSON,
+                        attachment: attachment
                     )
                     switch execution {
                     case .immediate(let json):
@@ -135,6 +150,30 @@ final class AgentOrchestrator {
     }
 
     // MARK: - Private
+
+    private func buildUserDisplayText(text: String, attachment: UserMessageAttachment?) -> String {
+        if let attachment {
+            if text.isEmpty {
+                return "[截图]"
+            }
+            return "\(text)\n[截图]"
+        }
+        return text
+    }
+
+    private func buildUserLLMContent(text: String, attachment: UserMessageAttachment?) -> String {
+        guard let attachment else { return text }
+
+        var parts: [String] = ["用户发送了一张作业截图。"]
+        parts.append("本地 OCR 已提取以下文字（请使用 import_from_image 工具并传入 ocr_text，勿重复 OCR）：")
+        parts.append("--- OCR 开始 ---")
+        parts.append(attachment.ocrText)
+        parts.append("--- OCR 结束 ---")
+        if !text.isEmpty {
+            parts.append("用户补充说明：\(text)")
+        }
+        return parts.joined(separator: "\n")
+    }
 
     private func buildLLMMessages(systemPrompt: String) -> [[String: Any]] {
         var messages: [[String: Any]] = [
@@ -225,7 +264,8 @@ final class AgentOrchestrator {
                     id: uiTurns[index].id,
                     role: uiTurns[index].role,
                     text: uiTurns[index].text,
-                    proposal: proposal
+                    proposal: proposal,
+                    attachedImage: uiTurns[index].attachedImage
                 )
             }
         }
