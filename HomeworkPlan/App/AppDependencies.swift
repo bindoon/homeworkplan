@@ -28,6 +28,7 @@ final class AppDependencies {
         self.keychainService = KeychainService.shared
         self.importService = ImportService(
             importRepository: importRepository,
+            taskRepository: taskRepository,
             keychainService: keychainService
         )
     }

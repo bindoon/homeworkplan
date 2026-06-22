@@ -15,15 +15,29 @@ struct ReviewableCandidate: Identifiable {
     var editedContent: String
     var editedNotes: String
     var editedDueDate: Date
+    var resolvedAction: ImportTaskAction
+    var matchedTaskId: UUID?
+    var matchedTaskPreview: String?
 
-    init(candidate: TaskCandidate, defaultSubject: Subject?, defaultDueDate: Date) {
+    init(
+        candidate: TaskCandidate,
+        defaultSubject: Subject?,
+        dueDate: Date,
+        resolvedAction: ImportTaskAction,
+        matchedTaskId: UUID?,
+        matchedTaskPreview: String?,
+        status: ReviewCandidateStatus = .pending
+    ) {
         self.id = candidate.id
         self.candidate = candidate
-        self.status = .pending
+        self.status = status
         self.selectedSubject = defaultSubject
         self.editedContent = candidate.content
         self.editedNotes = candidate.notes ?? ""
-        self.editedDueDate = candidate.dueDate ?? defaultDueDate
+        self.editedDueDate = dueDate
+        self.resolvedAction = resolvedAction
+        self.matchedTaskId = matchedTaskId
+        self.matchedTaskPreview = matchedTaskPreview
     }
 }
 
@@ -60,16 +74,12 @@ final class ImportReviewViewModel {
         statusMessage = result.message
         sourceImagePath = result.sourceImagePath
 
-        let defaultDue = Calendar.current.startOfDay(for: Date())
+        let referenceDate = result.importRecord?.createdAt ?? Date()
         candidates = result.candidates.map { candidate in
-            let subject = resolveSubject(named: candidate.subjectName, in: subjects)
-            let dueDate = candidate.dueDate.map { Calendar.current.startOfDay(for: $0) }
-            var normalized = candidate
-            normalized.dueDate = dueDate
-            return ReviewableCandidate(
-                candidate: normalized,
-                defaultSubject: subject,
-                defaultDueDate: defaultDue
+            buildReviewableCandidate(
+                candidate: candidate,
+                subjects: subjects,
+                referenceDate: referenceDate
             )
         }
     }
@@ -83,6 +93,31 @@ final class ImportReviewViewModel {
         guard candidates[index].status == .pending else { return }
 
         let item = candidates[index]
+
+        switch item.resolvedAction {
+        case .skip:
+            candidates[index].status = .discarded
+            return
+        case .update:
+            if let taskId = item.matchedTaskId,
+               try taskRepository.fetchTask(id: taskId) != nil {
+                try taskRepository.update(
+                    id: taskId,
+                    subject: item.selectedSubject,
+                    content: item.editedContent,
+                    notes: item.editedNotes,
+                    dueDate: item.editedDueDate
+                )
+                if let recordID = importRecordID {
+                    try importRepository.linkTask(recordID: recordID, taskID: taskId)
+                }
+                candidates[index].status = .confirmed
+                return
+            }
+        case .create:
+            break
+        }
+
         let sourceDetail = buildSourceDetail(for: item.candidate)
         let task = try taskRepository.create(
             subject: item.selectedSubject,
@@ -130,6 +165,60 @@ final class ImportReviewViewModel {
         candidates[index].editedContent = content
         candidates[index].editedNotes = notes
         candidates[index].editedDueDate = dueDate
+    }
+
+    private func buildReviewableCandidate(
+        candidate: TaskCandidate,
+        subjects: [Subject],
+        referenceDate: Date
+    ) -> ReviewableCandidate {
+        let subject = resolveSubject(named: candidate.subjectName, in: subjects)
+        let resolvedDue = DueDateResolver.resolve(for: candidate, importedAt: referenceDate)
+        let resolution = resolveImportAction(for: candidate)
+
+        return ReviewableCandidate(
+            candidate: candidate,
+            defaultSubject: subject,
+            dueDate: resolvedDue,
+            resolvedAction: resolution.action,
+            matchedTaskId: resolution.matchedTaskId,
+            matchedTaskPreview: resolution.matchedTaskPreview,
+            status: resolution.action == .skip ? .discarded : .pending
+        )
+    }
+
+    private func resolveImportAction(for candidate: TaskCandidate) -> (
+        action: ImportTaskAction,
+        matchedTaskId: UUID?,
+        matchedTaskPreview: String?
+    ) {
+        switch candidate.action {
+        case .skip:
+            return (.skip, nil, nil)
+        case .update:
+            guard
+                let matchedTaskId = candidate.matchedTaskId,
+                let matchedTask = try? taskRepository.fetchTask(id: matchedTaskId)
+            else {
+                return (.create, nil, nil)
+            }
+            return (
+                .update,
+                matchedTaskId,
+                previewText(for: matchedTask)
+            )
+        case .create:
+            return (.create, nil, nil)
+        }
+    }
+
+    private func previewText(for task: HomeworkTask) -> String {
+        let subject = task.subject?.name ?? "其他"
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "zh_CN")
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return "\(subject) · \(task.content) · 截止 \(formatter.string(from: task.dueDate))"
     }
 
     private func resolveSubject(named name: String, in subjects: [Subject]) -> Subject? {

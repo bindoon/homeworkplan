@@ -32,15 +32,18 @@ enum ImportServiceError: LocalizedError {
 @MainActor
 final class ImportService {
     private let importRepository: ImportRepository
+    private let taskRepository: TaskRepository
     private let keychainService: KeychainService
     private let parseService: ParseService
 
     init(
         importRepository: ImportRepository,
+        taskRepository: TaskRepository,
         keychainService: KeychainService,
         parseService: ParseService = .shared
     ) {
         self.importRepository = importRepository
+        self.taskRepository = taskRepository
         self.keychainService = keychainService
         self.parseService = parseService
     }
@@ -103,6 +106,7 @@ final class ImportService {
         }
 
         let importedAt = Date()
+        let existingTasks = loadExistingTaskContext(referenceDate: importedAt)
         var parseFailed = false
         var message: String?
         var candidates: [TaskCandidate] = []
@@ -112,6 +116,7 @@ final class ImportService {
             let response = try await parseService.parse(
                 text: trimmed,
                 importedAt: importedAt,
+                existingTasks: existingTasks,
                 apiKey: apiKey
             )
             candidates = response.tasks
@@ -172,6 +177,7 @@ final class ImportService {
         }
 
         let importedAt = Date()
+        let existingTasks = loadExistingTaskContext(referenceDate: importedAt)
         var parseFailed = false
         var message: String?
         var candidates: [TaskCandidate] = []
@@ -182,6 +188,7 @@ final class ImportService {
             let response = try await parseService.parseImage(
                 image,
                 importedAt: importedAt,
+                existingTasks: existingTasks,
                 apiKey: apiKey
             )
             candidates = response.tasks
@@ -228,6 +235,16 @@ final class ImportService {
             record.imagePath = path
         } catch {
             print("Failed to attach import image: \(error)")
+        }
+    }
+
+    private func loadExistingTaskContext(referenceDate: Date) -> [ExistingTaskContextItem] {
+        do {
+            let tasks = try taskRepository.fetchRecentForImportContext(from: referenceDate)
+            return ImportContextBuilder.build(from: tasks)
+        } catch {
+            print("Failed to load import context tasks: \(error)")
+            return []
         }
     }
 

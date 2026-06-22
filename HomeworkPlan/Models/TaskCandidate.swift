@@ -8,6 +8,8 @@ struct TaskCandidate: Codable, Identifiable, Equatable {
     var assigner: String?
     var confidence: Double
     var notes: String?
+    var action: ImportTaskAction
+    var matchedTaskId: UUID?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -17,6 +19,8 @@ struct TaskCandidate: Codable, Identifiable, Equatable {
         case assigner
         case confidence
         case notes
+        case action
+        case matchedTaskId
     }
 
     init(
@@ -26,7 +30,9 @@ struct TaskCandidate: Codable, Identifiable, Equatable {
         dueDate: Date? = nil,
         assigner: String? = nil,
         confidence: Double = 0.8,
-        notes: String? = nil
+        notes: String? = nil,
+        action: ImportTaskAction = .create,
+        matchedTaskId: UUID? = nil
     ) {
         self.id = id
         self.subjectName = subjectName
@@ -35,6 +41,8 @@ struct TaskCandidate: Codable, Identifiable, Equatable {
         self.assigner = assigner
         self.confidence = confidence
         self.notes = notes
+        self.action = action
+        self.matchedTaskId = matchedTaskId
     }
 
     init(from decoder: Decoder) throws {
@@ -46,23 +54,30 @@ struct TaskCandidate: Codable, Identifiable, Equatable {
         assigner = try container.decodeIfPresent(String.self, forKey: .assigner)
         confidence = try container.decodeIfPresent(Double.self, forKey: .confidence) ?? 0.8
         notes = try container.decodeIfPresent(String.self, forKey: .notes)
+        action = try container.decodeIfPresent(ImportTaskAction.self, forKey: .action) ?? .create
+        matchedTaskId = TaskCandidate.decodeMatchedTaskId(from: container)
+    }
+
+    private static func decodeMatchedTaskId(from container: KeyedDecodingContainer<CodingKeys>) -> UUID? {
+        if let uuid = try? container.decodeIfPresent(UUID.self, forKey: .matchedTaskId) {
+            return uuid
+        }
+        if let raw = try? container.decodeIfPresent(String.self, forKey: .matchedTaskId) {
+            let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty || trimmed.lowercased() == "null" {
+                return nil
+            }
+            return UUID(uuidString: trimmed)
+        }
+        return nil
     }
 
     private static func decodeDueDate(from container: KeyedDecodingContainer<CodingKeys>) -> Date? {
-        if let date = try? container.decodeIfPresent(Date.self, forKey: .dueDate) {
-            return date
+        if let iso = try? container.decodeIfPresent(String.self, forKey: .dueDate) {
+            return TaskCandidate.parseLocalDateString(iso)
         }
-        if let iso = try? container.decodeIfPresent(String.self, forKey: .dueDate),
-           !iso.isEmpty {
-            let formatter = ISO8601DateFormatter()
-            formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
-            if let parsed = formatter.date(from: iso) {
-                return parsed
-            }
-            let fallback = DateFormatter()
-            fallback.locale = Locale(identifier: "en_US_POSIX")
-            fallback.dateFormat = "yyyy-MM-dd"
-            return fallback.date(from: iso)
+        if let date = try? container.decodeIfPresent(Date.self, forKey: .dueDate) {
+            return Calendar.current.startOfDay(for: date)
         }
         return nil
     }

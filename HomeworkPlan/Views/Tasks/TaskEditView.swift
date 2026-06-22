@@ -13,6 +13,7 @@ struct TaskEditView: View {
     @State private var notes: String
     @State private var dueDate: Date
     @State private var errorMessage: String?
+    @State private var expandedSourceImage: UIImage?
 
     init(task: HomeworkTask) {
         self.task = task
@@ -26,7 +27,9 @@ struct TaskEditView: View {
         NavigationStack {
             Form {
                 if !task.sourceImagePath.isEmpty {
-                    TaskSourceImageView(relativePath: task.sourceImagePath)
+                    TaskSourceImageView(relativePath: task.sourceImagePath) { image in
+                        expandedSourceImage = image
+                    }
                 }
 
                 Picker("科目", selection: $selectedSubject) {
@@ -36,7 +39,12 @@ struct TaskEditView: View {
                     }
                 }
 
-                TextField("作业内容", text: $content)
+                Section {
+                    TextEditor(text: $content)
+                        .frame(minHeight: 160)
+                } header: {
+                    Text("作业内容")
+                }
 
                 DatePicker(
                     "截止日期",
@@ -45,7 +53,12 @@ struct TaskEditView: View {
                 )
                 .environment(\.locale, Locale(identifier: "zh_CN"))
 
-                TextField("备注（选填）", text: $notes)
+                Section {
+                    TextEditor(text: $notes)
+                        .frame(minHeight: 80)
+                } header: {
+                    Text("备注（选填）")
+                }
             }
             .navigationTitle("编辑作业")
             .navigationBarTitleDisplayMode(.inline)
@@ -65,6 +78,13 @@ struct TaskEditView: View {
                 Button("重试", role: .cancel) {}
             } message: {
                 Text(errorMessage ?? "请检查存储空间后重试。")
+            }
+            .overlay {
+                if let image = expandedSourceImage {
+                    ImportImageFullScreenOverlay(image: image) {
+                        expandedSourceImage = nil
+                    }
+                }
             }
         }
     }

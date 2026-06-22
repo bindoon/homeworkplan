@@ -11,6 +11,7 @@ struct TaskCandidateReviewView: View {
     @State private var viewModel: ImportReviewViewModel?
     @State private var editingCandidate: ReviewableCandidate?
     @State private var errorMessage: String?
+    @State private var expandedSourceImage: UIImage?
 
     var body: some View {
         Group {
@@ -59,6 +60,19 @@ struct TaskCandidateReviewView: View {
         } message: {
             Text(errorMessage ?? "")
         }
+        .overlay {
+            if let image = expandedSourceImage {
+                ImportImageFullScreenOverlay(image: image) {
+                    expandedSourceImage = nil
+                }
+            }
+        }
+    }
+
+    private func sourceImageSection(path: String) -> some View {
+        TaskSourceImageView(relativePath: path) { image in
+            expandedSourceImage = image
+        }
     }
 
     @ViewBuilder
@@ -66,7 +80,7 @@ struct TaskCandidateReviewView: View {
         if viewModel.candidates.isEmpty {
             List {
                 if !viewModel.sourceImagePath.isEmpty {
-                    TaskSourceImageView(relativePath: viewModel.sourceImagePath)
+                    sourceImageSection(path: viewModel.sourceImagePath)
                 }
 
                 Section {
@@ -100,7 +114,7 @@ struct TaskCandidateReviewView: View {
         } else {
             List {
                 if !viewModel.sourceImagePath.isEmpty {
-                    TaskSourceImageView(relativePath: viewModel.sourceImagePath)
+                    sourceImageSection(path: viewModel.sourceImagePath)
                 }
 
                 if viewModel.pendingCandidates.isEmpty {
@@ -129,7 +143,7 @@ struct TaskCandidateReviewView: View {
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("review-discard-all-button")
 
-                Button("全部确认（\(viewModel.pendingCandidates.count)）") {
+                Button("全部确认（\(confirmablePendingCount(viewModel))）") {
                     confirmAllAndFinish()
                 }
                 .buttonStyle(.borderedProminent)
@@ -154,6 +168,7 @@ struct TaskCandidateReviewView: View {
                         .font(.subheadline.weight(.medium))
                 }
                 Spacer()
+                actionBadge(item.resolvedAction)
                 Text(String(format: "%.0f%%", item.candidate.confidence * 100))
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -167,9 +182,19 @@ struct TaskCandidateReviewView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
+            Text(item.resolvedAction.recommendationText)
+                .font(.caption)
+                .foregroundStyle(actionColor(item.resolvedAction))
+
+            if item.resolvedAction == .update, let preview = item.matchedTaskPreview {
+                Text("原作业：\(preview)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             if item.status == .pending {
                 HStack {
-                    Button("确认") {
+                    Button(confirmButtonTitle(for: item.resolvedAction)) {
                         confirmOne(item.id)
                     }
                     .buttonStyle(.borderedProminent)
@@ -190,6 +215,38 @@ struct TaskCandidateReviewView: View {
         }
         .padding(.vertical, 4)
         .opacity(item.status == .discarded ? 0.5 : 1)
+    }
+
+    @ViewBuilder
+    private func actionBadge(_ action: ImportTaskAction) -> some View {
+        Text(action.displayName)
+            .font(.caption2.weight(.semibold))
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(actionColor(action).opacity(0.15), in: Capsule())
+            .foregroundStyle(actionColor(action))
+    }
+
+    private func actionColor(_ action: ImportTaskAction) -> Color {
+        switch action {
+        case .create:
+            return .blue
+        case .update:
+            return .orange
+        case .skip:
+            return .secondary
+        }
+    }
+
+    private func confirmButtonTitle(for action: ImportTaskAction) -> String {
+        switch action {
+        case .create:
+            return "确认"
+        case .update:
+            return "更新"
+        case .skip:
+            return "跳过"
+        }
     }
 
     @ViewBuilder
@@ -216,6 +273,10 @@ struct TaskCandidateReviewView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    private func confirmablePendingCount(_ viewModel: ImportReviewViewModel) -> Int {
+        viewModel.pendingCandidates.filter { $0.resolvedAction != .skip }.count
     }
 
     private func confirmAllAndFinish() {

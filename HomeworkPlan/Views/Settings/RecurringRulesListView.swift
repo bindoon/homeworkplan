@@ -6,6 +6,7 @@ struct RecurringRulesListView: View {
     @Query(sort: \RecurringRule.createdAt, order: .reverse) private var rules: [RecurringRule]
 
     @State private var showAddForm = false
+    @State private var showCalendarImport = false
     @State private var editingRule: RecurringRule?
 
     private var activeRules: [RecurringRule] {
@@ -46,13 +47,30 @@ struct RecurringRulesListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("添加") {
-                    showAddForm = true
+                Menu {
+                    Button {
+                        showAddForm = true
+                    } label: {
+                        Label("手动添加", systemImage: "plus")
+                    }
+
+                    Button {
+                        showCalendarImport = true
+                    } label: {
+                        Label("从钉钉日历导入", systemImage: "calendar.badge.plus")
+                    }
+                } label: {
+                    Label("添加", systemImage: "plus")
                 }
             }
         }
         .sheet(isPresented: $showAddForm) {
             RecurringRuleFormView(mode: .create)
+        }
+        .sheet(isPresented: $showCalendarImport) {
+            NavigationStack {
+                DingTalkCalendarImportView()
+            }
         }
         .sheet(item: $editingRule) { rule in
             RecurringRuleFormView(mode: .edit(rule))

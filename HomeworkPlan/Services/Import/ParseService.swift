@@ -45,7 +45,12 @@ actor ParseService {
         return URL(string: "\(base)/chat/completions")!
     }
 
-    func parse(text: String, importedAt: Date, apiKey: String) async throws -> TaskCandidateParseResponse {
+    func parse(
+        text: String,
+        importedAt: Date,
+        existingTasks: [ExistingTaskContextItem] = [],
+        apiKey: String
+    ) async throws -> TaskCandidateParseResponse {
         let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedKey.isEmpty else {
             throw ParseServiceError.missingAPIKey
@@ -55,6 +60,7 @@ actor ParseService {
             return try await requestTextParse(
                 text: text,
                 importedAt: importedAt,
+                existingTasks: existingTasks,
                 apiKey: trimmedKey,
                 strict: false
             )
@@ -62,13 +68,19 @@ actor ParseService {
             return try await requestTextParse(
                 text: text,
                 importedAt: importedAt,
+                existingTasks: existingTasks,
                 apiKey: trimmedKey,
                 strict: true
             )
         }
     }
 
-    func parseImage(_ image: UIImage, importedAt: Date, apiKey: String) async throws -> TaskCandidateParseResponse {
+    func parseImage(
+        _ image: UIImage,
+        importedAt: Date,
+        existingTasks: [ExistingTaskContextItem] = [],
+        apiKey: String
+    ) async throws -> TaskCandidateParseResponse {
         let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedKey.isEmpty else {
             throw ParseServiceError.missingAPIKey
@@ -86,6 +98,7 @@ actor ParseService {
             return try await requestVisionParse(
                 base64JPEG: base64,
                 importedAt: importedAt,
+                existingTasks: existingTasks,
                 apiKey: trimmedKey,
                 strict: false
             )
@@ -93,6 +106,7 @@ actor ParseService {
             return try await requestVisionParse(
                 base64JPEG: base64,
                 importedAt: importedAt,
+                existingTasks: existingTasks,
                 apiKey: trimmedKey,
                 strict: true
             )
@@ -127,13 +141,18 @@ actor ParseService {
     private func requestTextParse(
         text: String,
         importedAt: Date,
+        existingTasks: [ExistingTaskContextItem],
         apiKey: String,
         strict: Bool
     ) async throws -> TaskCandidateParseResponse {
         let messages: [[String: Any]] = [
             [
                 "role": "system",
-                "content": ParsePrompt.systemPrompt(importedAt: importedAt, strict: strict)
+                "content": ParsePrompt.systemPrompt(
+                    importedAt: importedAt,
+                    existingTasks: existingTasks,
+                    strict: strict
+                )
             ],
             [
                 "role": "user",
@@ -151,13 +170,18 @@ actor ParseService {
     private func requestVisionParse(
         base64JPEG: String,
         importedAt: Date,
+        existingTasks: [ExistingTaskContextItem],
         apiKey: String,
         strict: Bool
     ) async throws -> TaskCandidateParseResponse {
         let messages: [[String: Any]] = [
             [
                 "role": "system",
-                "content": ParsePrompt.systemPrompt(importedAt: importedAt, strict: strict)
+                "content": ParsePrompt.systemPrompt(
+                    importedAt: importedAt,
+                    existingTasks: existingTasks,
+                    strict: strict
+                )
             ],
             [
                 "role": "user",

@@ -49,6 +49,16 @@
 		C49BA1297754420EBF3D405B /* TaskEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F82A02CC5B6A26EB3EF6A76 /* TaskEditView.swift */; };
 		C5E269CB4BF94F51DA2FFDCA /* SubjectDedupeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871CFDC7FB8962578CC97D2 /* SubjectDedupeService.swift */; };
 		C70FE40E1DECBE65D3D03EAF /* RecurringTaskGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940692B783EA2E8BAA1AF07F /* RecurringTaskGeneratorTests.swift */; };
+		C8A1D2E3F4B5061728394A5B /* CalendarRecurrenceMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* CalendarRecurrenceMapper.swift */; };
+		C9B2E3F4A5C61728394B5C6D /* ICSRecurringParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F60718293A4B5C6D /* ICSRecurringParser.swift */; };
+		CAE3F4A5B6D728394A5C6D7E /* DingTalkCalendarImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F60718293A4B5C6D7E /* DingTalkCalendarImportService.swift */; };
+		CBF4A5B6C7E8394A5B6D7E8F /* CalendarRecurringCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293A4B5C6D7E8F /* CalendarRecurringCandidate.swift */; };
+		CE27D8394A5B6C7D8E9F0A1B /* ImportTaskAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0718293A4B5C6D7E8F901234 /* ImportTaskAction.swift */; };
+		CF38E94A5B6C7D8E9F0A1B2C /* ImportContextBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18293A4B5C6D7E8F9012345 /* ImportContextBuilder.swift */; };
+		D049FA5B6C7D8E9F0A1B2C3D /* ImportContextBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */; };
+		D15AFB6C7D8E9F0A1B2C3D4E /* ImportReviewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */; };
+		CC05B6C7D8F94A5B6C7E8F90 /* DingTalkCalendarImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60718293A4B5C6D7E8F90 /* DingTalkCalendarImportView.swift */; };
+		CD16C7D8E9A05B6C7D8E9F01 /* CalendarImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60718293A4B5C6D7E8F9012 /* CalendarImportTests.swift */; };
 		C7D882BF0672AEE421DC9613 /* HomeworkPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F413DF9398A8A4A62AE7DCC /* HomeworkPlanApp.swift */; };
 		CAC9D37B42F73F1693801C5F /* NotificationBudgetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2574E5DE1E63713393CC1541 /* NotificationBudgetManagerTests.swift */; };
 		D15834413A42BE8461B90A71 /* ContentHashServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB800FB72BE1CE208C1F283C /* ContentHashServiceTests.swift */; };
@@ -63,6 +73,7 @@
 		F1E037606EA963D0A0E20880 /* TaskRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653F2E519C0B5DB217A07E29 /* TaskRepositoryTests.swift */; };
 		F2A628FC5E9E84A33CB8F838 /* ImportSourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C542EFC6455EDD8EEF7E8D2 /* ImportSourceType.swift */; };
 		F38A35ABD2CC40F29E83DB1D /* ImportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C2C7185EE12DBD4123EF0D /* ImportRepository.swift */; };
+		F464125B67AB86C74CF309CF /* DueDateResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F045E88AFF987F422D1BE326 /* DueDateResolver.swift */; };
 		F54F5FAE76EC8B0145A7E74B /* AllTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92129A50627949E34126D25 /* AllTasksViewModel.swift */; };
 		FA172D8D532A21AC64C97BAA /* ReminderSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB1B16BFF8BBCB0C5B62A8A /* ReminderSettingsView.swift */; };
 		FA7E82B480702F5BFA060C22 /* RecurringRulesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667F620B92118917AB94C38 /* RecurringRulesListView.swift */; };
@@ -126,6 +137,16 @@
 		9021F7CA146CB5DE4F38479E /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
 		93879A47E0F2B859403C755F /* SubjectRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectRepositoryTests.swift; sourceTree = "<group>"; };
 		940692B783EA2E8BAA1AF07F /* RecurringTaskGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTaskGeneratorTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5C /* CalendarRecurrenceMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarRecurrenceMapper.swift; sourceTree = "<group>"; };
+		B2C3D4E5F60718293A4B5C6D /* ICSRecurringParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICSRecurringParser.swift; sourceTree = "<group>"; };
+		C3D4E5F60718293A4B5C6D7E /* DingTalkCalendarImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DingTalkCalendarImportService.swift; sourceTree = "<group>"; };
+		D4E5F60718293A4B5C6D7E8F /* CalendarRecurringCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarRecurringCandidate.swift; sourceTree = "<group>"; };
+		0718293A4B5C6D7E8F901234 /* ImportTaskAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTaskAction.swift; sourceTree = "<group>"; };
+		18293A4B5C6D7E8F9012345 /* ImportContextBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportContextBuilder.swift; sourceTree = "<group>"; };
+		293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportContextBuilderTests.swift; sourceTree = "<group>"; };
+		3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportReviewViewModelTests.swift; sourceTree = "<group>"; };
+		E5F60718293A4B5C6D7E8F90 /* DingTalkCalendarImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DingTalkCalendarImportView.swift; sourceTree = "<group>"; };
+		F60718293A4B5C6D7E8F9012 /* CalendarImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarImportTests.swift; sourceTree = "<group>"; };
 		9CED3A95B0BD9603D49937FC /* SubjectFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectFormView.swift; sourceTree = "<group>"; };
 		A1412481D71904646A4F9ECA /* ManualTaskFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTaskFormView.swift; sourceTree = "<group>"; };
 		A39D92B1971439EBF352FE70 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportService.swift; sourceTree = "<group>"; };
@@ -149,6 +170,7 @@
 		E298C8379349988841212F46 /* AllTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTasksView.swift; sourceTree = "<group>"; };
 		E82C5582E94EC708AB23EC3C /* NotificationBudgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBudgetManager.swift; sourceTree = "<group>"; };
 		EAB6F9BD6AF0FC19170EE1FA /* PasteImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteImportView.swift; sourceTree = "<group>"; };
+		F045E88AFF987F422D1BE326 /* DueDateResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DueDateResolver.swift; sourceTree = "<group>"; };
 		F1B21BA1F7B81B4DB836B879 /* ReminderNotificationBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderNotificationBuilderTests.swift; sourceTree = "<group>"; };
 		F3B1AB2CAF42BA57300FC022 /* ImportSourceSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSourceSheet.swift; sourceTree = "<group>"; };
 		F3DCF213C24B67EFFD162FCC /* GeneratedSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedSecrets.swift; sourceTree = "<group>"; };
@@ -179,10 +201,12 @@
 			children = (
 				C712162A605C3D198A6092EF /* HomeworkTask.swift */,
 				741F1D841D225A712E4C7CBB /* ImportRecord.swift */,
+				0718293A4B5C6D7E8F901234 /* ImportTaskAction.swift */,
 				4C542EFC6455EDD8EEF7E8D2 /* ImportSourceType.swift */,
 				5D026F019C6025766D8D8CA3 /* RecurringRule.swift */,
 				B4FCA59DF625517AC1ACD236 /* Subject.swift */,
 				298ABE4BF44A558DB3CB1AC5 /* TaskCandidate.swift */,
+				D4E5F60718293A4B5C6D7E8F /* CalendarRecurringCandidate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -200,6 +224,9 @@
 				61571B6DB8215747B378F797 /* SubjectDedupeServiceTests.swift */,
 				93879A47E0F2B859403C755F /* SubjectRepositoryTests.swift */,
 				653F2E519C0B5DB217A07E29 /* TaskRepositoryTests.swift */,
+				F60718293A4B5C6D7E8F9012 /* CalendarImportTests.swift */,
+				293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */,
+				3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */,
 			);
 			path = HomeworkPlanTests;
 			sourceTree = "<group>";
@@ -261,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				DE0163467E8A4EA2310D7AD5 /* APIKeySettingsView.swift */,
+				E5F60718293A4B5C6D7E8F90 /* DingTalkCalendarImportView.swift */,
 				6C9ABBE1DD2072DDC3FFC474 /* RecurringRuleFormView.swift */,
 				D667F620B92118917AB94C38 /* RecurringRulesListView.swift */,
 				FCB1B16BFF8BBCB0C5B62A8A /* ReminderSettingsView.swift */,
@@ -314,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				C217C3D27F53D1EF46162C25 /* Import */,
+				D8E9F0A1B2C3041526374859 /* Recurring */,
 				F32A92EF3FE335F2007EE4AB /* Reminders */,
 				215A2645183623C377596460 /* Security */,
 				AB97E54F2F1621464D13B793 /* Sync */,
@@ -322,10 +351,22 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		D8E9F0A1B2C3041526374859 /* Recurring */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60718293A4B5C /* CalendarRecurrenceMapper.swift */,
+				C3D4E5F60718293A4B5C6D7E /* DingTalkCalendarImportService.swift */,
+				B2C3D4E5F60718293A4B5C6D /* ICSRecurringParser.swift */,
+			);
+			path = Recurring;
+			sourceTree = "<group>";
+		};
 		C217C3D27F53D1EF46162C25 /* Import */ = {
 			isa = PBXGroup;
 			children = (
 				139FAF785AADF42E8A067A2D /* ContentHashService.swift */,
+				18293A4B5C6D7E8F9012345 /* ImportContextBuilder.swift */,
+				F045E88AFF987F422D1BE326 /* DueDateResolver.swift */,
 				BD62DD030B40ED43815C598F /* ImportImageStore.swift */,
 				A39D92B1971439EBF352FE70 /* ImportService.swift */,
 				BE9CD91EE0BC453D503DA41E /* OCRService.swift */,
@@ -538,6 +579,9 @@
 				7967CAAD76CD9A264DEB8237 /* SubjectDedupeServiceTests.swift in Sources */,
 				3713893D5C153725543B1C8E /* SubjectRepositoryTests.swift in Sources */,
 				F1E037606EA963D0A0E20880 /* TaskRepositoryTests.swift in Sources */,
+				CD16C7D8E9A05B6C7D8E9F01 /* CalendarImportTests.swift in Sources */,
+				D049FA5B6C7D8E9F0A1B2C3D /* ImportContextBuilderTests.swift in Sources */,
+				D15AFB6C7D8E9F0A1B2C3D4E /* ImportReviewViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +596,7 @@
 				241A035C616BD409C6D8392A /* AppModelContainer.swift in Sources */,
 				2D9247387A9FD8F1DD2CB2F2 /* ClipboardHintBanner.swift in Sources */,
 				1819F3D5FBA1F2908DCB9795 /* ContentHashService.swift in Sources */,
+				F464125B67AB86C74CF309CF /* DueDateResolver.swift in Sources */,
 				78B784BFC01CB46BF34CAEB0 /* GeneratedSecrets.swift in Sources */,
 				C7D882BF0672AEE421DC9613 /* HomeworkPlanApp.swift in Sources */,
 				FB8A88F02EF53213A39840CB /* HomeworkTask.swift in Sources */,
@@ -595,6 +640,13 @@
 				447220F60EAA7E408C78AD88 /* TaskRowView.swift in Sources */,
 				A727CB054AE1C219266994A9 /* TaskSourceImageView.swift in Sources */,
 				17C5E1112DEFF9D3FFFD0980 /* TodayView.swift in Sources */,
+				C8A1D2E3F4B5061728394A5B /* CalendarRecurrenceMapper.swift in Sources */,
+				C9B2E3F4A5C61728394B5C6D /* ICSRecurringParser.swift in Sources */,
+				CAE3F4A5B6D728394A5C6D7E /* DingTalkCalendarImportService.swift in Sources */,
+				CBF4A5B6C7E8394A5B6D7E8F /* CalendarRecurringCandidate.swift in Sources */,
+				CC05B6C7D8F94A5B6C7E8F90 /* DingTalkCalendarImportView.swift in Sources */,
+				CE27D8394A5B6C7D8E9F0A1B /* ImportTaskAction.swift in Sources */,
+				CF38E94A5B6C7D8E9F0A1B2C /* ImportContextBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +677,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = HomeworkPlan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "需要访问日历以从钉钉同步的日程导入重复任务";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要访问相册以导入作业截图";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -685,6 +738,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = HomeworkPlan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "需要访问日历以从钉钉同步的日程导入重复任务";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要访问相册以导入作业截图";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

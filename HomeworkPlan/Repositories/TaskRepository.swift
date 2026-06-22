@@ -202,6 +202,34 @@ final class TaskRepository {
         )
         return try context.fetch(descriptor).first
     }
+
+    func fetchRecentForImportContext(
+        pastDays: Int = ImportContextBuilder.defaultPastDays,
+        futureDays: Int = ImportContextBuilder.defaultFutureDays,
+        limit: Int = ImportContextBuilder.defaultLimit,
+        from date: Date = Date(),
+        calendar: Calendar = .current
+    ) throws -> [HomeworkTask] {
+        let today = calendar.startOfDay(for: date)
+        guard
+            let start = calendar.date(byAdding: .day, value: -pastDays, to: today),
+            let end = calendar.date(byAdding: .day, value: futureDays + 1, to: today)
+        else {
+            return []
+        }
+
+        var descriptor = FetchDescriptor<HomeworkTask>(
+            predicate: #Predicate { task in
+                task.dueDate >= start && task.dueDate < end
+            },
+            sortBy: [
+                SortDescriptor(\HomeworkTask.dueDate),
+                SortDescriptor(\HomeworkTask.createdAt, order: .reverse)
+            ]
+        )
+        descriptor.fetchLimit = limit
+        return try context.fetch(descriptor)
+    }
 }
 
 enum TaskRepositoryError: LocalizedError {
