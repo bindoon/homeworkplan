@@ -24,6 +24,16 @@ struct ActionConsoleView: View {
         Color(.tertiarySystemFill)
     }
 
+    private func sendButtonFill(canSend: Bool) -> Color {
+        guard canSend else { return Color(.systemGray3) }
+        return colorScheme == .dark ? Color.white : Color.black
+    }
+
+    private func sendButtonIconColor(canSend: Bool) -> Color {
+        guard canSend else { return Color.white }
+        return colorScheme == .dark ? Color.black : Color.white
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             topBar
@@ -441,12 +451,16 @@ struct ActionConsoleView: View {
         Button {
             viewModel.sendMessage()
         } label: {
-            Image(systemName: "arrow.up")
-                .font(.body.weight(.bold))
-                .foregroundStyle(.white)
-                .frame(width: 34, height: 34)
-                .background(Circle().fill(viewModel.canSend ? Color.primary : Color(.systemGray3)))
+            ZStack {
+                Circle()
+                    .fill(sendButtonFill(canSend: viewModel.canSend))
+                    .frame(width: 34, height: 34)
+                Image(systemName: "arrow.up")
+                    .font(.body.weight(.bold))
+                    .foregroundStyle(sendButtonIconColor(canSend: viewModel.canSend))
+            }
         }
+        .buttonStyle(.plain)
         .disabled(!viewModel.canSend)
         .accessibilityIdentifier("action-console-send")
     }

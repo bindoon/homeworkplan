@@ -11,7 +11,11 @@ final class AgentMarkdownParserTests: XCTestCase {
 
         let attributed = AgentMarkdownParser.attributedString(from: markdown)
         XCTAssertNotNil(attributed)
-        XCTAssertTrue(attributed?.characters.isEmpty == false)
+        let rendered = String(attributed!.characters)
+        XCTAssertTrue(rendered.contains("今日待办"))
+        XCTAssertTrue(rendered.contains("- 数学：P10"))
+        XCTAssertTrue(rendered.contains("- 英语：抄写"))
+        XCTAssertTrue(rendered.contains("\n"))
     }
 
     func testReturnsPartialForIncompleteStreamingChunk() {
@@ -20,40 +24,31 @@ final class AgentMarkdownParserTests: XCTestCase {
         XCTAssertNotNil(attributed)
     }
 
-    func testPreprocessConvertsPlainSingleNewlinesToHardBreaks() {
-        let result = AgentMarkdownParser.preprocessLineBreaks(in: "第一行\n第二行")
-        XCTAssertEqual(result, "第一行  \n第二行")
-    }
-
-    func testPreprocessPreservesParagraphBreaks() {
-        let result = AgentMarkdownParser.preprocessLineBreaks(in: "段落一\n\n段落二")
-        XCTAssertEqual(result, "段落一\n\n段落二")
-    }
-
-    func testPreprocessPreservesCodeBlockNewlines() {
-        let markdown = """
-        ```swift
-        let a = 1
-        let b = 2
-        ```
-        """
-        let result = AgentMarkdownParser.preprocessLineBreaks(in: markdown)
-        XCTAssertEqual(result, markdown)
-    }
-
-    func testPreprocessPreservesListItemNewlines() {
-        let markdown = "- 数学\n- 英语"
-        let result = AgentMarkdownParser.preprocessLineBreaks(in: markdown)
-        XCTAssertEqual(result, markdown)
-    }
-
-    func testPlainLinesRenderOnSeparateLines() {
+    func testPreservesSingleLineBreaks() {
         let markdown = "第一行\n第二行"
         let attributed = AgentMarkdownParser.attributedString(from: markdown)
         XCTAssertNotNil(attributed)
-        let rendered = String(attributed!.characters)
-        XCTAssertTrue(rendered.contains("第一行"))
-        XCTAssertTrue(rendered.contains("第二行"))
-        XCTAssertTrue(rendered.contains("\n"))
+        XCTAssertEqual(String(attributed!.characters), "第一行\n第二行")
+    }
+
+    func testPreservesParagraphBreaks() {
+        let markdown = "段落一\n\n段落二"
+        let attributed = AgentMarkdownParser.attributedString(from: markdown)
+        XCTAssertNotNil(attributed)
+        XCTAssertEqual(String(attributed!.characters), "段落一\n\n段落二")
+    }
+
+    func testPreservesListLineBreaks() {
+        let markdown = "- 数学\n- 英语"
+        let attributed = AgentMarkdownParser.attributedString(from: markdown)
+        XCTAssertNotNil(attributed)
+        XCTAssertEqual(String(attributed!.characters), "- 数学\n- 英语")
+    }
+
+    func testNormalizesWindowsLineEndings() {
+        let markdown = "第一行\r\n第二行"
+        let attributed = AgentMarkdownParser.attributedString(from: markdown)
+        XCTAssertNotNil(attributed)
+        XCTAssertEqual(String(attributed!.characters), "第一行\n第二行")
     }
 }
