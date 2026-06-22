@@ -10,7 +10,10 @@ final class HomeworkTask {
     var dueDate: Date = Date()
     var isCompleted: Bool = false
     var completedAt: Date? = nil
-    var sourceType: String = "manual"
+    var sourceType: String = ImportSourceType.manual.rawValue
+    var sourceDetail: String = ""
+    var recurringRuleId: UUID? = nil
+    var generationKey: String = ""
     var createdAt: Date = Date()
 
     init() {}
@@ -20,7 +23,10 @@ final class HomeworkTask {
         content: String,
         notes: String = "",
         dueDate: Date,
-        sourceType: String = "manual"
+        sourceType: String = ImportSourceType.manual.rawValue,
+        sourceDetail: String = "",
+        recurringRuleId: UUID? = nil,
+        generationKey: String = ""
     ) {
         self.id = UUID()
         self.subject = subject
@@ -28,6 +34,19 @@ final class HomeworkTask {
         self.notes = notes
         self.dueDate = dueDate
         self.sourceType = sourceType
+        self.sourceDetail = sourceDetail
+        self.recurringRuleId = recurringRuleId
+        self.generationKey = generationKey
         self.createdAt = Date()
+    }
+
+    static func makeGenerationKey(ruleId: UUID, date: Date, calendar: Calendar = .current) -> String {
+        let dayStart = calendar.startOfDay(for: date)
+        let formatter = DateFormatter()
+        formatter.calendar = calendar
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = calendar.timeZone
+        formatter.dateFormat = "yyyy-MM-dd"
+        return "\(ruleId.uuidString)-\(formatter.string(from: dayStart))"
     }
 }

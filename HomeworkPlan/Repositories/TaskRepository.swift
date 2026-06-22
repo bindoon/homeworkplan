@@ -13,7 +13,11 @@ final class TaskRepository {
         subject: Subject?,
         content: String,
         notes: String = "",
-        dueDate: Date
+        dueDate: Date,
+        sourceType: String = ImportSourceType.manual.rawValue,
+        sourceDetail: String = "",
+        recurringRuleId: UUID? = nil,
+        generationKey: String = ""
     ) throws -> HomeworkTask {
         let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
@@ -24,11 +28,40 @@ final class TaskRepository {
             subject: subject,
             content: trimmed,
             notes: notes.trimmingCharacters(in: .whitespacesAndNewlines),
-            dueDate: dueDate
+            dueDate: dueDate,
+            sourceType: sourceType,
+            sourceDetail: sourceDetail.trimmingCharacters(in: .whitespacesAndNewlines),
+            recurringRuleId: recurringRuleId,
+            generationKey: generationKey
         )
         context.insert(task)
         try context.save()
         return task
+    }
+
+    func createRecurring(
+        subject: Subject?,
+        content: String,
+        dueDate: Date,
+        recurringRuleId: UUID,
+        generationKey: String
+    ) throws -> HomeworkTask {
+        try create(
+            subject: subject,
+            content: content,
+            dueDate: dueDate,
+            sourceType: ImportSourceType.recurring.rawValue,
+            recurringRuleId: recurringRuleId,
+            generationKey: generationKey
+        )
+    }
+
+    func fetchByGenerationKey(_ key: String) throws -> HomeworkTask? {
+        guard !key.isEmpty else { return nil }
+        let descriptor = FetchDescriptor<HomeworkTask>(
+            predicate: #Predicate { $0.generationKey == key }
+        )
+        return try context.fetch(descriptor).first
     }
 
     func markComplete(id: UUID) throws {

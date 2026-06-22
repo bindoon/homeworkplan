@@ -13,7 +13,12 @@ struct HomeworkPlanApp: App {
         CloudKitSchemaInitializer.initializeIfNeeded()
         #endif
 
-        let schema = Schema([HomeworkTask.self, Subject.self])
+        let schema = Schema([
+            HomeworkTask.self,
+            Subject.self,
+            ImportRecord.self,
+            RecurringRule.self
+        ])
         let configuration = ModelConfiguration(
             cloudKitDatabase: .private("iCloud.app.homeworkplan.HomeworkPlan")
         )

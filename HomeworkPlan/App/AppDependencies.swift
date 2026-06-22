@@ -5,10 +5,27 @@ import SwiftUI
 final class AppDependencies {
     let taskRepository: TaskRepository
     let subjectRepository: SubjectRepository
+    let recurringRuleRepository: RecurringRuleRepository
+    let recurringTaskGenerator: RecurringTaskGenerator
+    let importRepository: ImportRepository
+    let keychainService: KeychainService
+    let importService: ImportService
 
     init(context: ModelContext) {
         self.taskRepository = TaskRepository(context: context)
         self.subjectRepository = SubjectRepository(context: context)
+        self.recurringRuleRepository = RecurringRuleRepository(context: context)
+        self.recurringTaskGenerator = RecurringTaskGenerator(
+            context: context,
+            taskRepository: taskRepository,
+            ruleRepository: recurringRuleRepository
+        )
+        self.importRepository = ImportRepository(context: context)
+        self.keychainService = KeychainService.shared
+        self.importService = ImportService(
+            importRepository: importRepository,
+            keychainService: keychainService
+        )
     }
 
     func seedIfNeeded() throws {
