@@ -53,7 +53,7 @@ final class ImportService {
         do {
             let text = try await OCRService.recognizeText(from: image)
             return try await processText(text, sourceType: .screenshot, sourceImage: image)
-        } catch {
+        } catch let error as OCRServiceError {
             guard AppSecrets.hasVisionModel,
                   let jpegData = image.fixedOrientation().jpegData(compressionQuality: 0.85) else {
                 throw error
@@ -88,7 +88,7 @@ final class ImportService {
         if let existing = try importRepository.findByContentHash(hash) {
             let candidates = decodeCandidates(from: existing.parsedJSON)
             if sourceType == .screenshot, existing.imagePath.isEmpty, let sourceImage {
-                try attachImage(sourceImage, to: existing)
+                attachImage(sourceImage, to: existing)
             }
             return ImportResult(
                 importRecord: existing,
@@ -133,7 +133,7 @@ final class ImportService {
         )
 
         if sourceType == .screenshot, let sourceImage {
-            try attachImage(sourceImage, to: record)
+            attachImage(sourceImage, to: record)
         }
 
         return ImportResult(
@@ -157,7 +157,7 @@ final class ImportService {
         if let existing = try importRepository.findByContentHash(hash) {
             let candidates = decodeCandidates(from: existing.parsedJSON)
             if existing.imagePath.isEmpty {
-                try attachImage(image, to: existing)
+                attachImage(image, to: existing)
             }
             return ImportResult(
                 importRecord: existing,
@@ -207,7 +207,7 @@ final class ImportService {
             sourceType: .screenshot,
             parsedJSON: parsedJSON
         )
-        try attachImage(image, to: record)
+        attachImage(image, to: record)
 
         return ImportResult(
             importRecord: record,
@@ -221,10 +221,14 @@ final class ImportService {
         )
     }
 
-    private func attachImage(_ image: UIImage, to record: ImportRecord) throws {
-        let path = try ImportImageStore.save(image, recordID: record.id)
-        try importRepository.updateImagePath(recordID: record.id, path: path)
-        record.imagePath = path
+    private func attachImage(_ image: UIImage, to record: ImportRecord) {
+        do {
+            let path = try ImportImageStore.save(image, recordID: record.id)
+            try importRepository.updateImagePath(recordID: record.id, path: path)
+            record.imagePath = path
+        } catch {
+            print("Failed to attach import image: \(error)")
+        }
     }
 
     private func resolveAPIKey() -> String? {

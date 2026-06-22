@@ -91,7 +91,7 @@
 /* Begin PBXFileReference section */
 		05F8C03735B777C2208D98DE /* ImportRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportRepositoryTests.swift; sourceTree = "<group>"; };
 		139FAF785AADF42E8A067A2D /* ContentHashService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentHashService.swift; sourceTree = "<group>"; };
-		1EB2FC7C8A2F33EDE12FDF7B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		1EB2FC7C8A2F33EDE12FDF7B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		21F593280FE88CA68200E391 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		24C779E96CC08BF05AC1A713 /* ParseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseService.swift; sourceTree = "<group>"; };
 		2574E5DE1E63713393CC1541 /* NotificationBudgetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBudgetManagerTests.swift; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		A920625ACF0FC4CB0031B76F /* TaskRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRepository.swift; sourceTree = "<group>"; };
 		A92129A50627949E34126D25 /* AllTasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTasksViewModel.swift; sourceTree = "<group>"; };
 		B4FCA59DF625517AC1ACD236 /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
-		B8E2314FE1D8037A76EE0C66 /* HomeworkPlan.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HomeworkPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8E2314FE1D8037A76EE0C66 /* HomeworkPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeworkPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB800FB72BE1CE208C1F283C /* ContentHashServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentHashServiceTests.swift; sourceTree = "<group>"; };
 		BD62DD030B40ED43815C598F /* ImportImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportImageStore.swift; sourceTree = "<group>"; };
 		BE9CD91EE0BC453D503DA41E /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
@@ -620,6 +620,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = HomeworkPlan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = SF442YFTBR;
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = HomeworkPlan;
@@ -679,6 +680,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = HomeworkPlan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = SF442YFTBR;
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = HomeworkPlan;

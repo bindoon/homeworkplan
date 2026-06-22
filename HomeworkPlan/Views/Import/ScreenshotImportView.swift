@@ -56,7 +56,7 @@ struct ScreenshotImportView: View {
     private func startQuickImportIfNeeded() {
         guard let initialImage, !didProcessInitialImage else { return }
         didProcessInitialImage = true
-        Task { await processImage(initialImage) }
+        Task { await importImage(initialImage) }
     }
 
     private func completeImport() {
@@ -90,13 +90,14 @@ struct ScreenshotImportView: View {
         .padding()
         .onChange(of: selectedItem) { _, newItem in
             guard let newItem else { return }
-            Task { await process(item: newItem) }
+            Task { await processPickerItem(newItem) }
         }
     }
 
     @MainActor
-    private func process(item: PhotosPickerItem) async {
+    private func processPickerItem(_ item: PhotosPickerItem) async {
         guard let dependencies, !isProcessing else { return }
+
         isProcessing = true
         processingStage = "正在读取图片…"
         defer {
@@ -104,18 +105,23 @@ struct ScreenshotImportView: View {
             processingStage = ""
         }
 
-        guard let data = try? await item.loadTransferable(type: Data.self),
-              let image = UIImage(data: data) else {
-            errorMessage = "无法读取所选图片"
-            return
+        do {
+            guard let data = try await item.loadTransferable(type: Data.self),
+                  let image = UIImage(data: data) else {
+                errorMessage = "无法读取所选图片"
+                return
+            }
+            processingStage = "正在识别文字…"
+            try await runImport(image, using: dependencies)
+        } catch {
+            errorMessage = error.localizedDescription
         }
-
-        await processImage(image)
     }
 
     @MainActor
-    private func processImage(_ image: UIImage) async {
+    private func importImage(_ image: UIImage) async {
         guard let dependencies, !isProcessing else { return }
+
         isProcessing = true
         processingStage = "正在识别文字…"
         defer {
@@ -124,15 +130,20 @@ struct ScreenshotImportView: View {
         }
 
         do {
-            let result = try await dependencies.importService.processImage(image)
-            if result.isDuplicate && result.candidates.isEmpty {
-                errorMessage = ImportServiceError.duplicateContent.localizedDescription
-                return
-            }
-            reviewResult = result
+            try await runImport(image, using: dependencies)
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    @MainActor
+    private func runImport(_ image: UIImage, using dependencies: AppDependencies) async throws {
+        let result = try await dependencies.importService.processImage(image)
+        if result.isDuplicate && result.candidates.isEmpty {
+            errorMessage = ImportServiceError.duplicateContent.localizedDescription
+            return
+        }
+        reviewResult = result
     }
 }
 
