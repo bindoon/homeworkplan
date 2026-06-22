@@ -41,11 +41,11 @@
 
 ### Local Reminders
 
-- [ ] **REMND-01**: User can configure default reminder times in settings
-- [ ] **REMND-02**: System schedules local notifications for incomplete tasks with due dates
-- [ ] **REMND-03**: System schedules local notifications for generated recurring tasks when rule includes reminder
-- [ ] **REMND-04**: System cancels pending notifications when task is completed or deleted
-- [ ] **REMND-05**: System requests notification permission before scheduling; explains if denied
+- [x] **REMND-01**: User can configure default reminder times in settings
+- [x] **REMND-02**: System schedules local notifications for incomplete tasks with due dates
+- [x] **REMND-03**: System schedules local notifications for generated recurring tasks when rule includes reminder
+- [x] **REMND-04**: System cancels pending notifications when task is completed or deleted
+- [x] **REMND-05**: System requests notification permission before scheduling; explains if denied
 
 ### Settings & Security
 
@@ -113,11 +113,11 @@
 | RECUR-02 | Phase 3 | Complete |
 | RECUR-03 | Phase 3 | Complete |
 | RECUR-04 | Phase 3 | Complete |
-| REMND-01 | Phase 4 | Pending |
-| REMND-02 | Phase 4 | Pending |
-| REMND-03 | Phase 4 | Pending |
-| REMND-04 | Phase 4 | Pending |
-| REMND-05 | Phase 4 | Pending |
+| REMND-01 | Phase 4 | Complete |
+| REMND-02 | Phase 4 | Complete |
+| REMND-03 | Phase 4 | Complete |
+| REMND-04 | Phase 4 | Complete |
+| REMND-05 | Phase 4 | Complete |
 
 **Coverage:**
 

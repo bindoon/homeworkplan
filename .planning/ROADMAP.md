@@ -14,7 +14,7 @@ HomeworkPlan MVP 以四个垂直切片交付完整家长作业管理闭环：先
 - [x] **Phase 1: Daily Task List & Data Foundation** - 手动创建/管理今日作业清单，SwiftData + iCloud 持久化 (completed 2026-06-22)
 - [ ] **Phase 2: Import & AI Parsing** - 截图/粘贴导入，OCR + DeepSeek 解析，用户确认后入库 (executed 2026-06-22, verification human_needed)
 - [ ] **Phase 3: Recurring Tasks** - 重复规则创建与启动/前台自动生成当日任务
-- [ ] **Phase 4: Local Reminders** - 截止与重复任务本地通知，权限引导与联动取消
+- [x] **Phase 4: Local Reminders** - 截止与重复任务本地通知，权限引导与联动取消 (completed 2026-06-22)
 
 ## Phase Details
 
@@ -101,6 +101,7 @@ Plans:
 **Wave 1**
 
 - [x] 03-01-PLAN.md — RecurringRule model, generator, Settings CRUD, lifecycle hooks
+
 **UI hint**: yes
 
 ### Phase 4: Local Reminders
@@ -130,4 +131,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Daily Task List & Data Foundation | 5/5 | Complete   | 2026-06-22 |
 | 2. Import & AI Parsing | 3/3 | Executed | 2026-06-22 |
 | 3. Recurring Tasks | 0/TBD | Not started | - |
-| 4. Local Reminders | 0/TBD | Not started | - |
+| 4. Local Reminders | 1/1 | Complete   | 2026-06-22 |
