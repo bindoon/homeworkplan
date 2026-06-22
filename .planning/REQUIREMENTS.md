@@ -17,20 +17,20 @@
 
 ### Homework Import
 
-- [ ] **IMPT-01**: User can select one or more homework screenshots from the photo library to import
-- [ ] **IMPT-02**: System runs Apple Vision OCR on imported screenshots and stores extracted text with the import record
-- [ ] **IMPT-03**: User can paste copied homework or chat text into the app as an import source
-- [ ] **IMPT-04**: System detects clipboard content hint when app opens or enters foreground (with iOS privacy compliance)
-- [ ] **IMPT-05**: System computes content hash and avoids re-processing exact duplicate imports
+- [x] **IMPT-01**: User can select one or more homework screenshots from the photo library to import
+- [x] **IMPT-02**: System runs Apple Vision OCR on imported screenshots and stores extracted text with the import record
+- [x] **IMPT-03**: User can paste copied homework or chat text into the app as an import source
+- [x] **IMPT-04**: System detects clipboard content hint when app opens or enters foreground (with iOS privacy compliance)
+- [x] **IMPT-05**: System computes content hash and avoids re-processing exact duplicate imports
 
 ### Homework Parsing
 
-- [ ] **PARSE-01**: System sends OCR or pasted text to DeepSeek and returns structured task candidates (subject, content, due date, assigner, confidence)
-- [ ] **PARSE-02**: System distinguishes homework from unrelated chat, notices, and parent discussion
-- [ ] **PARSE-03**: System normalizes relative due dates (e.g. "tomorrow") using import timestamp
-- [ ] **PARSE-04**: System validates model JSON output against local schema; retries once on failure
-- [ ] **PARSE-05**: Parsed results display as task candidates without auto-saving to database
-- [ ] **PARSE-06**: User can confirm, edit, or discard each parsed task candidate before saving
+- [x] **PARSE-01**: System sends OCR or pasted text to DeepSeek and returns structured task candidates (subject, content, due date, assigner, confidence)
+- [x] **PARSE-02**: System distinguishes homework from unrelated chat, notices, and parent discussion
+- [x] **PARSE-03**: System normalizes relative due dates (e.g. "tomorrow") using import timestamp
+- [x] **PARSE-04**: System validates model JSON output against local schema; retries once on failure
+- [x] **PARSE-05**: Parsed results display as task candidates without auto-saving to database
+- [x] **PARSE-06**: User can confirm, edit, or discard each parsed task candidate before saving
 
 ### Recurring Tasks
 
@@ -49,8 +49,8 @@
 
 ### Settings & Security
 
-- [ ] **SETT-01**: User can configure DeepSeek API Key stored securely in Keychain
-- [ ] **SETT-02**: App blocks AI parsing with clear guidance when API Key is not configured
+- [x] **SETT-01**: User can configure DeepSeek API Key stored securely in Keychain
+- [x] **SETT-02**: App blocks AI parsing with clear guidance when API Key is not configured
 - [x] **SETT-03**: SwiftData persists all data locally with iCloud sync enabled for multi-device continuity
 
 ## v2 Requirements
@@ -96,19 +96,19 @@
 | TASK-06 | Phase 1 | Complete |
 | TASK-07 | Phase 1 | Complete |
 | SETT-03 | Phase 1 | Complete |
-| IMPT-01 | Phase 2 | Pending |
-| IMPT-02 | Phase 2 | Pending |
-| IMPT-03 | Phase 2 | Pending |
-| IMPT-04 | Phase 2 | Pending |
-| IMPT-05 | Phase 2 | Pending |
-| PARSE-01 | Phase 2 | Pending |
-| PARSE-02 | Phase 2 | Pending |
-| PARSE-03 | Phase 2 | Pending |
-| PARSE-04 | Phase 2 | Pending |
-| PARSE-05 | Phase 2 | Pending |
-| PARSE-06 | Phase 2 | Pending |
-| SETT-01 | Phase 2 | Pending |
-| SETT-02 | Phase 2 | Pending |
+| IMPT-01 | Phase 2 | Complete |
+| IMPT-02 | Phase 2 | Complete |
+| IMPT-03 | Phase 2 | Complete |
+| IMPT-04 | Phase 2 | Complete |
+| IMPT-05 | Phase 2 | Complete |
+| PARSE-01 | Phase 2 | Complete |
+| PARSE-02 | Phase 2 | Complete |
+| PARSE-03 | Phase 2 | Complete |
+| PARSE-04 | Phase 2 | Complete |
+| PARSE-05 | Phase 2 | Complete |
+| PARSE-06 | Phase 2 | Complete |
+| SETT-01 | Phase 2 | Complete |
+| SETT-02 | Phase 2 | Complete |
 | RECUR-01 | Phase 3 | Pending |
 | RECUR-02 | Phase 3 | Pending |
 | RECUR-03 | Phase 3 | Pending |
