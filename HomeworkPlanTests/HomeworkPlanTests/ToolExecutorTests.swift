@@ -133,4 +133,75 @@ final class ToolExecutorTests: XCTestCase {
             XCTAssertTrue(error.localizedDescription.contains("ocr_text"))
         }
     }
+
+    func testCreateSubject_returnsProposalWithoutPersisting() async throws {
+        let args = """
+        {"name":"科学","emoji":"🔬"}
+        """
+
+        let result = try await executor.execute(toolName: "create_subject", argumentsJSON: args)
+
+        guard case .proposal(let proposal) = result else {
+            return XCTFail("Expected proposal")
+        }
+        XCTAssertEqual(proposal.kind, .createSubject)
+        XCTAssertEqual(proposal.status, .pending)
+
+        let descriptor = FetchDescriptor<Subject>()
+        let count = try context.fetchCount(descriptor)
+        XCTAssertEqual(count, 1, "Only setup subject should exist before confirmation")
+    }
+
+    func testCreateSubject_confirmPersistsSubject() async throws {
+        let args = """
+        {"name":"科学","emoji":"🔬"}
+        """
+        let result = try await executor.execute(toolName: "create_subject", argumentsJSON: args)
+        guard case .proposal(let proposal) = result else {
+            return XCTFail("Expected proposal")
+        }
+
+        let message = try executor.confirmProposal(proposal)
+        XCTAssertTrue(message.contains("科学"))
+
+        let subjects = try subjectRepository.fetchAll()
+        XCTAssertTrue(subjects.contains { $0.name == "科学" && $0.emoji == "🔬" })
+    }
+
+    func testCreateRecurringRule_returnsProposalWithoutPersisting() async throws {
+        let args = """
+        {"content":"练字","subject_name":"语文","frequency":"daily"}
+        """
+
+        let result = try await executor.execute(toolName: "create_recurring_rule", argumentsJSON: args)
+
+        guard case .proposal(let proposal) = result else {
+            return XCTFail("Expected proposal")
+        }
+        XCTAssertEqual(proposal.kind, .createRecurringRule)
+        XCTAssertEqual(proposal.status, .pending)
+
+        let descriptor = FetchDescriptor<RecurringRule>()
+        let count = try context.fetchCount(descriptor)
+        XCTAssertEqual(count, 0, "Rule should not be persisted before confirmation")
+    }
+
+    func testCreateRecurringRule_confirmPersistsRule() async throws {
+        let args = """
+        {"content":"练字","subject_name":"语文","frequency":"daily"}
+        """
+        let result = try await executor.execute(toolName: "create_recurring_rule", argumentsJSON: args)
+        guard case .proposal(let proposal) = result else {
+            return XCTFail("Expected proposal")
+        }
+
+        let message = try executor.confirmProposal(proposal)
+        XCTAssertTrue(message.contains("练字"))
+
+        let rules = try recurringRuleRepository.fetchAll()
+        XCTAssertEqual(rules.count, 1)
+        XCTAssertEqual(rules.first?.content, "练字")
+        XCTAssertEqual(rules.first?.frequency, .daily)
+        XCTAssertEqual(rules.first?.subject?.name, "语文")
+    }
 }
