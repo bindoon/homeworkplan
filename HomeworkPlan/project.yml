@@ -1,0 +1,59 @@
+name: HomeworkPlan
+options:
+  bundleIdPrefix: app.homeworkplan
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+settings:
+  SWIFT_VERSION: "5.0"
+  IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+targets:
+  HomeworkPlan:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Models
+      - path: Repositories
+      - path: Services
+      - path: ViewModels
+      - path: Views
+      - path: Resources
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: app.homeworkplan.HomeworkPlan
+      CODE_SIGN_ENTITLEMENTS: HomeworkPlan.entitlements
+      INFOPLIST_KEY_CFBundleDisplayName: HomeworkPlan
+      INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+      INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+      SWIFT_EMIT_LOC_STRINGS: YES
+      ENABLE_TESTABILITY: YES
+    entitlements:
+      path: HomeworkPlan.entitlements
+    scheme:
+      testTargets:
+        - HomeworkPlanTests
+        - HomeworkPlanUITests
+  HomeworkPlanTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ../HomeworkPlanTests/HomeworkPlanTests
+    dependencies:
+      - target: HomeworkPlan
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      PRODUCT_BUNDLE_IDENTIFIER: app.homeworkplan.HomeworkPlanTests
+  HomeworkPlanUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: ../HomeworkPlanTests/HomeworkPlanUITests
+    dependencies:
+      - target: HomeworkPlan
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      PRODUCT_BUNDLE_IDENTIFIER: app.homeworkplan.HomeworkPlanUITests
