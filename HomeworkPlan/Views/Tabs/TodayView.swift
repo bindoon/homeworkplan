@@ -1,12 +1,20 @@
 import SwiftUI
 import SwiftData
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct TodayView: View {
     @Environment(\.appDependencies) private var dependencies
+    @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \Subject.sortOrder) private var subjects: [Subject]
 
     @State private var selectedDate = Date()
     @State private var showAddTask = false
+    @State private var showImport = false
+    @State private var showPasteFromClipboard = false
+    @State private var clipboardPrefill = ""
+    @State private var showClipboardBanner = false
     @State private var selectedTask: HomeworkTask?
     @State private var tasks: [HomeworkTask] = []
 
@@ -15,6 +23,20 @@ struct TodayView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                if showClipboardBanner {
+                    ClipboardHintBanner(
+                        onImport: {
+                            showClipboardBanner = false
+                            #if canImport(UIKit)
+                            clipboardPrefill = UIPasteboard.general.string ?? ""
+                            #endif
+                            showPasteFromClipboard = true
+                        },
+                        onDismiss: {
+                            showClipboardBanner = false
+                        }
+                    )
+                }
                 DatePicker(
                     "选择日期",
                     selection: $selectedDate,
@@ -73,6 +95,12 @@ struct TodayView: View {
             .navigationTitle("今日")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("导入") {
+                        showImport = true
+                    }
+                    .accessibilityIdentifier("today-import-button")
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("添加作业") {
                         showAddTask = true
@@ -80,10 +108,31 @@ struct TodayView: View {
                     .accessibilityIdentifier("today-add-button")
                 }
             }
-            .onAppear { reloadTasks() }
+            .onAppear {
+                reloadTasks()
+                checkClipboardHint()
+            }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    checkClipboardHint()
+                }
+            }
             .sheet(isPresented: $showAddTask) {
                 ManualTaskFormView(defaultDueDate: selectedDate)
                     .onDisappear { reloadTasks() }
+            }
+            .sheet(isPresented: $showImport) {
+                ImportSourceSheet()
+                    .onDisappear { reloadTasks() }
+            }
+            .sheet(isPresented: $showPasteFromClipboard) {
+                NavigationStack {
+                    PasteImportView(initialText: clipboardPrefill)
+                }
+                .onDisappear {
+                    clipboardPrefill = ""
+                    reloadTasks()
+                }
             }
             .sheet(item: $selectedTask) { task in
                 TaskEditView(task: task)
@@ -152,6 +201,12 @@ struct TodayView: View {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter.string(from: date)
+    }
+
+    private func checkClipboardHint() {
+        #if canImport(UIKit)
+        showClipboardBanner = UIPasteboard.general.hasStrings
+        #endif
     }
 }
 

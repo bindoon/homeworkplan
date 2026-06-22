@@ -10,11 +10,21 @@ struct SettingsView: View {
                     } label: {
                         Text("科目管理")
                     }
+
+                    NavigationLink {
+                        RecurringRulesListView()
+                    } label: {
+                        Text("重复任务")
+                    }
                 }
 
                 Section("AI 解析") {
-                    Text("AI 解析设置将在后续版本提供")
-                        .foregroundStyle(.secondary)
+                    NavigationLink {
+                        APIKeySettingsView()
+                    } label: {
+                        Text("DeepSeek API Key")
+                    }
+                    .accessibilityIdentifier("settings-api-key-link")
                 }
 
                 Section("关于") {
