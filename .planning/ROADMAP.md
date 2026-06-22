@@ -39,7 +39,8 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 **Goal:** Action Console 支持贴图与语音输入，复用 Phase 1 agent 管道  
 **Mode:** mvp  
 **Requirements:** ACTN-04, ACTN-05  
-**UI hint:** yes
+**UI hint:** yes  
+**Status:** ✅ Complete (2026-06-22)
 
 **Success Criteria:**
 1. 用户在 Action Console 粘贴截图 → OCR → import 工具 → 确认 → 入库
@@ -78,7 +79,7 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Agent Foundation & Text Action Console | v2.0 | 0/TBD | Not started | - |
-| 2. Multimodal Action Console | v2.0 | 0/TBD | Not started | - |
+| 1. Agent Foundation & Text Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
+| 2. Multimodal Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
 | 3. Unified Home & Navigation | v2.0 | 0/TBD | Not started | - |
 | 4. NL Admin & Settings Slim | v2.0 | 0/TBD | Not started | - |

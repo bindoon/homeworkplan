@@ -19,8 +19,8 @@
 - [ ] **ACTN-01**: 第二 Tab 提供单一文字输入框 + 发送按钮
 - [ ] **ACTN-02**: 展示 agent 回复与待确认卡片
 - [ ] **ACTN-03**: 用户可在 Action Console 内确认/拒绝 tool 提案
-- [ ] **ACTN-04**: 支持在输入框粘贴截图触发 import 工具
-- [ ] **ACTN-05**: 支持按住录音按钮，语音转文字后送入 agent
+- [x] **ACTN-04**: 支持在输入框粘贴截图触发 import 工具
+- [x] **ACTN-05**: 支持按住录音按钮，语音转文字后送入 agent
 
 ### Home Query (HOME)
 
@@ -83,8 +83,8 @@
 | ACTN-02 | Phase 1 | Pending |
 | ACTN-03 | Phase 1 | Pending |
 | NLAD-03 | Phase 1 | Pending |
-| ACTN-04 | Phase 2 | Pending |
-| ACTN-05 | Phase 2 | Pending |
+| ACTN-04 | Phase 2 | Complete |
+| ACTN-05 | Phase 2 | Complete |
 | HOME-01 | Phase 3 | Pending |
 | HOME-02 | Phase 3 | Pending |
 | HOME-03 | Phase 3 | Pending |
