@@ -4,6 +4,7 @@ import SwiftData
 @MainActor
 final class TaskRepository {
     private let context: ModelContext
+    var reminderService: ReminderService?
 
     init(context: ModelContext) {
         self.context = context
@@ -36,6 +37,9 @@ final class TaskRepository {
         )
         context.insert(task)
         try context.save()
+        if sourceType != ImportSourceType.recurring.rawValue {
+            notifySchedule(task)
+        }
         return task
     }
 
@@ -69,6 +73,7 @@ final class TaskRepository {
         task.isCompleted = true
         task.completedAt = Date()
         try context.save()
+        notifyCancel(taskId: id)
     }
 
     func markIncomplete(id: UUID) throws {
@@ -76,6 +81,7 @@ final class TaskRepository {
         task.isCompleted = false
         task.completedAt = nil
         try context.save()
+        notifySchedule(task)
     }
 
     func update(
@@ -95,12 +101,63 @@ final class TaskRepository {
         task.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         task.dueDate = dueDate
         try context.save()
+        notifySchedule(task)
     }
 
     func delete(id: UUID) throws {
         guard let task = try fetchTask(id: id) else { return }
+        let taskId = task.id
         context.delete(task)
         try context.save()
+        notifyCancel(taskId: taskId)
+    }
+
+    func fetchIncompleteTasks(
+        dueWithinDays days: Int,
+        from date: Date = Date(),
+        calendar: Calendar = .current
+    ) throws -> [HomeworkTask] {
+        let start = calendar.startOfDay(for: date)
+        guard let end = calendar.date(byAdding: .day, value: days, to: start) else {
+            return []
+        }
+
+        let descriptor = FetchDescriptor<HomeworkTask>(
+            predicate: #Predicate { task in
+                !task.isCompleted && task.dueDate >= start && task.dueDate < end
+            },
+            sortBy: [SortDescriptor(\HomeworkTask.dueDate)]
+        )
+        return try context.fetch(descriptor)
+    }
+
+    private func notifySchedule(_ task: HomeworkTask, ruleReminderTime: Date? = nil) {
+        guard let reminderService else { return }
+        let resolvedRuleTime: Date?
+        if task.sourceType == ImportSourceType.recurring.rawValue,
+           ruleReminderTime == nil,
+           let ruleId = task.recurringRuleId {
+            resolvedRuleTime = try? fetchRuleReminderTime(ruleId)
+        } else {
+            resolvedRuleTime = ruleReminderTime
+        }
+        Task {
+            await reminderService.schedule(for: task, ruleReminderTime: resolvedRuleTime)
+        }
+    }
+
+    private func fetchRuleReminderTime(_ ruleId: UUID) throws -> Date? {
+        let descriptor = FetchDescriptor<RecurringRule>(
+            predicate: #Predicate { $0.id == ruleId }
+        )
+        return try context.fetch(descriptor).first?.reminderTime
+    }
+
+    private func notifyCancel(taskId: UUID) {
+        guard let reminderService else { return }
+        Task {
+            await reminderService.cancel(for: taskId)
+        }
     }
 
     func fetchTasks(dueOn date: Date, includeCompleted: Bool) throws -> [HomeworkTask] {

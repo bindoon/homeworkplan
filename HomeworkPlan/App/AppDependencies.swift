@@ -7,6 +7,7 @@ final class AppDependencies {
     let subjectRepository: SubjectRepository
     let recurringRuleRepository: RecurringRuleRepository
     let recurringTaskGenerator: RecurringTaskGenerator
+    let reminderService: ReminderService
     let importRepository: ImportRepository
     let keychainService: KeychainService
     let importService: ImportService
@@ -15,10 +16,13 @@ final class AppDependencies {
         self.taskRepository = TaskRepository(context: context)
         self.subjectRepository = SubjectRepository(context: context)
         self.recurringRuleRepository = RecurringRuleRepository(context: context)
+        self.reminderService = ReminderService()
+        self.taskRepository.reminderService = reminderService
         self.recurringTaskGenerator = RecurringTaskGenerator(
             context: context,
             taskRepository: taskRepository,
-            ruleRepository: recurringRuleRepository
+            ruleRepository: recurringRuleRepository,
+            reminderService: reminderService
         )
         self.importRepository = ImportRepository(context: context)
         self.keychainService = KeychainService.shared

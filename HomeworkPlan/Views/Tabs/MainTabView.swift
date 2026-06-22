@@ -35,6 +35,12 @@ struct MainTabView: View {
         guard let dependencies else { return }
         do {
             try dependencies.recurringTaskGenerator.generateIfNeeded()
+            Task {
+                await dependencies.reminderService.rescheduleAll(
+                    using: dependencies.taskRepository,
+                    ruleRepository: dependencies.recurringRuleRepository
+                )
+            }
         } catch {
             print("Recurring task generation failed: \(error)")
         }
