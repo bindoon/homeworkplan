@@ -76,7 +76,7 @@ struct RecurringRuleFormView: View {
                         selection: $reminderTime,
                         displayedComponents: .hourAndMinute
                     )
-                    Text("通知调度将在后续版本提供，当前仅保存时间设置")
+                    Text("重复作业将在每天的此时间发送本地通知")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

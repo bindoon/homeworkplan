@@ -6,6 +6,13 @@ struct SettingsView: View {
             List {
                 Section {
                     NavigationLink {
+                        ReminderSettingsView()
+                    } label: {
+                        Text("提醒设置")
+                    }
+                    .accessibilityIdentifier("settings-reminder-link")
+
+                    NavigationLink {
                         SubjectManagementView()
                     } label: {
                         Text("科目管理")
