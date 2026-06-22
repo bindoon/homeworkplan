@@ -62,12 +62,12 @@ completed: 2026-06-22
 
 ## Task Commits
 
-1. **SpeechInputService** - pending batch commit
-2. **import_from_image + orchestrator attachment** - pending batch commit
-3. **Action Console multimodal UI** - pending batch commit
-4. **Info.plist permissions** - pending batch commit
-5. **Tests** - pending batch commit
-6. **Phase docs** - pending batch commit
+1. **SpeechInputService** - `b3d4e23`
+2. **import_from_image + orchestrator attachment** - `3b159a6`
+3. **Action Console multimodal UI** - `cda2a8b`
+4. **Info.plist permissions** - `d1a4c93` (+ pbxproj in `b3d4e23`)
+5. **Tests** - `a4f7f6e`
+6. **Phase docs** - `2164379`
 
 ## Files Created/Modified
 
