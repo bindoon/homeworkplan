@@ -11,6 +11,8 @@ final class AppDependencies {
     let importRepository: ImportRepository
     let keychainService: KeychainService
     let importService: ImportService
+    let toolExecutor: ToolExecutor
+    let agentOrchestrator: AgentOrchestrator
 
     init(context: ModelContext) {
         self.taskRepository = TaskRepository(context: context)
@@ -29,6 +31,17 @@ final class AppDependencies {
         self.importService = ImportService(
             importRepository: importRepository,
             taskRepository: taskRepository,
+            keychainService: keychainService
+        )
+        self.toolExecutor = ToolExecutor(
+            taskRepository: taskRepository,
+            subjectRepository: subjectRepository,
+            recurringRuleRepository: recurringRuleRepository,
+            importService: importService
+        )
+        self.agentOrchestrator = AgentOrchestrator(
+            toolExecutor: toolExecutor,
+            subjectRepository: subjectRepository,
             keychainService: keychainService
         )
     }

@@ -19,6 +19,11 @@ struct MainTabView: View {
                     Label("全部", systemImage: "list.bullet")
                 }
 
+            ActionConsoleView()
+                .tabItem {
+                    Label("操作", systemImage: "text.bubble")
+                }
+
             SettingsView()
                 .tabItem {
                     Label("设置", systemImage: "gearshape")

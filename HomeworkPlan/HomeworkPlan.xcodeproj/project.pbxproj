@@ -81,6 +81,18 @@
 		FB0DD36A8A826A9A309B8C07 /* ImportSourceSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B1AB2CAF42BA57300FC022 /* ImportSourceSheet.swift */; };
 		FB8A88F02EF53213A39840CB /* HomeworkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C712162A605C3D198A6092EF /* HomeworkTask.swift */; };
 		FBDE4328D8FF27A8CD593117 /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D98442211BA45F15FFE82E4 /* AppDependencies.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S01 /* AgentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R01 /* AgentModels.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S02 /* AgentTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R02 /* AgentTool.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S03 /* ToolRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R03 /* ToolRegistry.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S04 /* ToolExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R04 /* ToolExecutor.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S05 /* AgentLLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R05 /* AgentLLMService.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S06 /* AgentSystemPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R06 /* AgentSystemPrompt.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S07 /* AgentOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R07 /* AgentOrchestrator.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S08 /* ActionConsoleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R08 /* ActionConsoleViewModel.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S09 /* ActionConsoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R09 /* ActionConsoleView.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S10 /* AgentProposalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S11 /* ToolRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +190,18 @@
 		F3DCF213C24B67EFFD162FCC /* GeneratedSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedSecrets.swift; sourceTree = "<group>"; };
 		F5E2D874BDFA81D0AC563DA1 /* SubjectManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectManagementView.swift; sourceTree = "<group>"; };
 		FCB1B16BFF8BBCB0C5B62A8A /* ReminderSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsView.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R01 /* AgentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentModels.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R02 /* AgentTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentTool.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R03 /* ToolRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolRegistry.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R04 /* ToolExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutor.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R05 /* AgentLLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentLLMService.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R06 /* AgentSystemPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentSystemPrompt.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R07 /* AgentOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentOrchestrator.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R08 /* ActionConsoleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionConsoleViewModel.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R09 /* ActionConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionConsoleView.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProposalCard.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolRegistryTests.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -194,6 +218,7 @@
 			children = (
 				A92129A50627949E34126D25 /* AllTasksViewModel.swift */,
 				8D8FF3216FADCD6A13D42162 /* ImportReviewViewModel.swift */,
+				A1G2E3N4T5M6O7D8E9L0R08 /* ActionConsoleViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -230,6 +255,8 @@
 				293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */,
 				3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */,
 				4B5C6D7E8F9012345678 /* DueDateResolverTests.swift */,
+				A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */,
+				A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */,
 			);
 			path = HomeworkPlanTests;
 			sourceTree = "<group>";
@@ -333,6 +360,7 @@
 		B5C4463FC138D41103C6BF55 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A1G2E3N4T5M6O7D8E9L0G01 /* Agent */,
 				E74F694B94EF67D42817A316 /* Import */,
 				7BA36D34C0869FAE118A2DC4 /* Settings */,
 				86152258FDCAB5A737B42DE5 /* Tabs */,
@@ -341,9 +369,19 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A1G2E3N4T5M6O7D8E9L0G01 /* Agent */ = {
+			isa = PBXGroup;
+			children = (
+				A1G2E3N4T5M6O7D8E9L0R09 /* ActionConsoleView.swift */,
+				A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */,
+			);
+			path = Agent;
+			sourceTree = "<group>";
+		};
 		B673CECECDA3010E187CF1D5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A1G2E3N4T5M6O7D8E9L0G02 /* Agent */,
 				C217C3D27F53D1EF46162C25 /* Import */,
 				D8E9F0A1B2C3041526374859 /* Recurring */,
 				F32A92EF3FE335F2007EE4AB /* Reminders */,
@@ -352,6 +390,20 @@
 				2E90957C931BA0804381008C /* RecurringTaskGenerator.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		A1G2E3N4T5M6O7D8E9L0G02 /* Agent */ = {
+			isa = PBXGroup;
+			children = (
+				A1G2E3N4T5M6O7D8E9L0R01 /* AgentModels.swift */,
+				A1G2E3N4T5M6O7D8E9L0R02 /* AgentTool.swift */,
+				A1G2E3N4T5M6O7D8E9L0R03 /* ToolRegistry.swift */,
+				A1G2E3N4T5M6O7D8E9L0R04 /* ToolExecutor.swift */,
+				A1G2E3N4T5M6O7D8E9L0R05 /* AgentLLMService.swift */,
+				A1G2E3N4T5M6O7D8E9L0R06 /* AgentSystemPrompt.swift */,
+				A1G2E3N4T5M6O7D8E9L0R07 /* AgentOrchestrator.swift */,
+			);
+			path = Agent;
 			sourceTree = "<group>";
 		};
 		D8E9F0A1B2C3041526374859 /* Recurring */ = {
@@ -586,6 +638,8 @@
 				D049FA5B6C7D8E9F0A1B2C3D /* ImportContextBuilderTests.swift in Sources */,
 				D15AFB6C7D8E9F0A1B2C3D4E /* ImportReviewViewModelTests.swift in Sources */,
 				D26B0C7D8E9F0A1B2C3D4E5F /* DueDateResolverTests.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S11 /* ToolRegistryTests.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +705,16 @@
 				CC05B6C7D8F94A5B6C7E8F90 /* DingTalkCalendarImportView.swift in Sources */,
 				CE27D8394A5B6C7D8E9F0A1B /* ImportTaskAction.swift in Sources */,
 				CF38E94A5B6C7D8E9F0A1B2C /* ImportContextBuilder.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S01 /* AgentModels.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S02 /* AgentTool.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S03 /* ToolRegistry.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S04 /* ToolExecutor.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S05 /* AgentLLMService.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S06 /* AgentSystemPrompt.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S07 /* AgentOrchestrator.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S08 /* ActionConsoleViewModel.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S09 /* ActionConsoleView.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S10 /* AgentProposalCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
