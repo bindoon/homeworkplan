@@ -4,22 +4,43 @@ enum DueDateResolver {
     static func resolve(
         for candidate: TaskCandidate,
         importedAt: Date = Date(),
+        rawText: String? = nil,
         calendar: Calendar = .current
     ) -> Date {
         let today = calendar.startOfDay(for: importedAt)
-        let text = [candidate.content, candidate.notes ?? ""]
-            .filter { !$0.isEmpty }
-            .joined(separator: " ")
+        let content = candidate.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        let sourceText = normalizedSourceText(rawText: rawText, content: content)
 
-        if let relative = relativeDueDate(in: text, from: today, calendar: calendar) {
+        if relativeDateMentioned(in: sourceText),
+           let relative = relativeDueDate(in: sourceText, from: today, calendar: calendar) {
             return relative
         }
 
-        if contentReferencesExplicitDate(text), let due = candidate.dueDate {
+        if explicitDateMentioned(in: sourceText), let due = candidate.dueDate {
             return calendar.startOfDay(for: due)
         }
 
         return today
+    }
+
+    private static func normalizedSourceText(rawText: String?, content: String) -> String {
+        guard let rawText else { return content }
+        let trimmed = rawText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return content }
+        if trimmed == "[截图识图导入]" {
+            return content
+        }
+        return trimmed
+    }
+
+    private static func relativeDateMentioned(in text: String) -> Bool {
+        text.contains("大后天")
+            || text.contains("后天")
+            || text.contains("明天")
+            || text.contains("明早")
+            || text.contains("明晚")
+            || text.contains("今天")
+            || text.contains("今日")
     }
 
     private static func relativeDueDate(in text: String, from today: Date, calendar: Calendar) -> Date? {
@@ -38,31 +59,34 @@ enum DueDateResolver {
         return nil
     }
 
-    private static func contentReferencesExplicitDate(_ text: String) -> Bool {
+    private static func explicitDateMentioned(in text: String) -> Bool {
         if text.range(of: #"\d{1,2}\s*月\s*\d{1,2}\s*日"#, options: .regularExpression) != nil {
             return true
         }
         if text.range(of: #"\d{4}-\d{1,2}-\d{1,2}"#, options: .regularExpression) != nil {
             return true
         }
-        if text.contains("明天") || text.contains("后天") || text.contains("今天") || text.contains("今日") {
+        if text.range(of: #"\d{1,2}\s*/\s*\d{1,2}"#, options: .regularExpression) != nil {
             return true
         }
-        return false
+        return relativeDateMentioned(in: text)
     }
 }
 
 extension TaskCandidate {
-    static func parseLocalDateString(_ value: String) -> Date? {
+    static func parseLocalDateString(_ value: String, calendar: Calendar = .current) -> Date? {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty, trimmed.lowercased() != "null" else { return nil }
 
         let datePart = String(trimmed.prefix(10))
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone.current
-        formatter.dateFormat = "yyyy-MM-dd"
-        guard let date = formatter.date(from: datePart) else { return nil }
-        return Calendar.current.startOfDay(for: date)
+        let parts = datePart.split(separator: "-")
+        guard parts.count == 3,
+              let year = Int(parts[0]),
+              let month = Int(parts[1]),
+              let day = Int(parts[2]) else {
+            return nil
+        }
+
+        return calendar.date(from: DateComponents(year: year, month: month, day: day))
     }
 }

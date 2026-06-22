@@ -173,7 +173,11 @@ final class ImportReviewViewModel {
         referenceDate: Date
     ) -> ReviewableCandidate {
         let subject = resolveSubject(named: candidate.subjectName, in: subjects)
-        let resolvedDue = DueDateResolver.resolve(for: candidate, importedAt: referenceDate)
+        let resolvedDue = DueDateResolver.resolve(
+            for: candidate,
+            importedAt: referenceDate,
+            rawText: rawText
+        )
         let resolution = resolveImportAction(for: candidate)
 
         return ReviewableCandidate(

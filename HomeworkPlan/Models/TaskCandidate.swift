@@ -76,9 +76,6 @@ struct TaskCandidate: Codable, Identifiable, Equatable {
         if let iso = try? container.decodeIfPresent(String.self, forKey: .dueDate) {
             return TaskCandidate.parseLocalDateString(iso)
         }
-        if let date = try? container.decodeIfPresent(Date.self, forKey: .dueDate) {
-            return Calendar.current.startOfDay(for: date)
-        }
         return nil
     }
 }

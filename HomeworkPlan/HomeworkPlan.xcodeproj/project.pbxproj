@@ -57,6 +57,7 @@
 		CF38E94A5B6C7D8E9F0A1B2C /* ImportContextBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18293A4B5C6D7E8F9012345 /* ImportContextBuilder.swift */; };
 		D049FA5B6C7D8E9F0A1B2C3D /* ImportContextBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */; };
 		D15AFB6C7D8E9F0A1B2C3D4E /* ImportReviewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */; };
+		D26B0C7D8E9F0A1B2C3D4E5F /* DueDateResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5C6D7E8F9012345678 /* DueDateResolverTests.swift */; };
 		CC05B6C7D8F94A5B6C7E8F90 /* DingTalkCalendarImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60718293A4B5C6D7E8F90 /* DingTalkCalendarImportView.swift */; };
 		CD16C7D8E9A05B6C7D8E9F01 /* CalendarImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60718293A4B5C6D7E8F9012 /* CalendarImportTests.swift */; };
 		C7D882BF0672AEE421DC9613 /* HomeworkPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F413DF9398A8A4A62AE7DCC /* HomeworkPlanApp.swift */; };
@@ -145,6 +146,7 @@
 		18293A4B5C6D7E8F9012345 /* ImportContextBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportContextBuilder.swift; sourceTree = "<group>"; };
 		293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportContextBuilderTests.swift; sourceTree = "<group>"; };
 		3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportReviewViewModelTests.swift; sourceTree = "<group>"; };
+		4B5C6D7E8F9012345678 /* DueDateResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DueDateResolverTests.swift; sourceTree = "<group>"; };
 		E5F60718293A4B5C6D7E8F90 /* DingTalkCalendarImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DingTalkCalendarImportView.swift; sourceTree = "<group>"; };
 		F60718293A4B5C6D7E8F9012 /* CalendarImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarImportTests.swift; sourceTree = "<group>"; };
 		9CED3A95B0BD9603D49937FC /* SubjectFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectFormView.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				F60718293A4B5C6D7E8F9012 /* CalendarImportTests.swift */,
 				293A4B5C6D7E8F90123456 /* ImportContextBuilderTests.swift */,
 				3A4B5C6D7E8F901234567 /* ImportReviewViewModelTests.swift */,
+				4B5C6D7E8F9012345678 /* DueDateResolverTests.swift */,
 			);
 			path = HomeworkPlanTests;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				CD16C7D8E9A05B6C7D8E9F01 /* CalendarImportTests.swift in Sources */,
 				D049FA5B6C7D8E9F0A1B2C3D /* ImportContextBuilderTests.swift in Sources */,
 				D15AFB6C7D8E9F0A1B2C3D4E /* ImportReviewViewModelTests.swift in Sources */,
+				D26B0C7D8E9F0A1B2C3D4E5F /* DueDateResolverTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
