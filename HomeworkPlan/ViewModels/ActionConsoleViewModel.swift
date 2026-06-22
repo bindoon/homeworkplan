@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import UIKit
 
 @Observable
 @MainActor
@@ -8,29 +9,122 @@ final class ActionConsoleViewModel {
     var turns: [ConversationTurn] = []
     var isProcessing: Bool = false
     var errorMessage: String?
+    var attachedImage: UIImage?
+    var attachedOCRText: String?
+    var isExtractingOCR: Bool = false
+    var isRecordingSpeech: Bool = false
+    var speechUnavailableMessage: String?
 
     private let orchestrator: AgentOrchestrator
+    private let speechService: SpeechInputService
 
-    init(orchestrator: AgentOrchestrator) {
+    init(orchestrator: AgentOrchestrator, speechService: SpeechInputService) {
         self.orchestrator = orchestrator
+        self.speechService = speechService
+        speechService.refreshAvailability()
+        updateSpeechAvailabilityMessage()
+    }
+
+    var canSend: Bool {
+        let hasText = !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let hasImage = attachedImage != nil && attachedOCRText != nil
+        return (hasText || hasImage) && !isProcessing && !isExtractingOCR
+    }
+
+    var isSpeechAvailable: Bool {
+        speechService.isAvailable
     }
 
     func sendMessage() async {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !text.isEmpty, !isProcessing else { return }
+        let attachment = buildAttachment()
+        guard !text.isEmpty || attachment != nil, !isProcessing else { return }
 
         inputText = ""
+        clearAttachment()
         isProcessing = true
         errorMessage = nil
         defer { isProcessing = false }
 
         do {
-            _ = try await orchestrator.sendUserMessage(text)
+            _ = try await orchestrator.sendUserMessage(text, attachment: attachment)
             syncTurns()
         } catch {
             errorMessage = error.localizedDescription
             syncTurns()
         }
+    }
+
+    func pasteImageFromClipboard() async {
+        guard UIPasteboard.general.hasImages,
+              let image = UIPasteboard.general.image else {
+            errorMessage = "剪贴板中没有图片"
+            return
+        }
+        await attachImage(image)
+    }
+
+    func attachImage(_ image: UIImage) async {
+        attachedImage = image
+        attachedOCRText = nil
+        isExtractingOCR = true
+        errorMessage = nil
+        defer { isExtractingOCR = false }
+
+        do {
+            attachedOCRText = try await OCRService.recognizeText(from: image)
+        } catch {
+            attachedImage = nil
+            errorMessage = "截图识别失败：\(error.localizedDescription)"
+        }
+    }
+
+    func removeAttachedImage() {
+        clearAttachment()
+    }
+
+    func beginSpeechRecording() async {
+        guard speechService.isAvailable else {
+            updateSpeechAvailabilityMessage()
+            return
+        }
+
+        errorMessage = nil
+        do {
+            try await speechService.startRecording()
+            isRecordingSpeech = true
+        } catch let error as SpeechInputError {
+            isRecordingSpeech = false
+            if error == .permissionDenied {
+                speechService.refreshAvailability()
+                updateSpeechAvailabilityMessage()
+            } else {
+                errorMessage = error.localizedDescription
+            }
+        } catch {
+            isRecordingSpeech = false
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func endSpeechRecording(sendImmediately: Bool = true) async {
+        guard isRecordingSpeech else { return }
+        let transcript = speechService.stopRecording()
+        isRecordingSpeech = false
+
+        guard !transcript.isEmpty else { return }
+
+        if sendImmediately {
+            inputText = transcript
+            await sendMessage()
+        } else {
+            inputText = transcript
+        }
+    }
+
+    func cancelSpeechRecording() {
+        speechService.cancelRecording()
+        isRecordingSpeech = false
     }
 
     func confirmProposal(id: UUID) {
@@ -52,9 +146,40 @@ final class ActionConsoleViewModel {
         orchestrator.clearConversation()
         turns = []
         errorMessage = nil
+        clearAttachment()
+        cancelSpeechRecording()
+    }
+
+    private func buildAttachment() -> UserMessageAttachment? {
+        guard let image = attachedImage,
+              let ocrText = attachedOCRText?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !ocrText.isEmpty else {
+            return nil
+        }
+        return UserMessageAttachment(image: image, ocrText: ocrText)
+    }
+
+    private func clearAttachment() {
+        attachedImage = nil
+        attachedOCRText = nil
     }
 
     private func syncTurns() {
         turns = orchestrator.uiTurns
+    }
+
+    private func updateSpeechAvailabilityMessage() {
+        if speechService.isAvailable {
+            speechUnavailableMessage = nil
+            return
+        }
+        switch speechService.permissionStatus {
+        case .denied, .restricted:
+            speechUnavailableMessage = "语音输入不可用（权限未开启），请使用文字或贴图"
+        case .notDetermined:
+            speechUnavailableMessage = nil
+        case .authorized:
+            speechUnavailableMessage = "当前设备不支持中文语音识别"
+        }
     }
 }
