@@ -36,6 +36,7 @@ final class ImportReviewViewModel {
     var importRecordID: UUID?
     var parseFailed: Bool = false
     var statusMessage: String?
+    var sourceImagePath: String = ""
 
     private let taskRepository: TaskRepository
     private let importRepository: ImportRepository
@@ -57,12 +58,16 @@ final class ImportReviewViewModel {
         importRecordID = result.importRecord?.id
         parseFailed = result.parseFailed
         statusMessage = result.message
+        sourceImagePath = result.sourceImagePath
 
-        let defaultDue = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+        let defaultDue = Calendar.current.startOfDay(for: Date())
         candidates = result.candidates.map { candidate in
             let subject = resolveSubject(named: candidate.subjectName, in: subjects)
+            let dueDate = candidate.dueDate.map { Calendar.current.startOfDay(for: $0) }
+            var normalized = candidate
+            normalized.dueDate = dueDate
             return ReviewableCandidate(
-                candidate: candidate,
+                candidate: normalized,
                 defaultSubject: subject,
                 defaultDueDate: defaultDue
             )
@@ -85,7 +90,8 @@ final class ImportReviewViewModel {
             notes: item.editedNotes,
             dueDate: item.editedDueDate,
             sourceType: sourceType.rawValue,
-            sourceDetail: sourceDetail
+            sourceDetail: sourceDetail,
+            sourceImagePath: sourceImagePath
         )
 
         if let recordID = importRecordID {

@@ -7,14 +7,14 @@ struct ImportSourceSheet: View {
         NavigationStack {
             List {
                 NavigationLink {
-                    ScreenshotImportView()
+                    ScreenshotImportView(onImportComplete: { dismiss() })
                 } label: {
                     Label("从相册选择截图", systemImage: "photo.on.rectangle")
                 }
                 .accessibilityIdentifier("import-screenshot-link")
 
                 NavigationLink {
-                    PasteImportView()
+                    PasteImportView(onImportComplete: { dismiss() })
                 } label: {
                     Label("粘贴文字", systemImage: "doc.on.clipboard")
                 }

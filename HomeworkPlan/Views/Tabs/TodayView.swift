@@ -127,7 +127,10 @@ struct TodayView: View {
             }
             .sheet(isPresented: $showPasteFromClipboard) {
                 NavigationStack {
-                    PasteImportView(initialText: clipboardPrefill)
+                    PasteImportView(
+                        initialText: clipboardPrefill,
+                        onImportComplete: { showPasteFromClipboard = false }
+                    )
                 }
                 .onDisappear {
                     clipboardPrefill = ""

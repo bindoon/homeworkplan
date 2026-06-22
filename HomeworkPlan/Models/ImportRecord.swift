@@ -8,6 +8,7 @@ final class ImportRecord {
     var rawText: String = ""
     var sourceType: String = ImportSourceType.pasted.rawValue
     var parsedJSON: String? = nil
+    var imagePath: String = ""
     var createdAt: Date = Date()
     var linkedTaskIDs: String = ""
 

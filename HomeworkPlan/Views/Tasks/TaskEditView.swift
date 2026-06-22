@@ -25,6 +25,10 @@ struct TaskEditView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if !task.sourceImagePath.isEmpty {
+                    TaskSourceImageView(relativePath: task.sourceImagePath)
+                }
+
                 Picker("科目", selection: $selectedSubject) {
                     ForEach(subjects) { subject in
                         Text("\(subject.emoji) \(subject.name)")
@@ -60,7 +64,7 @@ struct TaskEditView: View {
             )) {
                 Button("重试", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "请检查存储空间或 iCloud 连接后重试。")
+                Text(errorMessage ?? "请检查存储空间后重试。")
             }
         }
     }

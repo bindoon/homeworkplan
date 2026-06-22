@@ -13,7 +13,8 @@ final class ImportRepository {
         contentHash: String,
         rawText: String,
         sourceType: ImportSourceType,
-        parsedJSON: String? = nil
+        parsedJSON: String? = nil,
+        imagePath: String = ""
     ) throws -> ImportRecord {
         let record = ImportRecord(
             contentHash: contentHash,
@@ -21,9 +22,16 @@ final class ImportRepository {
             sourceType: sourceType,
             parsedJSON: parsedJSON
         )
+        record.imagePath = imagePath
         context.insert(record)
         try context.save()
         return record
+    }
+
+    func updateImagePath(recordID: UUID, path: String) throws {
+        guard let record = try fetchRecord(id: recordID) else { return }
+        record.imagePath = path
+        try context.save()
     }
 
     func findByContentHash(_ hash: String) throws -> ImportRecord? {

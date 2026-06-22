@@ -29,7 +29,7 @@ struct SettingsView: View {
                     NavigationLink {
                         APIKeySettingsView()
                     } label: {
-                        Text("DeepSeek API Key")
+                        Text("API Key（可选覆盖）")
                     }
                     .accessibilityIdentifier("settings-api-key-link")
                 }

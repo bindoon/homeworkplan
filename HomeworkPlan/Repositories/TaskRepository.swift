@@ -17,6 +17,7 @@ final class TaskRepository {
         dueDate: Date,
         sourceType: String = ImportSourceType.manual.rawValue,
         sourceDetail: String = "",
+        sourceImagePath: String = "",
         recurringRuleId: UUID? = nil,
         generationKey: String = ""
     ) throws -> HomeworkTask {
@@ -32,6 +33,7 @@ final class TaskRepository {
             dueDate: dueDate,
             sourceType: sourceType,
             sourceDetail: sourceDetail.trimmingCharacters(in: .whitespacesAndNewlines),
+            sourceImagePath: sourceImagePath,
             recurringRuleId: recurringRuleId,
             generationKey: generationKey
         )

@@ -21,13 +21,17 @@ struct APIKeySettingsView: View {
                     }
                 }
 
-                SecureField("DeepSeek API Key", text: $apiKey)
+                SecureField("DashScope API Key", text: $apiKey)
                     .textContentType(.password)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .accessibilityIdentifier("api-key-field")
             } footer: {
-                Text("API Key 仅保存在本机 Keychain，不会上传到其他服务器。")
+                if AppSecrets.isConfigured {
+                    Text("已使用编译时本地配置（Secrets.env）。此处填写的 Key 会优先覆盖。")
+                } else {
+                    Text("未检测到编译时配置，请填写 DashScope API Key 或创建 Config/Secrets.env 后重新编译。")
+                }
             }
 
             Section {
@@ -43,7 +47,7 @@ struct APIKeySettingsView: View {
                 }
             }
         }
-        .navigationTitle("DeepSeek API Key")
+        .navigationTitle("API Key")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             hasSavedKey = dependencies?.keychainService.hasAPIKey() ?? false

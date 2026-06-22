@@ -1,17 +1,21 @@
 import Foundation
+import UIKit
 
 enum ParseServiceError: LocalizedError {
     case missingAPIKey
     case invalidResponse
+    case invalidImage
     case apiError(statusCode: Int, message: String)
     case decodingFailed
 
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
-            return "请先在设置中配置 DeepSeek API Key"
+            return "AI 解析服务未配置"
         case .invalidResponse:
             return "解析服务返回无效响应"
+        case .invalidImage:
+            return "无法处理截图"
         case .apiError(let code, let message):
             return "解析请求失败（\(code)）：\(message)"
         case .decodingFailed:
@@ -23,12 +27,22 @@ enum ParseServiceError: LocalizedError {
 actor ParseService {
     static let shared = ParseService()
 
-    private let endpoint = URL(string: "https://api.deepseek.com/chat/completions")!
-    private let model = "deepseek-chat"
     private let session: URLSession
 
-    init(session: URLSession = .shared) {
-        self.session = session
+    init(session: URLSession? = nil) {
+        if let session {
+            self.session = session
+        } else {
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = 60
+            configuration.timeoutIntervalForResource = 90
+            self.session = URLSession(configuration: configuration)
+        }
+    }
+
+    private var endpoint: URL {
+        let base = AppSecrets.dashscopeBaseURL.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        return URL(string: "\(base)/chat/completions")!
     }
 
     func parse(text: String, importedAt: Date, apiKey: String) async throws -> TaskCandidateParseResponse {
@@ -38,15 +52,46 @@ actor ParseService {
         }
 
         do {
-            return try await requestParse(
+            return try await requestTextParse(
                 text: text,
                 importedAt: importedAt,
                 apiKey: trimmedKey,
                 strict: false
             )
         } catch ParseServiceError.decodingFailed {
-            return try await requestParse(
+            return try await requestTextParse(
                 text: text,
+                importedAt: importedAt,
+                apiKey: trimmedKey,
+                strict: true
+            )
+        }
+    }
+
+    func parseImage(_ image: UIImage, importedAt: Date, apiKey: String) async throws -> TaskCandidateParseResponse {
+        let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedKey.isEmpty else {
+            throw ParseServiceError.missingAPIKey
+        }
+        guard AppSecrets.hasVisionModel else {
+            throw ParseServiceError.invalidResponse
+        }
+        guard let jpegData = image.jpegData(compressionQuality: 0.85) else {
+            throw ParseServiceError.invalidImage
+        }
+
+        let base64 = jpegData.base64EncodedString()
+
+        do {
+            return try await requestVisionParse(
+                base64JPEG: base64,
+                importedAt: importedAt,
+                apiKey: trimmedKey,
+                strict: false
+            )
+        } catch ParseServiceError.decodingFailed {
+            return try await requestVisionParse(
+                base64JPEG: base64,
                 importedAt: importedAt,
                 apiKey: trimmedKey,
                 strict: true
@@ -79,14 +124,73 @@ actor ParseService {
         throw ParseServiceError.decodingFailed
     }
 
-    private func requestParse(
+    private func requestTextParse(
         text: String,
         importedAt: Date,
         apiKey: String,
         strict: Bool
     ) async throws -> TaskCandidateParseResponse {
+        let messages: [[String: Any]] = [
+            [
+                "role": "system",
+                "content": ParsePrompt.systemPrompt(importedAt: importedAt, strict: strict)
+            ],
+            [
+                "role": "user",
+                "content": ParsePrompt.userPrompt(text: text)
+            ]
+        ]
+
+        return try await performChatCompletion(
+            model: AppSecrets.llmModel,
+            apiKey: apiKey,
+            messages: messages
+        )
+    }
+
+    private func requestVisionParse(
+        base64JPEG: String,
+        importedAt: Date,
+        apiKey: String,
+        strict: Bool
+    ) async throws -> TaskCandidateParseResponse {
+        let messages: [[String: Any]] = [
+            [
+                "role": "system",
+                "content": ParsePrompt.systemPrompt(importedAt: importedAt, strict: strict)
+            ],
+            [
+                "role": "user",
+                "content": [
+                    [
+                        "type": "text",
+                        "text": ParsePrompt.imageUserPrompt()
+                    ],
+                    [
+                        "type": "image_url",
+                        "image_url": [
+                            "url": "data:image/jpeg;base64,\(base64JPEG)"
+                        ]
+                    ]
+                ]
+            ]
+        ]
+
+        return try await performChatCompletion(
+            model: AppSecrets.visionModel,
+            apiKey: apiKey,
+            messages: messages
+        )
+    }
+
+    private func performChatCompletion(
+        model: String,
+        apiKey: String,
+        messages: [[String: Any]]
+    ) async throws -> TaskCandidateParseResponse {
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
+        request.timeoutInterval = 60
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
@@ -94,16 +198,7 @@ actor ParseService {
             "model": model,
             "temperature": 0,
             "response_format": ["type": "json_object"],
-            "messages": [
-                [
-                    "role": "system",
-                    "content": ParsePrompt.systemPrompt(importedAt: importedAt, strict: strict)
-                ],
-                [
-                    "role": "user",
-                    "content": ParsePrompt.userPrompt(text: text)
-                ]
-            ]
+            "messages": messages
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: body)

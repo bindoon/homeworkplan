@@ -61,7 +61,7 @@ struct ManualTaskFormView: View {
             )) {
                 Button("重试", role: .cancel) {}
             } message: {
-                Text(errorMessage ?? "请检查存储空间或 iCloud 连接后重试。")
+                Text(errorMessage ?? "请检查存储空间后重试。")
             }
             .onAppear {
                 if selectedSubject == nil {

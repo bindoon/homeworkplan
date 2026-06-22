@@ -1,0 +1,52 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+**/xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+HomeworkPlan/Config/Secrets.env
+HomeworkPlan/App/GeneratedSecrets.swift
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Cursor / GSD local state
+.cursor/.gsd-profile
+.cursor/gsd-install-state.json
+.cursor/gsd-migration-journal/
+.cursor
+openspec

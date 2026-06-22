@@ -12,6 +12,7 @@ final class HomeworkTask {
     var completedAt: Date? = nil
     var sourceType: String = ImportSourceType.manual.rawValue
     var sourceDetail: String = ""
+    var sourceImagePath: String = ""
     var recurringRuleId: UUID? = nil
     var generationKey: String = ""
     var createdAt: Date = Date()
@@ -25,6 +26,7 @@ final class HomeworkTask {
         dueDate: Date,
         sourceType: String = ImportSourceType.manual.rawValue,
         sourceDetail: String = "",
+        sourceImagePath: String = "",
         recurringRuleId: UUID? = nil,
         generationKey: String = ""
     ) {
@@ -35,6 +37,7 @@ final class HomeworkTask {
         self.dueDate = dueDate
         self.sourceType = sourceType
         self.sourceDetail = sourceDetail
+        self.sourceImagePath = sourceImagePath
         self.recurringRuleId = recurringRuleId
         self.generationKey = generationKey
         self.createdAt = Date()

@@ -3,8 +3,10 @@ import Foundation
 
 enum ContentHashService {
     static func sha256(_ text: String) -> String {
-        let normalized = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        let data = Data(normalized.utf8)
+        sha256(data: Data(text.trimmingCharacters(in: .whitespacesAndNewlines).utf8))
+    }
+
+    static func sha256(data: Data) -> String {
         let digest = SHA256.hash(data: data)
         return digest.map { String(format: "%02x", $0) }.joined()
     }

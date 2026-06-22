@@ -20,6 +20,12 @@ targets:
       - path: ViewModels
       - path: Views
       - path: Resources
+    preBuildScripts:
+      - name: Generate App Secrets
+        basedOnDependencyAnalysis: false
+        script: |
+          chmod +x "${SRCROOT}/Scripts/generate-secrets.sh"
+          "${SRCROOT}/Scripts/generate-secrets.sh"
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: app.homeworkplan.HomeworkPlan
       CODE_SIGN_ENTITLEMENTS: HomeworkPlan.entitlements

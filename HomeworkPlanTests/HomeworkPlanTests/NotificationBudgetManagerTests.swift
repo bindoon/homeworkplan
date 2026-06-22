@@ -14,10 +14,11 @@ final class NotificationBudgetManagerTests: XCTestCase {
     }
 
     func testBudgetManager_limitsTo64() {
+        let today = calendar.startOfDay(for: Date())
         let requests = (0..<80).map { index in
             makeRequest(
                 id: "id-\(index)",
-                dayOffset: index,
+                fireDate: calendar.date(byAdding: .day, value: index + 1, to: today)!,
                 hour: 8,
                 calendar: calendar
             )
@@ -31,19 +32,12 @@ final class NotificationBudgetManagerTests: XCTestCase {
 
     private func makeRequest(
         id: String,
-        dayOffset: Int,
+        fireDate: Date,
         hour: Int,
         calendar: Calendar
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
         content.title = "Test"
-        let base = calendar.date(from: DateComponents(
-            timeZone: TimeZone(secondsFromGMT: 0),
-            year: 2026,
-            month: 6,
-            day: 1
-        ))!
-        let fireDate = calendar.date(byAdding: .day, value: dayOffset, to: base)!
         let withHour = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: fireDate)!
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: withHour)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)

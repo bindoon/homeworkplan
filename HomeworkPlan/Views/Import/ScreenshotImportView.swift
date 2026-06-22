@@ -5,10 +5,17 @@ struct ScreenshotImportView: View {
     @Environment(\.appDependencies) private var dependencies
     @Environment(\.dismiss) private var dismiss
 
+    var initialImage: UIImage?
+    var onImportComplete: (() -> Void)?
+
     @State private var selectedItem: PhotosPickerItem?
     @State private var isProcessing = false
     @State private var errorMessage: String?
     @State private var reviewResult: ImportResult?
+    @State private var didProcessInitialImage = false
+    @State private var processingStage = ""
+
+    private var isQuickImport: Bool { initialImage != nil }
 
     var body: some View {
         Group {
@@ -16,22 +23,55 @@ struct ScreenshotImportView: View {
                 TaskCandidateReviewView(
                     result: reviewResult,
                     dependencies: dependencies,
-                    onFinish: { dismiss() }
+                    onFinish: completeImport
                 )
+            } else if isProcessing || (isQuickImport && !didProcessInitialImage) {
+                VStack(spacing: 16) {
+                    ProgressView(processingStage.isEmpty ? "正在处理…" : processingStage)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 formContent
             }
         }
-        .navigationTitle("截图导入")
+        .navigationTitle(reviewResult == nil ? "截图导入" : "确认作业")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            startQuickImportIfNeeded()
+        }
+        .alert("导入失败", isPresented: Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("确定", role: .cancel) {
+                if isQuickImport {
+                    completeImport()
+                }
+            }
+        } message: {
+            Text(errorMessage ?? "")
+        }
+    }
+
+    private func startQuickImportIfNeeded() {
+        guard let initialImage, !didProcessInitialImage else { return }
+        didProcessInitialImage = true
+        Task { await processImage(initialImage) }
+    }
+
+    private func completeImport() {
+        if let onImportComplete {
+            onImportComplete()
+        } else {
+            dismiss()
+        }
     }
 
     private var formContent: some View {
         VStack(spacing: 24) {
             PhotosPicker(
                 selection: $selectedItem,
-                matching: .images,
-                photoLibrary: .shared()
+                matching: .images
             ) {
                 Label("选择截图", systemImage: "photo.badge.plus")
                     .frame(maxWidth: .infinity)
@@ -42,7 +82,7 @@ struct ScreenshotImportView: View {
             .accessibilityIdentifier("screenshot-picker")
 
             if isProcessing {
-                ProgressView("正在识别并解析…")
+                ProgressView(processingStage.isEmpty ? "正在处理…" : processingStage)
             }
 
             Spacer()
@@ -52,28 +92,38 @@ struct ScreenshotImportView: View {
             guard let newItem else { return }
             Task { await process(item: newItem) }
         }
-        .alert("导入失败", isPresented: Binding(
-            get: { errorMessage != nil },
-            set: { if !$0 { errorMessage = nil } }
-        )) {
-            Button("确定", role: .cancel) {}
-        } message: {
-            Text(errorMessage ?? "")
-        }
     }
 
     @MainActor
     private func process(item: PhotosPickerItem) async {
-        guard let dependencies else { return }
+        guard let dependencies, !isProcessing else { return }
         isProcessing = true
-        defer { isProcessing = false }
+        processingStage = "正在读取图片…"
+        defer {
+            isProcessing = false
+            processingStage = ""
+        }
+
+        guard let data = try? await item.loadTransferable(type: Data.self),
+              let image = UIImage(data: data) else {
+            errorMessage = "无法读取所选图片"
+            return
+        }
+
+        await processImage(image)
+    }
+
+    @MainActor
+    private func processImage(_ image: UIImage) async {
+        guard let dependencies, !isProcessing else { return }
+        isProcessing = true
+        processingStage = "正在识别文字…"
+        defer {
+            isProcessing = false
+            processingStage = ""
+        }
 
         do {
-            guard let data = try await item.loadTransferable(type: Data.self),
-                  let image = UIImage(data: data) else {
-                errorMessage = "无法读取所选图片"
-                return
-            }
             let result = try await dependencies.importService.processImage(image)
             if result.isDuplicate && result.candidates.isEmpty {
                 errorMessage = ImportServiceError.duplicateContent.localizedDescription

@@ -82,13 +82,13 @@ struct ReminderSettings {
 
     func setMorningReminder(from date: Date, calendar: Calendar = .current) {
         let components = calendar.dateComponents([.hour, .minute], from: date)
-        morningHour = components.hour ?? 8
-        morningMinute = components.minute ?? 0
+        defaults.set(components.hour ?? 8, forKey: Keys.morningHour)
+        defaults.set(components.minute ?? 0, forKey: Keys.morningMinute)
     }
 
     func setAfternoonReminder(from date: Date, calendar: Calendar = .current) {
         let components = calendar.dateComponents([.hour, .minute], from: date)
-        afternoonHour = components.hour ?? 17
-        afternoonMinute = components.minute ?? 0
+        defaults.set(components.hour ?? 17, forKey: Keys.afternoonHour)
+        defaults.set(components.minute ?? 0, forKey: Keys.afternoonMinute)
     }
 }

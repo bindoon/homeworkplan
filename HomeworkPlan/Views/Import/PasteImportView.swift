@@ -5,6 +5,7 @@ struct PasteImportView: View {
     @Environment(\.dismiss) private var dismiss
 
     var initialText: String = ""
+    var onImportComplete: (() -> Void)?
 
     @State private var pastedText = ""
     @State private var isProcessing = false
@@ -17,14 +18,22 @@ struct PasteImportView: View {
                 TaskCandidateReviewView(
                     result: reviewResult,
                     dependencies: dependencies,
-                    onFinish: { dismiss() }
+                    onFinish: completeImport
                 )
             } else {
                 formContent
             }
         }
-        .navigationTitle("粘贴导入")
+        .navigationTitle(reviewResult == nil ? "粘贴导入" : "确认作业")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func completeImport() {
+        if let onImportComplete {
+            onImportComplete()
+        } else {
+            dismiss()
+        }
     }
 
     private var formContent: some View {
