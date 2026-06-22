@@ -95,6 +95,9 @@
 		A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */; };
 		A1G2E3N4T5M6O7D8E9L0S13 /* SpeechInputService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R13 /* SpeechInputService.swift */; };
 		A1G2E3N4T5M6O7D8E9L0S14 /* SpeechInputServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */; };
+		H0M3Q1V13W01BUILD01 /* HomeQueryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H0M3Q1V13W01REF001 /* HomeQueryView.swift */; };
+		H0M3Q1V1MDL01BUILD01 /* HomeQueryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = H0M3Q1V1MDL01REF001 /* HomeQueryViewModel.swift */; };
+		H0M3Q1V1TST01BUILD01 /* HomeQueryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H0M3Q1V1TST01REF001 /* HomeQueryViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -206,6 +209,9 @@
 		A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutorTests.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R13 /* SpeechInputService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechInputService.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechInputServiceTests.swift; sourceTree = "<group>"; };
+		H0M3Q1V13W01REF001 /* HomeQueryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQueryView.swift; sourceTree = "<group>"; };
+		H0M3Q1V1MDL01REF001 /* HomeQueryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQueryViewModel.swift; sourceTree = "<group>"; };
+		H0M3Q1V1TST01REF001 /* HomeQueryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQueryViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -221,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				A92129A50627949E34126D25 /* AllTasksViewModel.swift */,
+				H0M3Q1V1MDL01REF001 /* HomeQueryViewModel.swift */,
 				8D8FF3216FADCD6A13D42162 /* ImportReviewViewModel.swift */,
 				A1G2E3N4T5M6O7D8E9L0R08 /* ActionConsoleViewModel.swift */,
 			);
@@ -262,6 +269,7 @@
 				A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */,
 				A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */,
 				A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */,
+				H0M3Q1V1TST01REF001 /* HomeQueryViewModelTests.swift */,
 			);
 			path = HomeworkPlanTests;
 			sourceTree = "<group>";
@@ -337,6 +345,7 @@
 			isa = PBXGroup;
 			children = (
 				E298C8379349988841212F46 /* AllTasksView.swift */,
+				H0M3Q1V13W01REF001 /* HomeQueryView.swift */,
 				5ACCEA7C8CCB8B550148A341 /* MainTabView.swift */,
 				21F593280FE88CA68200E391 /* SettingsView.swift */,
 				C127234D8DA956F5BFCFAC33 /* TodayView.swift */,
@@ -647,6 +656,7 @@
 				A1G2E3N4T5M6O7D8E9L0S11 /* ToolRegistryTests.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S14 /* SpeechInputServiceTests.swift in Sources */,
+				H0M3Q1V1TST01BUILD01 /* HomeQueryViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,6 +668,8 @@
 				A91D97EBA46B26E075189B52 /* AllTasksView.swift in Sources */,
 				F54F5FAE76EC8B0145A7E74B /* AllTasksViewModel.swift in Sources */,
 				FBDE4328D8FF27A8CD593117 /* AppDependencies.swift in Sources */,
+				H0M3Q1V1MDL01BUILD01 /* HomeQueryViewModel.swift in Sources */,
+				H0M3Q1V13W01BUILD01 /* HomeQueryView.swift in Sources */,
 				241A035C616BD409C6D8392A /* AppModelContainer.swift in Sources */,
 				2D9247387A9FD8F1DD2CB2F2 /* ClipboardHintBanner.swift in Sources */,
 				1819F3D5FBA1F2908DCB9795 /* ContentHashService.swift in Sources */,
