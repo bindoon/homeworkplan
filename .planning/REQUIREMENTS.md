@@ -7,13 +7,13 @@
 
 ### Task Management
 
-- [ ] **TASK-01**: User can create homework tasks manually with subject, content, due date, and optional notes
-- [ ] **TASK-02**: User sees today's incomplete homework tasks grouped by subject on the default screen
-- [ ] **TASK-03**: User can mark a homework task complete and record completion time
-- [ ] **TASK-04**: User can edit saved homework tasks (subject, content, due date, notes)
-- [ ] **TASK-05**: User can delete homework tasks via swipe or equivalent action
-- [ ] **TASK-06**: User can browse homework tasks for dates other than today
-- [ ] **TASK-07**: User can manage subjects (default set plus custom subjects)
+- [x] **TASK-01**: User can create homework tasks manually with subject, content, due date, and optional notes
+- [x] **TASK-02**: User sees today's incomplete homework tasks grouped by subject on the default screen
+- [x] **TASK-03**: User can mark a homework task complete and record completion time
+- [x] **TASK-04**: User can edit saved homework tasks (subject, content, due date, notes)
+- [x] **TASK-05**: User can delete homework tasks via swipe or equivalent action
+- [x] **TASK-06**: User can browse homework tasks for dates other than today
+- [x] **TASK-07**: User can manage subjects (default set plus custom subjects)
 
 ### Homework Import
 
@@ -51,7 +51,7 @@
 
 - [ ] **SETT-01**: User can configure DeepSeek API Key stored securely in Keychain
 - [ ] **SETT-02**: App blocks AI parsing with clear guidance when API Key is not configured
-- [ ] **SETT-03**: SwiftData persists all data locally with iCloud sync enabled for multi-device continuity
+- [x] **SETT-03**: SwiftData persists all data locally with iCloud sync enabled for multi-device continuity
 
 ## v2 Requirements
 
@@ -88,14 +88,14 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TASK-01 | Phase 1 | Pending |
-| TASK-02 | Phase 1 | Pending |
-| TASK-03 | Phase 1 | Pending |
-| TASK-04 | Phase 1 | Pending |
-| TASK-05 | Phase 1 | Pending |
-| TASK-06 | Phase 1 | Pending |
-| TASK-07 | Phase 1 | Pending |
-| SETT-03 | Phase 1 | Pending |
+| TASK-01 | Phase 1 | Complete |
+| TASK-02 | Phase 1 | Complete |
+| TASK-03 | Phase 1 | Complete |
+| TASK-04 | Phase 1 | Complete |
+| TASK-05 | Phase 1 | Complete |
+| TASK-06 | Phase 1 | Complete |
+| TASK-07 | Phase 1 | Complete |
+| SETT-03 | Phase 1 | Complete |
 | IMPT-01 | Phase 2 | Pending |
 | IMPT-02 | Phase 2 | Pending |
 | IMPT-03 | Phase 2 | Pending |
@@ -120,6 +120,7 @@
 | REMND-05 | Phase 4 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 30 total
 - Mapped to phases: 30/30 ✓
 - Unmapped: 0

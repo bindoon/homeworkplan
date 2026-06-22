@@ -11,7 +11,7 @@ HomeworkPlan MVP 以四个垂直切片交付完整家长作业管理闭环：先
 - Integer phases (1, 2, 3, 4): Planned milestone work
 - Decimal phases (e.g., 2.1): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Daily Task List & Data Foundation** - 手动创建/管理今日作业清单，SwiftData + iCloud 持久化
+- [x] **Phase 1: Daily Task List & Data Foundation** - 手动创建/管理今日作业清单，SwiftData + iCloud 持久化 (completed 2026-06-22)
 - [ ] **Phase 2: Import & AI Parsing** - 截图/粘贴导入，OCR + DeepSeek 解析，用户确认后入库
 - [ ] **Phase 3: Recurring Tasks** - 重复规则创建与启动/前台自动生成当日任务
 - [ ] **Phase 4: Local Reminders** - 截止与重复任务本地通知，权限引导与联动取消
@@ -36,20 +36,20 @@ HomeworkPlan MVP 以四个垂直切片交付完整家长作业管理闭环：先
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Walking Skeleton：Xcode 工程 + SwiftData/CloudKit + Tab 壳 + 手动添加今日任务
+- [x] 01-01-PLAN.md — Walking Skeleton：Xcode 工程 + SwiftData/CloudKit + Tab 壳 + 手动添加今日任务
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — 任务生命周期：完成/编辑/左滑删除
+- [x] 01-02-PLAN.md — 任务生命周期：完成/编辑/左滑删除
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — 日期浏览：今日日期选择器 + 全部 Tab 按日分组
-- [ ] 01-04-PLAN.md — 科目管理：设置页 CRUD + 自定义科目
+- [x] 01-03-PLAN.md — 日期浏览：今日日期选择器 + 全部 Tab 按日分组
+- [x] 01-04-PLAN.md — 科目管理：设置页 CRUD + 自定义科目
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 01-05-PLAN.md — iCloud 同步硬化：CloudKit schema + 去重 + 人工验证
+- [x] 01-05-PLAN.md — iCloud 同步硬化：CloudKit schema + 去重 + 人工验证
 
 **UI hint**: yes
 
@@ -110,7 +110,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Daily Task List & Data Foundation | 0/TBD | Not started | - |
+| 1. Daily Task List & Data Foundation | 5/5 | Complete   | 2026-06-22 |
 | 2. Import & AI Parsing | 0/TBD | Not started | - |
 | 3. Recurring Tasks | 0/TBD | Not started | - |
 | 4. Local Reminders | 0/TBD | Not started | - |
