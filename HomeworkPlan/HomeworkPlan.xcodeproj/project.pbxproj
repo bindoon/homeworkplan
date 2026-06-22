@@ -93,6 +93,8 @@
 		A1G2E3N4T5M6O7D8E9L0S10 /* AgentProposalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */; };
 		A1G2E3N4T5M6O7D8E9L0S11 /* ToolRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */; };
 		A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S13 /* SpeechInputService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R13 /* SpeechInputService.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S14 /* SpeechInputServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,6 +204,8 @@
 		A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProposalCard.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolRegistryTests.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutorTests.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R13 /* SpeechInputService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechInputService.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechInputServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -257,6 +261,7 @@
 				4B5C6D7E8F9012345678 /* DueDateResolverTests.swift */,
 				A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */,
 				A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */,
+				A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */,
 			);
 			path = HomeworkPlanTests;
 			sourceTree = "<group>";
@@ -402,6 +407,7 @@
 				A1G2E3N4T5M6O7D8E9L0R05 /* AgentLLMService.swift */,
 				A1G2E3N4T5M6O7D8E9L0R06 /* AgentSystemPrompt.swift */,
 				A1G2E3N4T5M6O7D8E9L0R07 /* AgentOrchestrator.swift */,
+				A1G2E3N4T5M6O7D8E9L0R13 /* SpeechInputService.swift */,
 			);
 			path = Agent;
 			sourceTree = "<group>";
@@ -640,6 +646,7 @@
 				D26B0C7D8E9F0A1B2C3D4E5F /* DueDateResolverTests.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S11 /* ToolRegistryTests.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S14 /* SpeechInputServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,6 +721,7 @@
 				A1G2E3N4T5M6O7D8E9L0S07 /* AgentOrchestrator.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S08 /* ActionConsoleViewModel.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S09 /* ActionConsoleView.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S13 /* SpeechInputService.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S10 /* AgentProposalCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -746,7 +754,9 @@
 				INFOPLIST_KEY_CFBundleDisplayName = HomeworkPlan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "需要访问日历以从钉钉同步的日程导入重复任务";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "需要麦克风权限以在操作台语音描述作业";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要访问相册以导入作业截图";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "需要语音识别权限以将语音转为文字";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -807,7 +817,9 @@
 				INFOPLIST_KEY_CFBundleDisplayName = HomeworkPlan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "需要访问日历以从钉钉同步的日程导入重复任务";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "需要麦克风权限以在操作台语音描述作业";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要访问相册以导入作业截图";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "需要语音识别权限以将语音转为文字";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
