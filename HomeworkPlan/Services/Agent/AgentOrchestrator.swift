@@ -27,10 +27,14 @@ final class AgentOrchestrator {
     }
 
     func sendUserMessage(_ text: String) async throws -> AgentTurn {
-        try await sendUserMessage(text, attachment: nil)
+        try await sendUserMessage(text, attachment: nil, onUIUpdate: nil)
     }
 
-    func sendUserMessage(_ text: String, attachment: UserMessageAttachment?) async throws -> AgentTurn {
+    func sendUserMessage(
+        _ text: String,
+        attachment: UserMessageAttachment?,
+        onUIUpdate: (() -> Void)? = nil
+    ) async throws -> AgentTurn {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty || attachment != nil else {
             return AgentTurn(messages: conversationHistory)
@@ -48,32 +52,52 @@ final class AgentOrchestrator {
                 attachedImage: attachment?.image
             )
         )
+        onUIUpdate?()
 
         var turnProposals: [AgentProposal] = []
         var rounds = 0
 
         while rounds < Self.maxToolRounds {
+            try Task.checkCancellation()
             rounds += 1
 
             guard let apiKey = resolveAPIKey() else {
                 throw AgentOrchestratorError.missingAPIKey
             }
 
+            let streamingTurnID = appendStreamingAssistantTurn(status: rounds == 1 ? "思考中…" : "继续处理…")
+            onUIUpdate?()
+
             let subjects = (try? subjectRepository.fetchAll()) ?? []
             let llmMessages = buildLLMMessages(systemPrompt: AgentSystemPrompt.build(subjects: subjects))
+            let turnID = streamingTurnID
+            let refreshUI = onUIUpdate
+
             let response = try await llmService.chat(
                 messages: llmMessages,
                 tools: ToolRegistry.openAITools,
-                apiKey: apiKey
+                apiKey: apiKey,
+                onContentDelta: { content in
+                    await MainActor.run { [weak self] in
+                        guard let self else { return }
+                        self.updateStreamingTurn(id: turnID, text: content, isStreaming: true)
+                        refreshUI?()
+                    }
+                }
             )
 
             if response.toolCalls.isEmpty {
                 let reply = response.content?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "好的。"
+                finalizeStreamingTurn(id: streamingTurnID, text: reply)
+                onUIUpdate?()
+
                 let assistantMessage = AgentMessage(role: .assistant, content: reply)
                 conversationHistory.append(assistantMessage)
-                uiTurns.append(ConversationTurn(role: .assistant, text: reply))
                 return AgentTurn(messages: conversationHistory, proposals: turnProposals)
             }
+
+            removeStreamingTurn(id: streamingTurnID)
+            onUIUpdate?()
 
             let assistantMessage = AgentMessage(
                 role: .assistant,
@@ -83,6 +107,10 @@ final class AgentOrchestrator {
             conversationHistory.append(assistantMessage)
 
             for toolCall in response.toolCalls {
+                try Task.checkCancellation()
+                let statusTurnID = appendStreamingAssistantTurn(status: toolStatusMessage(for: toolCall.name))
+                onUIUpdate?()
+
                 let toolResult: String
                 do {
                     let execution = try await toolExecutor.execute(
@@ -93,15 +121,20 @@ final class AgentOrchestrator {
                     switch execution {
                     case .immediate(let json):
                         toolResult = json
-                    case .proposal(var proposal):
+                    case .proposal(let proposal):
                         pendingProposals.append(proposal)
                         turnProposals.append(proposal)
+                        removeStreamingTurn(id: statusTurnID)
                         uiTurns.append(ConversationTurn(role: .assistant, text: proposal.summary, proposal: proposal))
+                        onUIUpdate?()
                         toolResult = proposalToolResult(proposal)
                     }
                 } catch {
                     toolResult = encodeError(error)
                 }
+
+                removeStreamingTurn(id: statusTurnID)
+                onUIUpdate?()
 
                 conversationHistory.append(
                     AgentMessage(role: .tool, content: toolResult, toolCallID: toolCall.id)
@@ -149,10 +182,62 @@ final class AgentOrchestrator {
         pendingProposals.removeAll()
     }
 
+    func finalizeCancellation(onUIUpdate: (() -> Void)? = nil) {
+        uiTurns.removeAll { $0.isStreaming }
+
+        let message = "已停止。"
+        let alreadyStopped = uiTurns.last?.role == .assistant && uiTurns.last?.text == message
+        if !alreadyStopped {
+            uiTurns.append(ConversationTurn(role: .assistant, text: message))
+            conversationHistory.append(AgentMessage(role: .assistant, content: message))
+        }
+
+        onUIUpdate?()
+    }
+
     // MARK: - Private
 
+    @discardableResult
+    private func appendStreamingAssistantTurn(status: String) -> UUID {
+        let turn = ConversationTurn(role: .assistant, text: status, isStreaming: true)
+        uiTurns.append(turn)
+        return turn.id
+    }
+
+    private func updateStreamingTurn(id: UUID, text: String, isStreaming: Bool) {
+        guard let index = uiTurns.firstIndex(where: { $0.id == id }) else { return }
+        uiTurns[index].text = text
+        uiTurns[index].isStreaming = isStreaming
+    }
+
+    private func finalizeStreamingTurn(id: UUID, text: String) {
+        guard let index = uiTurns.firstIndex(where: { $0.id == id }) else {
+            uiTurns.append(ConversationTurn(role: .assistant, text: text))
+            return
+        }
+        uiTurns[index].text = text
+        uiTurns[index].isStreaming = false
+    }
+
+    private func removeStreamingTurn(id: UUID) {
+        uiTurns.removeAll { $0.id == id }
+    }
+
+    private func toolStatusMessage(for toolName: String) -> String {
+        switch toolName {
+        case "import_from_text", "import_from_image":
+            return "正在解析作业…"
+        case "create_task":
+            return "正在准备添加作业…"
+        case "list_tasks", "list_subjects", "list_recurring_rules":
+            return "正在查询…"
+        default:
+            return "正在执行操作…"
+        }
+    }
+
     private func buildUserDisplayText(text: String, attachment: UserMessageAttachment?) -> String {
-        if let attachment {
+        if attachment != nil {
             if text.isEmpty {
                 return "[截图]"
             }
@@ -265,7 +350,8 @@ final class AgentOrchestrator {
                     role: uiTurns[index].role,
                     text: uiTurns[index].text,
                     proposal: proposal,
-                    attachedImage: uiTurns[index].attachedImage
+                    attachedImage: uiTurns[index].attachedImage,
+                    isStreaming: false
                 )
             }
         }

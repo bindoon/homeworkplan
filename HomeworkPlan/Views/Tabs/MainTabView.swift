@@ -1,25 +1,37 @@
 import SwiftUI
 
+private enum AppTab: Hashable {
+    case home
+    case action
+    case settings
+}
+
 struct MainTabView: View {
     @Environment(\.appDependencies) private var dependencies
     @Environment(\.scenePhase) private var scenePhase
 
+    @State private var selectedTab: AppTab = .home
     @State private var pendingScreenshot: DetectedScreenshot?
     @State private var showScreenshotImport = false
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             HomeQueryView()
+                .tag(AppTab.home)
                 .tabItem {
                     Label("首页", systemImage: "house")
                 }
 
-            ActionConsoleView()
-                .tabItem {
-                    Label("操作", systemImage: "text.bubble")
-                }
+            ActionConsoleView {
+                selectedTab = .home
+            }
+            .tag(AppTab.action)
+            .tabItem {
+                Label("操作", systemImage: "text.bubble")
+            }
 
             SettingsView()
+                .tag(AppTab.settings)
                 .tabItem {
                     Label("设置", systemImage: "gearshape")
                 }

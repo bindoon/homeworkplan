@@ -198,22 +198,25 @@ struct SetRecurringRuleEnabledPayload: Equatable {
 struct ConversationTurn: Identifiable {
     let id: UUID
     let role: AgentMessageRole
-    let text: String
+    var text: String
     let proposal: AgentProposal?
     let attachedImage: UIImage?
+    var isStreaming: Bool
 
     init(
         id: UUID = UUID(),
         role: AgentMessageRole,
         text: String,
         proposal: AgentProposal? = nil,
-        attachedImage: UIImage? = nil
+        attachedImage: UIImage? = nil,
+        isStreaming: Bool = false
     ) {
         self.id = id
         self.role = role
         self.text = text
         self.proposal = proposal
         self.attachedImage = attachedImage
+        self.isStreaming = isStreaming
     }
 }
 

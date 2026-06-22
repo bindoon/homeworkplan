@@ -16,7 +16,8 @@ final class ActionConsoleViewModel {
     var speechUnavailableMessage: String?
 
     private let orchestrator: AgentOrchestrator
-    private let speechService: SpeechInputService
+    let speechService: SpeechInputService
+    private var sendTask: Task<Void, Never>?
 
     init(orchestrator: AgentOrchestrator, speechService: SpeechInputService) {
         self.orchestrator = orchestrator
@@ -25,17 +26,35 @@ final class ActionConsoleViewModel {
         updateSpeechAvailabilityMessage()
     }
 
+    var liveSpeechTranscript: String {
+        speechService.liveTranscript
+    }
+
     var canSend: Bool {
         let hasText = !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let hasImage = attachedImage != nil && attachedOCRText != nil
-        return (hasText || hasImage) && !isProcessing && !isExtractingOCR
+        return (hasText || hasImage) && !isProcessing && !isExtractingOCR && !isRecordingSpeech
     }
 
     var isSpeechAvailable: Bool {
         speechService.isAvailable
     }
 
-    func sendMessage() async {
+    func sendMessage() {
+        sendTask?.cancel()
+        sendTask = Task { await performSendMessage() }
+    }
+
+    func stopProcessing() {
+        guard isProcessing else { return }
+        sendTask?.cancel()
+        sendTask = nil
+        orchestrator.finalizeCancellation()
+        syncTurns()
+        isProcessing = false
+    }
+
+    private func performSendMessage() async {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         let attachment = buildAttachment()
         guard !text.isEmpty || attachment != nil, !isProcessing else { return }
@@ -44,10 +63,20 @@ final class ActionConsoleViewModel {
         clearAttachment()
         isProcessing = true
         errorMessage = nil
-        defer { isProcessing = false }
+        defer {
+            isProcessing = false
+            sendTask = nil
+        }
 
         do {
-            _ = try await orchestrator.sendUserMessage(text, attachment: attachment)
+            try await orchestrator.sendUserMessage(text, attachment: attachment) { [weak self] in
+                self?.syncTurns()
+            }
+            syncTurns()
+        } catch is CancellationError {
+            orchestrator.finalizeCancellation { [weak self] in
+                self?.syncTurns()
+            }
             syncTurns()
         } catch {
             errorMessage = error.localizedDescription
@@ -116,7 +145,7 @@ final class ActionConsoleViewModel {
 
         if sendImmediately {
             inputText = transcript
-            await sendMessage()
+            sendMessage()
         } else {
             inputText = transcript
         }
@@ -143,6 +172,9 @@ final class ActionConsoleViewModel {
     }
 
     func clearConversation() {
+        sendTask?.cancel()
+        sendTask = nil
+        isProcessing = false
         orchestrator.clearConversation()
         turns = []
         errorMessage = nil
@@ -165,7 +197,16 @@ final class ActionConsoleViewModel {
     }
 
     private func syncTurns() {
-        turns = orchestrator.uiTurns
+        turns = orchestrator.uiTurns.map { turn in
+            ConversationTurn(
+                id: turn.id,
+                role: turn.role,
+                text: turn.text,
+                proposal: turn.proposal,
+                attachedImage: turn.attachedImage,
+                isStreaming: turn.isStreaming
+            )
+        }
     }
 
     private func updateSpeechAvailabilityMessage() {

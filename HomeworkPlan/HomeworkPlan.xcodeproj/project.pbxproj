@@ -97,7 +97,10 @@
 		A1G2E3N4T5M6O7D8E9L0S14 /* SpeechInputServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */; };
 		H0M3Q1V13W01BUILD01 /* HomeQueryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H0M3Q1V13W01REF001 /* HomeQueryView.swift */; };
 		H0M3Q1V1MDL01BUILD01 /* HomeQueryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = H0M3Q1V1MDL01REF001 /* HomeQueryViewModel.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S15 /* ZoomableImagePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R15 /* ZoomableImagePreview.swift */; };
+		A1G2E3N4T5M6O7D8E9L0S16 /* AgentMarkdownText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1G2E3N4T5M6O7D8E9L0R16 /* AgentMarkdownText.swift */; };
 		H0M3Q1V1TST01BUILD01 /* HomeQueryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H0M3Q1V1TST01REF001 /* HomeQueryViewModelTests.swift */; };
+		A1MD0001BUILD00001 /* AgentMarkdownParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1MD0001REF000001 /* AgentMarkdownParserTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +208,8 @@
 		A1G2E3N4T5M6O7D8E9L0R08 /* ActionConsoleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionConsoleViewModel.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R09 /* ActionConsoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionConsoleView.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentProposalCard.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R15 /* ZoomableImagePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImagePreview.swift; sourceTree = "<group>"; };
+		A1G2E3N4T5M6O7D8E9L0R16 /* AgentMarkdownText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentMarkdownText.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R11 /* ToolRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolRegistryTests.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolExecutorTests.swift; sourceTree = "<group>"; };
 		A1G2E3N4T5M6O7D8E9L0R13 /* SpeechInputService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechInputService.swift; sourceTree = "<group>"; };
@@ -212,6 +217,7 @@
 		H0M3Q1V13W01REF001 /* HomeQueryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQueryView.swift; sourceTree = "<group>"; };
 		H0M3Q1V1MDL01REF001 /* HomeQueryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQueryViewModel.swift; sourceTree = "<group>"; };
 		H0M3Q1V1TST01REF001 /* HomeQueryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQueryViewModelTests.swift; sourceTree = "<group>"; };
+		A1MD0001REF000001 /* AgentMarkdownParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentMarkdownParserTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -270,6 +276,7 @@
 				A1G2E3N4T5M6O7D8E9L0R12 /* ToolExecutorTests.swift */,
 				A1G2E3N4T5M6O7D8E9L0R14 /* SpeechInputServiceTests.swift */,
 				H0M3Q1V1TST01REF001 /* HomeQueryViewModelTests.swift */,
+				A1MD0001REF000001 /* AgentMarkdownParserTests.swift */,
 			);
 			path = HomeworkPlanTests;
 			sourceTree = "<group>";
@@ -388,6 +395,8 @@
 			children = (
 				A1G2E3N4T5M6O7D8E9L0R09 /* ActionConsoleView.swift */,
 				A1G2E3N4T5M6O7D8E9L0R10 /* AgentProposalCard.swift */,
+				A1G2E3N4T5M6O7D8E9L0R15 /* ZoomableImagePreview.swift */,
+				A1G2E3N4T5M6O7D8E9L0R16 /* AgentMarkdownText.swift */,
 			);
 			path = Agent;
 			sourceTree = "<group>";
@@ -657,6 +666,7 @@
 				A1G2E3N4T5M6O7D8E9L0S12 /* ToolExecutorTests.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S14 /* SpeechInputServiceTests.swift in Sources */,
 				H0M3Q1V1TST01BUILD01 /* HomeQueryViewModelTests.swift in Sources */,
+				A1MD0001BUILD00001 /* AgentMarkdownParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -733,6 +743,8 @@
 				A1G2E3N4T5M6O7D8E9L0S07 /* AgentOrchestrator.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S08 /* ActionConsoleViewModel.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S09 /* ActionConsoleView.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S16 /* AgentMarkdownText.swift in Sources */,
+				A1G2E3N4T5M6O7D8E9L0S15 /* ZoomableImagePreview.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S13 /* SpeechInputService.swift in Sources */,
 				A1G2E3N4T5M6O7D8E9L0S10 /* AgentProposalCard.swift in Sources */,
 			);

@@ -2,52 +2,94 @@ import PhotosUI
 import SwiftUI
 
 struct ActionConsoleView: View {
+    var onVisitHome: () -> Void = {}
+
     @Environment(\.appDependencies) private var dependencies
+    @Environment(\.colorScheme) private var colorScheme
     @State private var viewModel: ActionConsoleViewModel?
+    @State private var isPhotoPickerPresented = false
     @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var zoomedImageItem: ImagePreviewItem?
+    @FocusState private var inputFocused: Bool
+
+    private var pageBackground: Color {
+        Color(.systemBackground)
+    }
+
+    private var composerSurface: Color {
+        Color(.secondarySystemBackground)
+    }
+
+    private var controlFill: Color {
+        Color(.tertiarySystemFill)
+    }
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                if let viewModel {
-                    conversationList(viewModel: viewModel)
-                    attachmentPreview(viewModel: viewModel)
-                    inputBar(viewModel: viewModel)
-                } else {
-                    ProgressView("加载中…")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-            }
-            .navigationTitle("操作")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("清空") {
-                        viewModel?.clearConversation()
-                    }
-                    .disabled(viewModel?.turns.isEmpty ?? true)
-                }
-            }
-            .onAppear {
-                if viewModel == nil, let orchestrator = dependencies?.agentOrchestrator {
-                    viewModel = ActionConsoleViewModel(
-                        orchestrator: orchestrator,
-                        speechService: SpeechInputService()
-                    )
-                }
-            }
-            .onChange(of: selectedPhotoItem) { _, item in
-                guard let item else { return }
-                Task {
-                    if let data = try? await item.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data),
-                       let viewModel {
-                        await viewModel.attachImage(image)
-                    }
-                    selectedPhotoItem = nil
-                }
+        VStack(spacing: 0) {
+            topBar
+
+            if let viewModel {
+                conversationList(viewModel: viewModel)
+                composerCard(viewModel: viewModel)
+            } else {
+                ProgressView("加载中…")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .background(pageBackground.ignoresSafeArea())
+        .toolbar(.hidden, for: .tabBar)
+        .onAppear {
+            if viewModel == nil, let orchestrator = dependencies?.agentOrchestrator {
+                viewModel = ActionConsoleViewModel(
+                    orchestrator: orchestrator,
+                    speechService: SpeechInputService()
+                )
+            }
+        }
+        .onChange(of: selectedPhotoItem) { _, item in
+            guard let item else { return }
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data),
+                   let viewModel {
+                    await viewModel.attachImage(image)
+                }
+                selectedPhotoItem = nil
+            }
+        }
+        .photosPicker(
+            isPresented: $isPhotoPickerPresented,
+            selection: $selectedPhotoItem,
+            matching: .images
+        )
+        .fullScreenCover(item: $zoomedImageItem) { item in
+            ZoomableImagePreview(image: item.image)
+        }
         .accessibilityIdentifier("action-console-view")
+    }
+
+    private var topBar: some View {
+        HStack {
+            Button(action: onVisitHome) {
+                Image(systemName: "chevron.left")
+                    .font(.body.weight(.semibold))
+                    .frame(width: 36, height: 36)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel("返回")
+            .accessibilityIdentifier("action-console-back")
+
+            Spacer()
+
+            Button("清空") {
+                viewModel?.clearConversation()
+            }
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .disabled(viewModel?.turns.isEmpty ?? true)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
     }
 
     @ViewBuilder
@@ -64,31 +106,29 @@ struct ActionConsoleView: View {
                             .id(turn.id)
                     }
 
-                    if viewModel.isProcessing {
-                        HStack(spacing: 8) {
-                            ProgressView()
-                            Text("思考中…")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.horizontal)
-                    }
-
                     if let error = viewModel.errorMessage {
                         Text(error)
                             .font(.subheadline)
                             .foregroundStyle(.red)
-                            .padding(.horizontal)
+                            .padding(.horizontal, 4)
                     }
                 }
-                .padding()
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
             }
             .onChange(of: viewModel.turns.count) { _, _ in
-                if let last = viewModel.turns.last {
-                    withAnimation {
-                        proxy.scrollTo(last.id, anchor: .bottom)
-                    }
-                }
+                scrollToBottom(proxy: proxy, viewModel: viewModel)
+            }
+            .onChange(of: viewModel.turns.map(\.text)) { _, _ in
+                scrollToBottom(proxy: proxy, viewModel: viewModel)
+            }
+        }
+    }
+
+    private func scrollToBottom(proxy: ScrollViewProxy, viewModel: ActionConsoleViewModel) {
+        if let last = viewModel.turns.last {
+            withAnimation(.easeOut(duration: 0.2)) {
+                proxy.scrollTo(last.id, anchor: .bottom)
             }
         }
     }
@@ -100,17 +140,24 @@ struct ActionConsoleView: View {
                 Spacer(minLength: 48)
                 VStack(alignment: .trailing, spacing: 8) {
                     if let image = turn.attachedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: 180, maxHeight: 140)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        TappableMessageImage(
+                            image: image,
+                            maxWidth: 200,
+                            maxHeight: 160
+                        ) {
+                            zoomedImageItem = ImagePreviewItem(image: image)
+                        }
                     }
-                    if !turn.text.isEmpty {
+                    if !turn.text.isEmpty, turn.text != "[截图]" {
                         Text(turn.text)
                             .padding(12)
                             .background(Color.accentColor.opacity(0.15))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                    } else if turn.text == "[截图]" && turn.attachedImage == nil {
+                        Text(turn.text)
+                            .padding(12)
+                            .background(Color.accentColor.opacity(0.15))
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
                 }
             }
@@ -121,11 +168,11 @@ struct ActionConsoleView: View {
                 onReject: { viewModel.rejectProposal(id: proposal.id) }
             )
         } else {
-            HStack {
-                Text(turn.text)
+            HStack(alignment: .top) {
+                AgentMarkdownText(text: turn.text, isStreaming: turn.isStreaming)
                     .padding(12)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .background(composerSurface)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
                 Spacer(minLength: 48)
             }
         }
@@ -136,9 +183,9 @@ struct ActionConsoleView: View {
             Image(systemName: "text.bubble")
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
-            Text("输入、贴图或语音描述作业")
+            Text("描述作业或指令")
                 .font(.headline)
-            Text("可粘贴截图、按住麦克风说话，或直接输入文字")
+            Text("可语音、贴图，或直接输入文字")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -159,140 +206,269 @@ struct ActionConsoleView: View {
     }
 
     @ViewBuilder
-    private func attachmentPreview(viewModel: ActionConsoleViewModel) -> some View {
-        if viewModel.attachedImage != nil || viewModel.isExtractingOCR {
-            HStack(spacing: 12) {
-                if let image = viewModel.attachedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 52, height: 52)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
+    private func composerCard(viewModel: ActionConsoleViewModel) -> some View {
+        @Bindable var speechService = viewModel.speechService
 
-                if viewModel.isExtractingOCR {
-                    ProgressView()
-                    Text("识别截图文字…")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Text("已附加截图，发送后将导入")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Button {
-                    viewModel.removeAttachedImage()
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
-                }
-                .disabled(viewModel.isExtractingOCR)
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            .background(Color(.secondarySystemBackground))
-        }
-    }
-
-    @ViewBuilder
-    private func inputBar(viewModel: ActionConsoleViewModel) -> some View {
         VStack(spacing: 8) {
             if let hint = viewModel.speechUnavailableMessage {
                 Text(hint)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 16)
             }
 
-            if viewModel.isRecordingSpeech {
-                HStack(spacing: 8) {
-                    Image(systemName: "waveform")
-                        .foregroundStyle(.red)
-                        .symbolEffect(.variableColor.iterative, options: .repeating)
-                    Text("正在聆听…松开发送")
-                        .font(.caption)
+            VStack(alignment: .leading, spacing: 12) {
+                if viewModel.isRecordingSpeech {
+                    recordingControlBar(viewModel: viewModel, liveTranscript: speechService.liveTranscript)
+                }
+
+                if let image = viewModel.attachedImage {
+                    attachmentChip(image: image, viewModel: viewModel)
+                }
+
+                ZStack(alignment: .topLeading) {
+                    if viewModel.inputText.isEmpty, !viewModel.isRecordingSpeech {
+                        Text("描述作业或指令…")
+                            .foregroundStyle(.tertiary)
+                            .padding(.top, 8)
+                            .padding(.leading, 4)
+                    }
+
+                    TextField("", text: Bindable(viewModel).inputText, axis: .vertical)
+                        .lineLimit(1 ... 6)
+                        .focused($inputFocused)
+                        .accessibilityIdentifier("action-console-input")
+                }
+                .frame(minHeight: 44, alignment: .topLeading)
+
+                HStack(spacing: 12) {
+                    attachmentMenu(viewModel: viewModel)
+
+                    modelBadge
+
+                    Spacer(minLength: 8)
+
+                    micButton(viewModel: viewModel)
+
+                    if viewModel.isProcessing {
+                        stopButton(viewModel: viewModel)
+                    } else if viewModel.isRecordingSpeech {
+                        EmptyView()
+                    } else {
+                        sendButton(viewModel: viewModel)
+                    }
+                }
+            }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .fill(composerSurface)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(colorScheme == .dark ? 0.12 : 0.08), lineWidth: 1)
+            )
+            .padding(.horizontal, 12)
+            .padding(.bottom, 8)
+        }
+        .padding(.bottom, 8)
+    }
+
+    @ViewBuilder
+    private func recordingControlBar(viewModel: ActionConsoleViewModel, liveTranscript: String) -> some View {
+        HStack(spacing: 12) {
+            Button {
+                viewModel.cancelSpeechRecording()
+            } label: {
+                Label("取消", systemImage: "xmark")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.red)
+            }
+            .accessibilityIdentifier("action-console-cancel-recording")
+
+            Spacer(minLength: 8)
+
+            HStack(spacing: 6) {
+                Image(systemName: "waveform")
+                    .foregroundStyle(.red)
+                    .symbolEffect(.variableColor.iterative, options: .repeating)
+                Text(liveTranscript.isEmpty ? "正在聆听…" : liveTranscript)
+                    .lineLimit(2)
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+
+            Spacer(minLength: 8)
+
+            Button {
+                Task { await viewModel.endSpeechRecording(sendImmediately: false) }
+            } label: {
+                Text("完成")
+                    .font(.subheadline.weight(.medium))
+            }
+            .accessibilityIdentifier("action-console-finish-recording")
+        }
+        .padding(.vertical, 4)
+    }
+
+    @ViewBuilder
+    private func attachmentChip(image: UIImage, viewModel: ActionConsoleViewModel) -> some View {
+        HStack(spacing: 10) {
+            Button {
+                zoomedImageItem = ImagePreviewItem(image: image)
+            } label: {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 56, height: 56)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+            .buttonStyle(.plain)
+
+            VStack(alignment: .leading, spacing: 2) {
+                if viewModel.isExtractingOCR {
+                    HStack(spacing: 6) {
+                        ProgressView()
+                            .controlSize(.small)
+                        Text("识别截图文字…")
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                } else {
+                    Text("已附加截图")
+                        .font(.caption.weight(.medium))
+                    Text("发送后将导入作业")
+                        .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            HStack(spacing: 8) {
-                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                    Image(systemName: "photo")
-                        .font(.title3)
-                }
-                .accessibilityIdentifier("action-console-attach-photo")
+            Spacer()
 
-                Button {
-                    Task { await viewModel.pasteImageFromClipboard() }
-                } label: {
-                    Image(systemName: "doc.on.clipboard")
-                        .font(.title3)
-                }
-                .accessibilityIdentifier("action-console-paste-image")
-
-                micButton(viewModel: viewModel)
-
-                TextField("输入消息…", text: Bindable(viewModel).inputText, axis: .vertical)
-                    .lineLimit(1 ... 5)
-                    .textFieldStyle(.roundedBorder)
-                    .accessibilityIdentifier("action-console-input")
-
-                Button {
-                    Task { await viewModel.sendMessage() }
-                } label: {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.title2)
-                }
-                .disabled(!viewModel.canSend)
-                .accessibilityIdentifier("action-console-send")
+            Button {
+                viewModel.removeAttachedImage()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
             }
+            .disabled(viewModel.isExtractingOCR)
         }
-        .padding()
-        .background(.bar)
+        .padding(10)
+        .background(controlFill.opacity(0.65))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+
+    @ViewBuilder
+    private func attachmentMenu(viewModel: ActionConsoleViewModel) -> some View {
+        Menu {
+            Button {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(50))
+                    isPhotoPickerPresented = true
+                }
+            } label: {
+                Label("从相册选择", systemImage: "photo")
+            }
+            .accessibilityIdentifier("action-console-photo-picker")
+
+            Button {
+                Task { await viewModel.pasteImageFromClipboard() }
+            } label: {
+                Label("粘贴截图", systemImage: "doc.on.clipboard")
+            }
+        } label: {
+            Image(systemName: "plus")
+                .font(.body.weight(.semibold))
+                .frame(width: 34, height: 34)
+                .background(Circle().fill(controlFill))
+        }
+        .accessibilityIdentifier("action-console-attach-menu")
+    }
+
+    private var modelBadge: some View {
+        Text(AppSecrets.llmModel)
+            .font(.caption2.weight(.medium))
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(
+                Capsule().fill(controlFill)
+            )
+            .lineLimit(1)
     }
 
     @ViewBuilder
     private func micButton(viewModel: ActionConsoleViewModel) -> some View {
         let isDisabled = !viewModel.isSpeechAvailable || viewModel.isProcessing
 
-        Image(systemName: viewModel.isRecordingSpeech ? "mic.fill" : "mic")
-            .font(.title3)
-            .foregroundStyle(viewModel.isRecordingSpeech ? .red : (isDisabled ? .secondary : .primary))
-            .padding(6)
-            .background(
-                Circle()
-                    .fill(viewModel.isRecordingSpeech ? Color.red.opacity(0.15) : Color.clear)
-            )
-            .accessibilityIdentifier("action-console-mic")
-            .opacity(isDisabled && !viewModel.isRecordingSpeech ? 0.4 : 1)
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in
-                        guard !viewModel.isRecordingSpeech else { return }
-                        Task { await viewModel.beginSpeechRecording() }
-                    }
-                    .onEnded { _ in
-                        Task { await viewModel.endSpeechRecording() }
-                    }
-            )
-            .simultaneousGesture(
-                TapGesture()
-                    .onEnded {
-                        guard viewModel.isSpeechAvailable, !viewModel.isProcessing else { return }
-                        Task {
-                            if viewModel.isRecordingSpeech {
-                                await viewModel.endSpeechRecording()
-                            } else {
-                                await viewModel.beginSpeechRecording()
-                            }
-                        }
-                    }
-            )
+        Button {
+            guard viewModel.isSpeechAvailable, !viewModel.isProcessing else { return }
+            Task {
+                if viewModel.isRecordingSpeech {
+                    await viewModel.endSpeechRecording()
+                } else {
+                    await viewModel.beginSpeechRecording()
+                }
+            }
+        } label: {
+            Image(systemName: viewModel.isRecordingSpeech ? "mic.fill" : "mic")
+                .font(.body)
+                .foregroundStyle(viewModel.isRecordingSpeech ? .red : .primary)
+                .frame(width: 34, height: 34)
+                .background(
+                    Circle()
+                        .fill(viewModel.isRecordingSpeech ? Color.red.opacity(0.12) : controlFill)
+                )
+        }
+        .accessibilityIdentifier("action-console-mic")
+        .opacity(isDisabled && !viewModel.isRecordingSpeech ? 0.35 : 1)
+        .disabled(isDisabled && !viewModel.isRecordingSpeech)
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    guard !viewModel.isRecordingSpeech, viewModel.isSpeechAvailable else { return }
+                    Task { await viewModel.beginSpeechRecording() }
+                }
+                .onEnded { _ in
+                    Task { await viewModel.endSpeechRecording() }
+                }
+        )
     }
+
+    @ViewBuilder
+    private func sendButton(viewModel: ActionConsoleViewModel) -> some View {
+        Button {
+            viewModel.sendMessage()
+        } label: {
+            Image(systemName: "arrow.up")
+                .font(.body.weight(.bold))
+                .foregroundStyle(.white)
+                .frame(width: 34, height: 34)
+                .background(Circle().fill(viewModel.canSend ? Color.primary : Color(.systemGray3)))
+        }
+        .disabled(!viewModel.canSend)
+        .accessibilityIdentifier("action-console-send")
+    }
+
+    @ViewBuilder
+    private func stopButton(viewModel: ActionConsoleViewModel) -> some View {
+        Button {
+            viewModel.stopProcessing()
+        } label: {
+            Image(systemName: "stop.fill")
+                .font(.body.weight(.bold))
+                .foregroundStyle(.white)
+                .frame(width: 34, height: 34)
+                .background(Circle().fill(Color.red))
+        }
+        .accessibilityIdentifier("action-console-stop")
+    }
+}
+
+private struct ImagePreviewItem: Identifiable {
+    let id = UUID()
+    let image: UIImage
 }
 
 #Preview {
