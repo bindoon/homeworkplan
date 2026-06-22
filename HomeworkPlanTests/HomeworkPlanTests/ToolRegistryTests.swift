@@ -36,6 +36,7 @@ final class ToolRegistryTests: XCTestCase {
         XCTAssertFalse(ToolRegistry.isMutating(name: "list_recurring_rules"))
         XCTAssertTrue(ToolRegistry.isMutating(name: "create_task"))
         XCTAssertTrue(ToolRegistry.isMutating(name: "import_from_text"))
+        XCTAssertTrue(ToolRegistry.isMutating(name: "import_from_image"))
         XCTAssertTrue(ToolRegistry.isMutating(name: "delete_task"))
     }
 }

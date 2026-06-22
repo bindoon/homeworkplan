@@ -1,4 +1,5 @@
 import SwiftData
+import UIKit
 import XCTest
 @testable import HomeworkPlan
 
@@ -102,5 +103,34 @@ final class ToolExecutorTests: XCTestCase {
             return XCTFail("Expected immediate result")
         }
         XCTAssertTrue(json.contains("语文"))
+    }
+
+    func testImportFromImage_requiresAttachment() async throws {
+        let args = """
+        {"ocr_text":"数学 P10 明天交"}
+        """
+
+        do {
+            _ = try await executor.execute(toolName: "import_from_image", argumentsJSON: args)
+            XCTFail("Expected missing attachment error")
+        } catch let error as ToolExecutorError {
+            XCTAssertTrue(error.localizedDescription.contains("截图附件"))
+        }
+    }
+
+    func testImportFromImage_rejectsEmptyOCRText() async throws {
+        let image = UIImage(systemName: "doc.text")!
+        let attachment = UserMessageAttachment(image: image, ocrText: "   ")
+
+        do {
+            _ = try await executor.execute(
+                toolName: "import_from_image",
+                argumentsJSON: "{\"ocr_text\":\"   \"}",
+                attachment: attachment
+            )
+            XCTFail("Expected invalid ocr_text")
+        } catch let error as ToolExecutorError {
+            XCTAssertTrue(error.localizedDescription.contains("ocr_text"))
+        }
     }
 }
