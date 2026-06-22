@@ -1,232 +1,74 @@
-# Stack Research
+# Stack Research — v2.0 AI Native Additions
 
-**Domain:** Local-first iOS homework management app (家长端，手动导入 + OCR + LLM 解析)
-**Researched:** 2026-06-22
-**Confidence:** HIGH
+**Project:** HomeworkPlan v2.0 AI Native  
+**Researched:** 2026-06-22  
+**Scope:** Stack additions only — v1.0 stack (SwiftUI, SwiftData, Vision, DeepSeek, Keychain) unchanged
 
-## Recommended Stack
+## v1.0 Baseline (Unchanged)
 
-### Core Technologies
+SwiftUI + MVVM, SwiftData + CloudKit, Apple Vision OCR, DeepSeek Chat Completions (JSON mode), Keychain, UNUserNotificationCenter, zero external SPM.
 
-| Technology | Version | Purpose | Why Recommended | Confidence |
-|------------|---------|---------|-----------------|------------|
-| Xcode | 26.x | 构建与签名 | 自 2026-04-28 起，App Store Connect 要求使用 iOS 26 SDK 构建；与项目 iOS 17 最低部署目标不冲突 | HIGH |
-| Swift | 6.x（语言模式可暂用 Swift 5） | 应用语言 | Xcode 26 默认 Swift 6；Greenfield 项目可逐步启用 strict concurrency，MVP 可先保持 Swift 5 模式降低迁移成本 | HIGH |
-| iOS Deployment Target | 17.0+ | 最低系统版本 | SwiftData、SwiftUI `@Query`、`PhotosPicker` inline 等核心能力均要求 iOS 17；与 PROJECT.md 约束一致 | HIGH |
-| SwiftUI | iOS 17+ | UI 层 | Apple 官方声明式 UI 标准；Tab 导航、表单、确认流、空状态引导均原生支持 | HIGH |
-| MVVM | — | 架构模式 | 视图与 `@Observable` ViewModel 分离，便于 OCR/解析/通知等服务注入与测试；PRD 与 OpenSpec 均已选定 | HIGH |
-| SwiftData | iOS 17+ | 本地持久化 | 2025–2026 年 Apple 平台本地存储标准路径；`@Model` + `@Query` 与 SwiftUI 深度集成，替代 Core Data 样板代码 | HIGH |
-| CloudKit（via SwiftData） | iCloud 容器 | 多设备同步 | 无后端前提下实现 iPhone/iPad 数据同步；SwiftData 自动映射到 `NSPersistentCloudKitContainer` | HIGH |
-| Apple Vision | iOS 17+ | 本地 OCR | 设备端执行、零 API 成本；`.accurate` 模式支持 `zh-Hans`/`zh-Hant`，适合微信/钉钉截图中文聊天文字 | HIGH |
-| DeepSeek Chat Completions API | `deepseek-v4-flash`（主） / `deepseek-v4-pro`（重试） | 文本语义解析 | MVP 仅需 OCR 后纯文本解析；OpenSpec 明确 DeepSeek 替代 Claude；JSON Output 官方支持；Flash 成本低（~$0.14/1M input miss） | HIGH |
-| URLSession + async/await | Foundation（系统内置） | DeepSeek HTTP 客户端 | 无需第三方网络库；OpenAI 兼容 REST 格式，`Codable` 直接解码响应 | HIGH |
-| UserNotifications | iOS 17+ | 本地提醒 | 截止日提醒 + 重复任务提醒均可在设备端调度，无需 APNs 或后端 | HIGH |
-| Keychain Services | Security（系统内置） | API Key 安全存储 | Apple 官方密钥存储唯一正确位置；禁止 UserDefaults/文件明文 | HIGH |
-| PhotosUI | iOS 17+ | 截图导入 | `PhotosPicker` 系统相册选择器；iOS 17 起支持 `.photosPickerStyle(.inline)` 与应用内嵌入 | HIGH |
-| CryptoKit | 系统内置 | 导入去重 | SHA256 哈希原始 OCR/粘贴文本，避免重复调用 DeepSeek（PRD 策略） | HIGH |
+## Recommended Additions
 
-### Supporting Libraries
+### LLM Tool-Calling
 
-| Library | Version | Purpose | When to Use | Confidence |
-|---------|---------|---------|-------------|------------|
-| Foundation `JSONDecoder` / `Codable` | 系统内置 | 解析 DeepSeek JSON 响应 | 所有 AI 结构化输出；配合 `response_format: { type: "json_object" }` | HIGH |
-| Observation (`@Observable`) | iOS 17+ | ViewModel 状态 | 替代 Combine `ObservableObject`，减少 `@Published` 样板 | HIGH |
-| `@ModelActor` | SwiftData | 后台数据写入 | 重复任务批量生成、导入记录写入等后台上下文 | MEDIUM |
-| `NSPersistentCloudKitContainer.initializeCloudKitSchema()` | Core Data + CloudKit | 开发期 schema 初始化 | DEBUG 首次启用 iCloud 同步时，在 `ModelContainer` 创建前初始化 CloudKit schema | HIGH |
-| Swift Testing | Xcode 26 内置 | 单元测试 | OCR 语言配置、JSON schema 校验、日期归一化、通知 identifier 策略 | MEDIUM |
-| App Groups（延后） | — | Extension 共享存储 | Phase 2 Share Extension / 未来 ReplayKit 才需要；MVP 不启用 | HIGH |
+| Component | Choice | Rationale |
+|-----------|--------|-----------|
+| Tool protocol | Swift `AgentTool` protocol + JSON Schema definitions | Type-safe, testable, no runtime reflection |
+| LLM API | DeepSeek Chat Completions with `tools` parameter | Already integrated; supports OpenAI-compatible function calling |
+| Agent loop | `AgentOrchestrator` @MainActor async loop | Max 5 tool rounds, then force user-facing summary |
+| Response format | Structured `AgentTurn` (message, pendingConfirmation, toolCalls) | Drives Action Console UI |
 
-### Development Tools
+**Confidence:** HIGH — DeepSeek documents function calling; existing `ParseService` pattern extends naturally.
 
-| Tool | Purpose | Notes | Confidence |
-|------|---------|-------|------------|
-| Xcode 26.x | IDE、Simulator、Instruments | 构建 SDK = iOS 26；部署目标 = iOS 17 | HIGH |
-| CloudKit Console | 验证 schema、调试同步 | 开发环境 schema 提升 production 前必须完成 | HIGH |
-| Apple Developer Account | iCloud、CloudKit、TestFlight | iCloud capability 需有效开发者账号 | HIGH |
-| Instruments (Memory / Leaks) | Vision OCR 内存验证 | 为 Phase 2+ ReplayKit Extension 预留验证习惯；MVP 主 App OCR 风险低 | MEDIUM |
-| `.xcconfig` + `#if DEBUG` | 环境隔离 | CloudKit schema init、verbose 日志仅 DEBUG 执行 | HIGH |
+### Speech Input
 
-## Installation
+| Component | Choice | Rationale |
+|-----------|--------|-----------|
+| STT | `SFSpeechRecognizer` + `AVAudioEngine` | Native, free, zh-CN supported on device |
+| Permissions | `NSSpeechRecognitionUsageDescription` + `NSMicrophoneUsageDescription` | Required Info.plist keys |
+| UX | Press-hold or tap-to-record button on Action Console | Simpler than continuous dictation for short homework descriptions |
 
-HomeworkPlan 是纯原生 iOS 项目，无 npm/SPM 第三方依赖。MVP 推荐零外部 Package 起步。
+**Confidence:** HIGH — standard iOS pattern.
 
-### 1. 创建 Xcode 项目
+### Multimodal Attachments
+
+| Component | Choice | Rationale |
+|-----------|--------|-----------|
+| Image attach | `PhotosPicker` + pasteboard `UIImage` in Action Console | Reuse v1.0 screenshot flow; pass image to `import_from_image` tool |
+| Image in agent context | Base64 thumbnail + OCR text pre-extracted locally | Keep Extension/API payload small; Vision runs before LLM |
+
+**Confidence:** HIGH — v1.0 already has PhotosPicker + OCR pipeline.
+
+### UI Shell
+
+| Component | Choice | Rationale |
+|-----------|--------|-----------|
+| Tab structure | 2-tab `TabView` (Home, Action) + Settings via toolbar gear or third minimal tab | User requested 2 primary tabs |
+| Action Console | `ScrollView` + `TextField` + attachment bar + confirmation cards | Chat-like but not full chat clone — focus on one input |
+
+## What NOT to Add
+
+| Avoid | Why |
+|-------|-----|
+| LangChain / external agent frameworks | Overkill for single-user iOS app; adds SPM dependency |
+| On-device LLM (Core ML) | Quality insufficient for Chinese homework parsing vs DeepSeek |
+| Separate backend agent service | Violates local-first constraint |
+| RAG / vector DB | Homework context fits in prompt + tool results |
+| Full chat history persistence | complicates SwiftData; session-scoped history sufficient for v2.0 |
+
+## Integration Points
 
 ```
-File → New → Project → iOS → App
-- Interface: SwiftUI
-- Storage: SwiftData
-- Minimum Deployments: iOS 17.0
-- Language: Swift
+ActionConsoleView
+  → AgentOrchestrator.run(userInput, attachments)
+    → DeepSeek (tools: ToolRegistry.schemas)
+    → ToolExecutor.execute(call) → existing ImportService / TaskRepository / etc.
+    → ConfirmationGate → TaskCandidateReviewView pattern
+    → Persist on approve
 ```
 
-### 2. 启用 Capabilities（Xcode → Signing & Capabilities）
+## Info.plist Additions
 
-| Capability | 配置 | 用途 |
-|------------|------|------|
-| iCloud | CloudKit + 私有容器 `iCloud.<bundle-id>` | SwiftData 自动同步 |
-| Background Modes | Remote notifications | 接收 CloudKit 静默推送以触发同步 |
-
-### 3. SwiftData + CloudKit 容器配置
-
-```swift
-let config = ModelConfiguration(
-    cloudKitDatabase: .private("iCloud.com.yourteam.HomeworkPlan")
-)
-let container = try ModelContainer(
-    for: HomeworkTask.self, Subject.self, RecurringRule.self,
-         ImportRecord.self, TaskAttachment.self,
-    configurations: config
-)
-```
-
-### 4. DeepSeek API 集成常量
-
-```swift
-enum DeepSeekConfig {
-    static let baseURL = URL(string: "https://api.deepseek.com")!
-    static let chatCompletionsPath = "/chat/completions"
-    static let defaultModel = "deepseek-v4-flash"
-    static let retryModel = "deepseek-v4-pro"   // 低置信度或 JSON 解析失败时
-    static let legacyModelCutoff = "2026-07-24" // deepseek-chat 退役日
-}
-```
-
-### 5. Vision OCR 中文配置
-
-```swift
-let request = VNRecognizeTextRequest()
-request.recognitionLevel = .accurate          // 中文仅 accurate 支持
-request.recognitionLanguages = ["zh-Hans", "en-US"]  // 中文优先，英文兜底
-request.usesLanguageCorrection = true       // 英文有效；中文无 language correction
-```
-
-### 6. Keychain 存储 API Key
-
-```swift
-// Service: com.yourteam.HomeworkPlan / Account: deepseek-api-key
-// kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-// 前台解析场景足够；若未来需后台通知触发解析，改为 AfterFirstUnlockThisDeviceOnly
-```
-
-## Alternatives Considered
-
-| Recommended | Alternative | When to Use Alternative | Confidence |
-|-------------|-------------|-------------------------|------------|
-| SwiftData + CloudKit | Core Data + NSPersistentCloudKitContainer 手写 | 需要 CloudKit 不支持的高级关系/迁移控制，或团队已有成熟 Core Data 栈 | MEDIUM |
-| SwiftData + CloudKit | GRDB / SQLiteData | 需要复杂 SQL 查询、自定义同步协议、或 SwiftData 稳定性不满足 | LOW（MVP 不需要） |
-| Apple Vision OCR | DeepSeek VLM / Claude Vision / Qwen-VL | OCR 质量不足、需理解聊天 UI 布局（发言人/气泡结构）时；Phase 2+ 按需接入 | HIGH |
-| DeepSeek `deepseek-v4-flash` | `deepseek-v4-pro` | 默认路径用 Flash；解析失败、低置信度、复杂相对日期（"下节课交"）重试时用 Pro | HIGH |
-| URLSession 原生 | OpenAI Swift SDK / Alamofire | 仅当需要 SDK 级 retry/stream 抽象；MVP 单次 POST 请求不值得引入依赖 | HIGH |
-| 本地通知 UNUserNotificationCenter | APNs 远程推送 | 需要服务端触发提醒或多设备协同推送时；MVP 纯本地足够 | HIGH |
-| PhotosPicker 应用内 | Share Extension | 减少操作步骤；OpenSpec 明确 MVP v1 延后 Share Extension | HIGH |
-| `@Observable` ViewModel | TCA / Composable Architecture | 状态机复杂度显著上升（多步导入向导 + 离线队列 + 冲突解决）时再评估 | MEDIUM |
-
-## What NOT to Use
-
-| Avoid | Why | Use Instead | Confidence |
-|-------|-----|-------------|------------|
-| `deepseek-chat` / `deepseek-reasoner` | 2026-07-24 UTC 退役；仅为 V4-Flash 别名 | `deepseek-v4-flash` / `deepseek-v4-pro` | HIGH |
-| Claude API（MVP 主路径） | OpenSpec 范围外；Vision 成本高；文本解析足够验证核心价值 | Vision OCR + DeepSeek 文本 | HIGH |
-| Firebase / Supabase / 自建后端 | 与 local-first、无多用户 MVP 目标冲突；增加部署与隐私成本 | SwiftData + iCloud | HIGH |
-| UserDefaults 存 API Key | 明文可读、iCloud 备份泄露风险 | Keychain Services | HIGH |
-| `@Attribute(.unique)` on synced models | CloudKit 不支持 unique 约束；同步 silently fail | 应用层 SHA256 去重 + `ImportRecord` | HIGH |
-| 非 optional CloudKit 关系 | CloudKit 要求关系 optional；否则同步失败 | 所有 `@Relationship` 设为 optional 或提供默认值 | HIGH |
-| Tesseract / Google ML Kit OCR | 额外依赖、中文微信截图场景 Vision 已足够且免费 | Apple Vision | HIGH |
-| ReplayKit Broadcast Extension（MVP） | 权限摩擦、50MB 内存限制、微信录屏不确定性 | 手动截图 + 粘贴导入 | HIGH |
-| `UNTimeIntervalNotificationTrigger(repeats: true)` 做复杂重复 | 无法表达"工作日""每周三"等规则 | 前台/启动时生成 + `UNCalendarNotificationTrigger` 滚动窗口 | HIGH |
-| 一次性 schedule 全部任务通知 | iOS 硬限制 64 条 pending 本地通知 | NotificationBudgetManager：保留最近 64 条，App 启动时重算 | HIGH |
-| Realm / FMDB | 与 SwiftData + CloudKit 路线重复；SwiftUI 集成弱于 SwiftData | SwiftData | HIGH |
-| RxSwift / Combine 驱动全局状态 | 2025–2026 Swift 并发 + Observation 已是标准 | async/await + `@Observable` | MEDIUM |
-
-## Stack Patterns by Variant
-
-**If MVP（当前范围 — 手动导入 only）：**
-- 数据流：`PhotosPicker/剪贴板 → Vision OCR（截图路径）→ DeepSeek JSON → 用户确认 → SwiftData`
-- 网络：仅 `URLSession` POST `/chat/completions`；无 WebSocket、无 streaming
-- 同步：开发期先 `cloudKitDatabase: .none` 跑通模型，稳定后切 `.private(...)` 并 DEBUG 初始化 schema
-- 通知：任务 CRUD 时增量更新通知队列，启动/前台时 `enforceLimit()` 保持 ≤64 条
-
-**If 解析失败重试：**
-- 第一次：`deepseek-v4-flash`，`temperature: 0`，`response_format: json_object`，`max_tokens: 4096`
-- 第二次（JSON 无效 / 低置信度）：同 prompt + `deepseek-v4-pro`，禁用 thinking mode（结构化提取不需要推理链）
-- 仍失败：展示 OCR 原文 + 手动表单入口
-
-**If 后续 Phase 2（Share Extension）：**
-- 新增 App Group + Extension Target
-- Extension 内仅 Vision OCR → 写 App Group 共享目录
-- 主 App 打开时读取 → 复用同一 `ParseService` + 确认流
-- Extension 禁止直接调用 DeepSeek（网络/Keychain 共享复杂）
-
-**If 后续 Phase 4+（ReplayKit 自动采集）：**
-- Broadcast Upload Extension：仅帧差 + 顶部条带 Vision OCR 群名匹配
-- 命中规则后写 ImportRecord → 主 App 或后台 URLSession 调 DeepSeek
-- 仍走"候选 → 确认 → 持久化"同一管道
-
-**If iCloud 同步出现重复 recurring 任务：**
-- 生成键 = `"\(ruleID)-\(yyyy-MM-dd)"` 确定性 ID
-- `@ModelActor` 在单设备上下文 upsert，CloudKit 合并时去重
-
-## Version Compatibility
-
-| Package A | Compatible With | Notes | Confidence |
-|-----------|-----------------|-------|------------|
-| iOS 17.0 deployment | SwiftData, `@Query`, `@Observable` | 最低部署目标；不可降至 iOS 16 | HIGH |
-| iOS 17.0 deployment | PhotosPicker inline (`.photosPickerStyle(.inline)`) | iOS 17+ | HIGH |
-| iOS 26 SDK build | iOS 17.0 min deployment | App Store 构建要求 ≠ 运行要求；可继续支持 iOS 17 用户 | HIGH |
-| SwiftData + CloudKit | 所有属性 optional 或有默认值 | CloudKit 不同步缺省值填充失败的 non-optional 字段 | HIGH |
-| SwiftData + CloudKit | 禁止 `@Attribute(.unique)` | 改用应用层 dedup | HIGH |
-| `VNRecognizeTextRequest` + `zh-Hans` | `.accurate` recognition level only | `.fast` 不支持中文 | HIGH |
-| `deepseek-v4-flash` | `response_format: { type: "json_object" }` | prompt 必须含 "json" 字样 + 示例；否则可能空输出 | HIGH |
-| Swift 6 strict concurrency | URLSession async | `@MainActor` ViewModel 调用 `actor ParseService` 隔离网络层 | MEDIUM |
-| CloudKit schema | 仅 additive 变更 | production 后不可删除字段/类型；MVP 前冻结核心模型 | HIGH |
-
-## Recommended Service Layer Mapping
-
-| Service | Stack Components | Responsibility |
-|---------|------------------|----------------|
-| `ImportService` | PhotosUI, UIPasteboard | 相册选图、剪贴板检测、原始内容封装 |
-| `OCRService` | Vision (`VNRecognizeTextRequest`) | 截图 → 纯文本；保留 `CGImage` 供附件 |
-| `ParseService` | URLSession, DeepSeek API, Codable | Prompt 管理、JSON 解析、SHA256 缓存、重试 |
-| `TaskRepository` | SwiftData `@ModelActor` | HomeworkTask CRUD、按科目/日期查询 |
-| `RecurringService` | SwiftData + Calendar | 启动/前台生成当日任务、确定性 ID |
-| `NotificationService` | UserNotifications | 调度/取消/64 条预算管理 |
-| `KeychainService` | Security | DeepSeek API Key 读写 |
-| `SyncService` | SwiftData + CloudKit | 容器配置、schema init（DEBUG） |
-
-## DeepSeek Request Contract (MVP)
-
-```json
-{
-  "model": "deepseek-v4-flash",
-  "messages": [
-    { "role": "system", "content": "...含 json 示例的系统提示..." },
-    { "role": "user", "content": "...OCR 或粘贴文本..." }
-  ],
-  "temperature": 0,
-  "max_tokens": 4096,
-  "response_format": { "type": "json_object" },
-  "stream": false
-}
-```
-
-**成本估算（MVP 手动导入）：** 单次解析 ~1–3K input tokens → Flash miss 约 $0.0001–0.0004/次；月 100 次导入 < $0.05。Pro 仅作重试，成本可控。
-
-## Sources
-
-- [Apple SwiftData — Syncing model data across devices](https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices) — CloudKit capability、schema 限制、`ModelConfiguration.cloudKitDatabase` — **HIGH**
-- Context7 `/websites/developer_apple_swiftdata` — CloudKit sync configuration — **HIGH**
-- [Apple Vision — Recognizing Text in Images](https://developer.apple.com/documentation/vision/recognizing-text-in-images) — `zh-Hans`、`.accurate` 要求 — **HIGH**
-- Context7 `/websites/developer_apple_vision` — `recognitionLanguages` API — **HIGH**
-- [DeepSeek API Docs — Your First API Call](https://api-docs.deepseek.com/) — base URL、V4 模型名 — **HIGH**
-- [DeepSeek API Docs — JSON Output](https://api-docs.deepseek.com/guides/json_mode) — `response_format: json_object` 要求 — **HIGH**
-- [DeepSeek API Docs — Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing) — V4 Flash/Pro 定价与 JSON 支持 — **HIGH**
-- [Apple — Upcoming SDK minimum requirements (2026-02-03)](https://developer.apple.com/news/?id=ueeok6yw) — iOS 26 SDK / Xcode 26 提交要求 — **HIGH**
-- [Apple — Scheduling a notification locally](https://developer.apple.com/documentation/usernotifications/scheduling-a-notification-locally-from-your-app) — `UNCalendarNotificationTrigger` — **HIGH**
-- [Apple — Restricting keychain item accessibility](https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility) — `kSecAttrAccessible` 选择 — **HIGH**
-- [Fatbobman — Key Considerations Before Using SwiftData](https://fatbobman.com/en/posts/key-considerations-before-using-swiftdata/) — CloudKit 同步行为、iOS 18 稳定性注意 — **MEDIUM**
-- PROJECT.md / OpenSpec `extract-mvp-scope/design.md` — MVP 范围、DeepSeek 决策 — **HIGH**
-
----
-*Stack research for: HomeworkPlan — 小学生作业管理 iOS App*
-*Researched: 2026-06-22*
+- `NSSpeechRecognitionUsageDescription` — 语音描述作业时需要
+- `NSMicrophoneUsageDescription` — 录制语音时需要
