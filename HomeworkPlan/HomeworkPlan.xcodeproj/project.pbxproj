@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1230EDBCE0005E88E41DCA0A /* NotificationBudgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82C5582E94EC708AB23EC3C /* NotificationBudgetManager.swift */; };
 		130DAB448534E068564236C9 /* CloudKitSchemaInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73A2173357E7F5DB796F4DC /* CloudKitSchemaInitializer.swift */; };
 		14217E6D8E914F2F5A8186C3 /* TaskCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298ABE4BF44A558DB3CB1AC5 /* TaskCandidate.swift */; };
 		17C5E1112DEFF9D3FFFD0980 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C127234D8DA956F5BFCFAC33 /* TodayView.swift */; };
@@ -21,6 +22,7 @@
 		4311E34A28CB05167B8335BF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F593280FE88CA68200E391 /* SettingsView.swift */; };
 		447220F60EAA7E408C78AD88 /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9021F7CA146CB5DE4F38479E /* TaskRowView.swift */; };
 		474702CBC8ECC13154224875 /* TodayFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769326B524C6A6A3E84662 /* TodayFlowUITests.swift */; };
+		4E5C356323A6794DF8D092E3 /* ReminderNotificationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47A4A5692870DEA7903623C /* ReminderNotificationBuilder.swift */; };
 		53F9C6AAE3A4B07CAB756A0D /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9CD91EE0BC453D503DA41E /* OCRService.swift */; };
 		5681721640831E4C1CD9F01A /* RecurringRuleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAF06A5E794EA20D43FC2F5 /* RecurringRuleRepository.swift */; };
 		5CF48C159B6AFBF3B2F70941 /* RecurringTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E90957C931BA0804381008C /* RecurringTaskGenerator.swift */; };
@@ -30,6 +32,7 @@
 		79C7DD4CACCACCD6FEA2EC93 /* SubjectManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E2D874BDFA81D0AC563DA1 /* SubjectManagementView.swift */; };
 		7E003DCB5F2FDFEFA19359B2 /* ImportRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741F1D841D225A712E4C7CBB /* ImportRecord.swift */; };
 		7FE9FB433C7F08E81E78E9DF /* ImportRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F8C03735B777C2208D98DE /* ImportRepositoryTests.swift */; };
+		87D9DD2B397BA63A616E2D04 /* ReminderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD4C7B77540AA4F4DE1DCA7 /* ReminderSettings.swift */; };
 		898999166B911BE302982E57 /* SubjectRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434974D873BD577037B28EE6 /* SubjectRepository.swift */; };
 		8EADFC8FFF8F430ADC3705C2 /* ManualTaskFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1412481D71904646A4F9ECA /* ManualTaskFormView.swift */; };
 		98E95246FAE79EA2998CF8F8 /* TaskCandidateReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B2AC00BB75EC07FEE3CD71 /* TaskCandidateReviewView.swift */; };
@@ -43,9 +46,13 @@
 		C5E269CB4BF94F51DA2FFDCA /* SubjectDedupeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5871CFDC7FB8962578CC97D2 /* SubjectDedupeService.swift */; };
 		C70FE40E1DECBE65D3D03EAF /* RecurringTaskGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940692B783EA2E8BAA1AF07F /* RecurringTaskGeneratorTests.swift */; };
 		C7D882BF0672AEE421DC9613 /* HomeworkPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F413DF9398A8A4A62AE7DCC /* HomeworkPlanApp.swift */; };
+		CAC9D37B42F73F1693801C5F /* NotificationBudgetManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2574E5DE1E63713393CC1541 /* NotificationBudgetManagerTests.swift */; };
 		D15834413A42BE8461B90A71 /* ContentHashServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB800FB72BE1CE208C1F283C /* ContentHashServiceTests.swift */; };
 		D2241DBD3E9C99658C2714A8 /* SubjectFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED3A95B0BD9603D49937FC /* SubjectFormView.swift */; };
 		DB5899B4CD58D78D273FA6D5 /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FCA59DF625517AC1ACD236 /* Subject.swift */; };
+		DC301ABAEFC889CAD81EAEE1 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26603B36EE0C9EA2213592D0 /* ReminderService.swift */; };
+		E42F8242A004D38AE2D68AF6 /* ReminderNotificationID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED6A3917AF6DBA115153530 /* ReminderNotificationID.swift */; };
+		E4F20E0694877025983D10DD /* ReminderNotificationBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B21BA1F7B81B4DB836B879 /* ReminderNotificationBuilderTests.swift */; };
 		E65B3E744423A239DA2580D3 /* PasteImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB6F9BD6AF0FC19170EE1FA /* PasteImportView.swift */; };
 		E9CC09A30C1A1B453D9F4B26 /* RecurringRuleRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99A440F98677861C692B0E /* RecurringRuleRepositoryTests.swift */; };
 		F179D386D730DDF36DE0A7C1 /* ScreenshotImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A99C8F7533E6729D67C78C /* ScreenshotImportView.swift */; };
@@ -53,6 +60,7 @@
 		F2A628FC5E9E84A33CB8F838 /* ImportSourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C542EFC6455EDD8EEF7E8D2 /* ImportSourceType.swift */; };
 		F38A35ABD2CC40F29E83DB1D /* ImportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C2C7185EE12DBD4123EF0D /* ImportRepository.swift */; };
 		F54F5FAE76EC8B0145A7E74B /* AllTasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92129A50627949E34126D25 /* AllTasksViewModel.swift */; };
+		FA172D8D532A21AC64C97BAA /* ReminderSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB1B16BFF8BBCB0C5B62A8A /* ReminderSettingsView.swift */; };
 		FA7E82B480702F5BFA060C22 /* RecurringRulesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667F620B92118917AB94C38 /* RecurringRulesListView.swift */; };
 		FB0DD36A8A826A9A309B8C07 /* ImportSourceSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B1AB2CAF42BA57300FC022 /* ImportSourceSheet.swift */; };
 		FB8A88F02EF53213A39840CB /* HomeworkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C712162A605C3D198A6092EF /* HomeworkTask.swift */; };
@@ -82,6 +90,8 @@
 		1EB2FC7C8A2F33EDE12FDF7B /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		21F593280FE88CA68200E391 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		24C779E96CC08BF05AC1A713 /* ParseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseService.swift; sourceTree = "<group>"; };
+		2574E5DE1E63713393CC1541 /* NotificationBudgetManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBudgetManagerTests.swift; sourceTree = "<group>"; };
+		26603B36EE0C9EA2213592D0 /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
 		298ABE4BF44A558DB3CB1AC5 /* TaskCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCandidate.swift; sourceTree = "<group>"; };
 		2E90957C931BA0804381008C /* RecurringTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTaskGenerator.swift; sourceTree = "<group>"; };
 		361EF7915C4C23F1BC1315CD /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
@@ -91,9 +101,11 @@
 		5871CFDC7FB8962578CC97D2 /* SubjectDedupeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectDedupeService.swift; sourceTree = "<group>"; };
 		5ACCEA7C8CCB8B550148A341 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		5D026F019C6025766D8D8CA3 /* RecurringRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRule.swift; sourceTree = "<group>"; };
+		5ED6A3917AF6DBA115153530 /* ReminderNotificationID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderNotificationID.swift; sourceTree = "<group>"; };
 		61571B6DB8215747B378F797 /* SubjectDedupeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectDedupeServiceTests.swift; sourceTree = "<group>"; };
 		653F2E519C0B5DB217A07E29 /* TaskRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRepositoryTests.swift; sourceTree = "<group>"; };
 		69769326B524C6A6A3E84662 /* TodayFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowUITests.swift; sourceTree = "<group>"; };
+		6BD4C7B77540AA4F4DE1DCA7 /* ReminderSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettings.swift; sourceTree = "<group>"; };
 		6C9ABBE1DD2072DDC3FFC474 /* RecurringRuleFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRuleFormView.swift; sourceTree = "<group>"; };
 		6EAF06A5E794EA20D43FC2F5 /* RecurringRuleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringRuleRepository.swift; sourceTree = "<group>"; };
 		6F413DF9398A8A4A62AE7DCC /* HomeworkPlanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkPlanApp.swift; sourceTree = "<group>"; };
@@ -111,6 +123,7 @@
 		9CED3A95B0BD9603D49937FC /* SubjectFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectFormView.swift; sourceTree = "<group>"; };
 		A1412481D71904646A4F9ECA /* ManualTaskFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualTaskFormView.swift; sourceTree = "<group>"; };
 		A39D92B1971439EBF352FE70 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportService.swift; sourceTree = "<group>"; };
+		A47A4A5692870DEA7903623C /* ReminderNotificationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderNotificationBuilder.swift; sourceTree = "<group>"; };
 		A920625ACF0FC4CB0031B76F /* TaskRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRepository.swift; sourceTree = "<group>"; };
 		A92129A50627949E34126D25 /* AllTasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTasksViewModel.swift; sourceTree = "<group>"; };
 		B4FCA59DF625517AC1ACD236 /* Subject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -126,10 +139,13 @@
 		DE0163467E8A4EA2310D7AD5 /* APIKeySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeySettingsView.swift; sourceTree = "<group>"; };
 		DEA4A7FEAF752A2515FAE3AD /* ParsePrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsePrompt.swift; sourceTree = "<group>"; };
 		E298C8379349988841212F46 /* AllTasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTasksView.swift; sourceTree = "<group>"; };
+		E82C5582E94EC708AB23EC3C /* NotificationBudgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBudgetManager.swift; sourceTree = "<group>"; };
 		EAB6F9BD6AF0FC19170EE1FA /* PasteImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteImportView.swift; sourceTree = "<group>"; };
+		F1B21BA1F7B81B4DB836B879 /* ReminderNotificationBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderNotificationBuilderTests.swift; sourceTree = "<group>"; };
 		F3B1AB2CAF42BA57300FC022 /* ImportSourceSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSourceSheet.swift; sourceTree = "<group>"; };
 		F5E2D874BDFA81D0AC563DA1 /* SubjectManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectManagementView.swift; sourceTree = "<group>"; };
 		F73A2173357E7F5DB796F4DC /* CloudKitSchemaInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSchemaInitializer.swift; sourceTree = "<group>"; };
+		FCB1B16BFF8BBCB0C5B62A8A /* ReminderSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -168,9 +184,11 @@
 			children = (
 				BB800FB72BE1CE208C1F283C /* ContentHashServiceTests.swift */,
 				05F8C03735B777C2208D98DE /* ImportRepositoryTests.swift */,
+				2574E5DE1E63713393CC1541 /* NotificationBudgetManagerTests.swift */,
 				775D2CEBDAA361AC9F2DC62C /* ParseServiceTests.swift */,
 				8B99A440F98677861C692B0E /* RecurringRuleRepositoryTests.swift */,
 				940692B783EA2E8BAA1AF07F /* RecurringTaskGeneratorTests.swift */,
+				F1B21BA1F7B81B4DB836B879 /* ReminderNotificationBuilderTests.swift */,
 				61571B6DB8215747B378F797 /* SubjectDedupeServiceTests.swift */,
 				93879A47E0F2B859403C755F /* SubjectRepositoryTests.swift */,
 				653F2E519C0B5DB217A07E29 /* TaskRepositoryTests.swift */,
@@ -235,6 +253,7 @@
 				DE0163467E8A4EA2310D7AD5 /* APIKeySettingsView.swift */,
 				6C9ABBE1DD2072DDC3FFC474 /* RecurringRuleFormView.swift */,
 				D667F620B92118917AB94C38 /* RecurringRulesListView.swift */,
+				FCB1B16BFF8BBCB0C5B62A8A /* ReminderSettingsView.swift */,
 				9CED3A95B0BD9603D49937FC /* SubjectFormView.swift */,
 				F5E2D874BDFA81D0AC563DA1 /* SubjectManagementView.swift */,
 			);
@@ -286,6 +305,7 @@
 			isa = PBXGroup;
 			children = (
 				C217C3D27F53D1EF46162C25 /* Import */,
+				F32A92EF3FE335F2007EE4AB /* Reminders */,
 				215A2645183623C377596460 /* Security */,
 				AB97E54F2F1621464D13B793 /* Sync */,
 				2E90957C931BA0804381008C /* RecurringTaskGenerator.swift */,
@@ -324,6 +344,18 @@
 				D0B2AC00BB75EC07FEE3CD71 /* TaskCandidateReviewView.swift */,
 			);
 			path = Import;
+			sourceTree = "<group>";
+		};
+		F32A92EF3FE335F2007EE4AB /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				E82C5582E94EC708AB23EC3C /* NotificationBudgetManager.swift */,
+				A47A4A5692870DEA7903623C /* ReminderNotificationBuilder.swift */,
+				5ED6A3917AF6DBA115153530 /* ReminderNotificationID.swift */,
+				26603B36EE0C9EA2213592D0 /* ReminderService.swift */,
+				6BD4C7B77540AA4F4DE1DCA7 /* ReminderSettings.swift */,
+			);
+			path = Reminders;
 			sourceTree = "<group>";
 		};
 		F7EA65E282ED25E5B4B36E4F /* HomeworkPlanTests */ = {
@@ -463,9 +495,11 @@
 			files = (
 				D15834413A42BE8461B90A71 /* ContentHashServiceTests.swift in Sources */,
 				7FE9FB433C7F08E81E78E9DF /* ImportRepositoryTests.swift in Sources */,
+				CAC9D37B42F73F1693801C5F /* NotificationBudgetManagerTests.swift in Sources */,
 				73C0B70021C10AB16BC4C40B /* ParseServiceTests.swift in Sources */,
 				E9CC09A30C1A1B453D9F4B26 /* RecurringRuleRepositoryTests.swift in Sources */,
 				C70FE40E1DECBE65D3D03EAF /* RecurringTaskGeneratorTests.swift in Sources */,
+				E4F20E0694877025983D10DD /* ReminderNotificationBuilderTests.swift in Sources */,
 				7967CAAD76CD9A264DEB8237 /* SubjectDedupeServiceTests.swift in Sources */,
 				3713893D5C153725543B1C8E /* SubjectRepositoryTests.swift in Sources */,
 				F1E037606EA963D0A0E20880 /* TaskRepositoryTests.swift in Sources */,
@@ -494,6 +528,7 @@
 				419042DE88B24265439C5397 /* KeychainService.swift in Sources */,
 				B977733AC05EA3CAF49DD20C /* MainTabView.swift in Sources */,
 				8EADFC8FFF8F430ADC3705C2 /* ManualTaskFormView.swift in Sources */,
+				1230EDBCE0005E88E41DCA0A /* NotificationBudgetManager.swift in Sources */,
 				53F9C6AAE3A4B07CAB756A0D /* OCRService.swift in Sources */,
 				A79DAB54EFD00859767C3FB6 /* ParsePrompt.swift in Sources */,
 				3B5004CEC1B2EDDF598FDD42 /* ParseService.swift in Sources */,
@@ -503,6 +538,11 @@
 				5681721640831E4C1CD9F01A /* RecurringRuleRepository.swift in Sources */,
 				FA7E82B480702F5BFA060C22 /* RecurringRulesListView.swift in Sources */,
 				5CF48C159B6AFBF3B2F70941 /* RecurringTaskGenerator.swift in Sources */,
+				4E5C356323A6794DF8D092E3 /* ReminderNotificationBuilder.swift in Sources */,
+				E42F8242A004D38AE2D68AF6 /* ReminderNotificationID.swift in Sources */,
+				DC301ABAEFC889CAD81EAEE1 /* ReminderService.swift in Sources */,
+				87D9DD2B397BA63A616E2D04 /* ReminderSettings.swift in Sources */,
+				FA172D8D532A21AC64C97BAA /* ReminderSettingsView.swift in Sources */,
 				F179D386D730DDF36DE0A7C1 /* ScreenshotImportView.swift in Sources */,
 				4311E34A28CB05167B8335BF /* SettingsView.swift in Sources */,
 				DB5899B4CD58D78D273FA6D5 /* Subject.swift in Sources */,
