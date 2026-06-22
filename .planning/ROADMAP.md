@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-4 (shipped 2026-06-22)
-- 🚧 **v2.0 AI Native** — Phases 1-4 (in progress)
+- 🚧 **v2.0 AI Native** — Phases 1-4 (complete 2026-06-22)
 
 ## Overview
 
@@ -68,7 +68,8 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 **Goal:** 科目与重复任务可通过自然语言管理；Settings 移除表单入口  
 **Mode:** mvp  
 **Requirements:** NLAD-01, NLAD-02, NAV-02  
-**UI hint:** yes
+**UI hint:** yes  
+**Status:** ✅ Complete (2026-06-22)
 
 **Success Criteria:**
 1. 「加一门科学课」→ create_subject → 确认 → 科目列表更新
@@ -83,4 +84,4 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 | 1. Agent Foundation & Text Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
 | 2. Multimodal Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
 | 3. Unified Home & Navigation | v2.0 | 1/1 | Complete | 2026-06-22 |
-| 4. NL Admin & Settings Slim | v2.0 | 0/TBD | Not started | - |
+| 4. NL Admin & Settings Slim | v2.0 | 1/1 | Complete | 2026-06-22 |

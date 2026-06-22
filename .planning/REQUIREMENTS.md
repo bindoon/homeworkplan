@@ -33,12 +33,12 @@
 ### Navigation (NAV)
 
 - [x] **NAV-01**: 主界面改为 Home + Action 双 Tab，Settings 保留第三 Tab 或 gear 入口
-- [ ] **NAV-02**: Settings 精简为提醒、API Key、关于；科目/重复任务表单入口移除
+- [x] **NAV-02**: Settings 精简为提醒、API Key、关于；科目/重复任务表单入口移除
 
 ### Natural Language Admin (NLAD)
 
-- [ ] **NLAD-01**: 用户可通过 Action Console 自然语言创建/修改/删除科目
-- [ ] **NLAD-02**: 用户可通过 Action Console 自然语言创建/修改/删除重复规则
+- [x] **NLAD-01**: 用户可通过 Action Console 自然语言创建/修改/删除科目
+- [x] **NLAD-02**: 用户可通过 Action Console 自然语言创建/修改/删除重复规则
 - [ ] **NLAD-03**: 用户可通过文字或语音描述添加手动作业
 
 ### Tool Implementations (TOOL)
@@ -91,9 +91,9 @@
 | HOME-04 | Phase 3 | Complete |
 | HOME-05 | Phase 3 | Complete |
 | NAV-01 | Phase 3 | Complete |
-| NLAD-01 | Phase 4 | Pending |
-| NLAD-02 | Phase 4 | Pending |
-| NAV-02 | Phase 4 | Pending |
+| NLAD-01 | Phase 4 | Complete |
+| NLAD-02 | Phase 4 | Complete |
+| NAV-02 | Phase 4 | Complete |
 
 **Coverage:**
 - Milestone requirements: 26 total
