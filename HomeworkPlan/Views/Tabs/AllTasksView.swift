@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Deprecated: replaced by HomeQueryView (Phase 3). Kept for reference; not used in MainTabView.
 struct AllTasksView: View {
     @Environment(\.appDependencies) private var dependencies
     @State private var viewModel = AllTasksViewModel()

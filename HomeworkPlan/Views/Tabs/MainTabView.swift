@@ -9,14 +9,9 @@ struct MainTabView: View {
 
     var body: some View {
         TabView {
-            TodayView()
+            HomeQueryView()
                 .tabItem {
-                    Label("今日", systemImage: "calendar")
-                }
-
-            AllTasksView()
-                .tabItem {
-                    Label("全部", systemImage: "list.bullet")
+                    Label("首页", systemImage: "house")
                 }
 
             ActionConsoleView()

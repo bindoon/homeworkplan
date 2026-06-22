@@ -9,12 +9,12 @@ final class TodayFlowUITests: XCTestCase {
         app.launchArguments = ["UI-Testing"]
     }
 
-    func testTodayTabShowsEmptyStateGuidance() throws {
+    func testHomeTabShowsEmptyStateGuidance() throws {
         app.launch()
 
-        let todayTab = app.tabBars.buttons["今日"]
-        XCTAssertTrue(todayTab.waitForExistence(timeout: 5))
-        todayTab.tap()
+        let homeTab = app.tabBars.buttons["首页"]
+        XCTAssertTrue(homeTab.waitForExistence(timeout: 5))
+        homeTab.tap()
 
         let emptyGuidance = app.staticTexts.matching(
             NSPredicate(format: "label CONTAINS '添加'")
@@ -22,12 +22,12 @@ final class TodayFlowUITests: XCTestCase {
         XCTAssertTrue(emptyGuidance.waitForExistence(timeout: 5))
     }
 
-    func testManualAddTaskAppearsInTodayList() throws {
+    func testManualAddTaskAppearsInHomeList() throws {
         app.launch()
 
-        app.tabBars.buttons["今日"].tap()
+        app.tabBars.buttons["首页"].tap()
 
-        let addButton = app.buttons["today-add-button"]
+        let addButton = app.buttons["home-add-button"]
         XCTAssertTrue(addButton.waitForExistence(timeout: 5))
         addButton.tap()
 
