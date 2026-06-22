@@ -3,11 +3,11 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-4 (shipped 2026-06-22)
-- 🚧 **v2.0 AI Native** — Phases 1-4 (complete 2026-06-22)
+- ✅ **v2.0 AI Native** — Phases 1-4 (shipped 2026-06-22)
 
 ## Overview
 
-v2.0 将 HomeworkPlan 从「三 Tab 表单导航」改造为 **AI Native 双 Tab 架构**：Home 负责查询与折叠展示，Action 负责自然语言/贴图/语音操作。v1.0 服务层保留，新增 Agent + Tool-calling 层。
+HomeworkPlan 已完成 v1.0 手动清单闭环与 v2.0 AI Native 改造。当前 App 采用 **Home 查询 + Action 自然语言操作台** 双 Tab 架构，保留 v1.0 服务层与确认门控。
 
 ## Phases
 
@@ -18,70 +18,27 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 
 </details>
 
-### 🚧 v2.0 AI Native
+<details>
+<summary>✅ v2.0 AI Native (Phases 1-4) — SHIPPED 2026-06-22</summary>
 
-#### Phase 1: Agent Foundation & Text Action Console
+See `.planning/milestones/v2.0-ROADMAP.md`
 
-**Goal:** 建立 AgentOrchestrator + ToolRegistry，用户可在 Action Tab 用文字描述添加/导入作业，确认后入库  
-**Mode:** mvp  
-**Requirements:** AGNT-01, AGNT-02, AGNT-03, AGNT-04, AGNT-05, TOOL-01, TOOL-02, TOOL-03, TOOL-04, ACTN-01, ACTN-02, ACTN-03, NLAD-03  
-**UI hint:** yes
+- [x] Phase 1: Agent Foundation & Text Action Console (1/1 plans) — completed 2026-06-22
+- [x] Phase 2: Multimodal Action Console (1/1 plans) — completed 2026-06-22
+- [x] Phase 3: Unified Home & Navigation (1/1 plans) — completed 2026-06-22
+- [x] Phase 4: NL Admin & Settings Slim (1/1 plans) — completed 2026-06-22
 
-**Success Criteria:**
-1. 用户在 Action Tab 输入「明天交数学练习册 P15」→ agent 调用 create_task → 确认卡片 → 确认后出现在今日列表
-2. 用户输入「导入这段文字：…」→ import_from_text → 候选确认 → 任务入库
-3. Mutating tool 未经确认不会写入 SwiftData
-4. Agent 循环在 5 轮内终止并给出可读回复
-5. 单元测试覆盖 ToolRegistry 与至少 2 个 tool 适配器
-
-#### Phase 2: Multimodal Action Console
-
-**Goal:** Action Console 支持贴图与语音输入，复用 Phase 1 agent 管道  
-**Mode:** mvp  
-**Requirements:** ACTN-04, ACTN-05  
-**UI hint:** yes  
-**Status:** ✅ Complete (2026-06-22)
-
-**Success Criteria:**
-1. 用户在 Action Console 粘贴截图 → OCR → import 工具 → 确认 → 入库
-2. 用户按住录音说「每天练字」→ 文字送入 agent（Phase 4 才完整支持 recurring，本阶段验证语音管道）
-3. 麦克风/语音识别权限拒绝时优雅降级为纯文字
-4. 不在 Extension 内重复 OCR（本地 Vision 预提取文字）
-
-#### Phase 3: Unified Home & Navigation
-
-**Goal:** 合并 Today + All 为 Home Tab，折叠展示；主界面切换为 Home + Action  
-**Mode:** mvp  
-**Requirements:** HOME-01, HOME-02, HOME-03, HOME-04, HOME-05, NAV-01  
-**UI hint:** yes  
-**Status:** ✅ Complete (2026-06-22)
-
-**Success Criteria:**
-1. App 仅 Home + Action + Settings 三 Tab（或 Home + Action + gear Settings）
-2. Home 默认显示今日任务，按科目分组，可折叠
-3. 历史日期分区可展开浏览，非今日默认折叠
-4. 首页可 toggle 完成状态
-5. 原 TodayView / AllTasksView Tab 入口移除
-
-#### Phase 4: NL Admin & Settings Slim
-
-**Goal:** 科目与重复任务可通过自然语言管理；Settings 移除表单入口  
-**Mode:** mvp  
-**Requirements:** NLAD-01, NLAD-02, NAV-02  
-**UI hint:** yes  
-**Status:** ✅ Complete (2026-06-22)
-
-**Success Criteria:**
-1. 「加一门科学课」→ create_subject → 确认 → 科目列表更新
-2. 「每天练字」→ create_recurring_rule → 确认 → 规则生效
-3. Settings 不再显示科目管理/重复任务 NavigationLink
-4. Agent 误解析时用户可拒绝，数据不变
+</details>
 
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Agent Foundation & Text Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
-| 2. Multimodal Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
-| 3. Unified Home & Navigation | v2.0 | 1/1 | Complete | 2026-06-22 |
-| 4. NL Admin & Settings Slim | v2.0 | 1/1 | Complete | 2026-06-22 |
+| 1. Agent Foundation & Text Action Console | v2.0 | 1/1 | Shipped | 2026-06-22 |
+| 2. Multimodal Action Console | v2.0 | 1/1 | Shipped | 2026-06-22 |
+| 3. Unified Home & Navigation | v2.0 | 1/1 | Shipped | 2026-06-22 |
+| 4. NL Admin & Settings Slim | v2.0 | 1/1 | Shipped | 2026-06-22 |
+
+## Next
+
+Run `/gsd-new-milestone` to plan v2.1+ (Extensions, cross-tab UX fixes, etc.)

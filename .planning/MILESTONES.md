@@ -1,5 +1,22 @@
 # Milestones
 
+## v2.0 AI Native (Shipped: 2026-06-22)
+
+**Phases completed:** 4 phases, 4 plans, 31 tasks
+
+**Key accomplishments:**
+
+- OpenAI-compatible tool-calling agent with confirmation-gated mutations and Action Tab console
+- Action Console 贴图本地 OCR + import_from_image 管道，以及 zh-CN 按住录音语音输入
+- Single Home tab merges Today + All with subject DisclosureGroups, collapsible history by date, and three-tab shell (Home + Action + Settings)
+- Agent prompt documents Chinese NL subject/recurring admin; Settings slimmed to reminders/API/about; ToolExecutor confirm flows tested
+
+**Known deferred items at close:** 9 items (see STATE.md Deferred Items) — cross-tab Home refresh, recurring generateIfNeeded, device UAT, deprecated view cleanup.
+
+**Tag:** v2.0
+
+---
+
 ## v1.0 MVP (Shipped: 2026-06-22)
 
 **Phases completed:** 4 phases, 10 plans, 12 tasks

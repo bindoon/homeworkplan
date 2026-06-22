@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: AI Native
-status: Complete
+status: Awaiting next milestone
 stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-06-22T11:36:02Z"
-last_activity: 2026-06-22 — Completed Phase 4 NL admin and settings slim
+last_updated: "2026-06-22T11:39:54.098Z"
+last_activity: 2026-06-22 — Milestone v2.0 completed and archived
 progress:
   total_phases: 4
   completed_phases: 4
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-22)
 
 **Core value:** 手动提供作业内容后，App 能可靠地将信息转化为经用户确认的每日作业清单
-**Current focus:** v2.0 AI Native milestone complete
+**Current focus:** Planning next milestone (/gsd-new-milestone)
 
 ## Current Position
 
-Phase: 4 — NL Admin & Settings Slim (complete)
-Plan: 04-01 complete
-Status: v2.0 milestone complete
-Last activity: 2026-06-22 — NL admin via Action Console; Settings slimmed
+Phase: Milestone v2.0 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-06-22 — Milestone v2.0 completed and archived
 
 ## Performance Metrics
 
@@ -95,6 +95,4 @@ Resume file: None
 
 ## Operator Next Steps
 
-- Milestone v2.0 AI Native complete
-- Optional: `/gsd-complete-milestone` to archive and retrospective
-- Optional: device UAT for NL admin flows
+- Start the next milestone with /gsd-new-milestone
