@@ -60,9 +60,9 @@ completed: 2026-06-22
 
 ## Task Commits
 
-1. **Task 1: Failing UI test scaffold** - `pending`
-2. **Task 2: Models, CloudKit, Tab shell** - `pending`
-3. **Task 3: Manual add GREEN** - `pending`
+1. **Task 1: Failing UI test scaffold** - `0336349`
+2. **Task 2: Models, CloudKit, Tab shell** - `95e2311`
+3. **Task 3: Manual add GREEN** - `adbac97`
 
 ## Deviations from Plan
 
