@@ -88,13 +88,42 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmap) | | |
+| TASK-01 | Phase 1 | Pending |
+| TASK-02 | Phase 1 | Pending |
+| TASK-03 | Phase 1 | Pending |
+| TASK-04 | Phase 1 | Pending |
+| TASK-05 | Phase 1 | Pending |
+| TASK-06 | Phase 1 | Pending |
+| TASK-07 | Phase 1 | Pending |
+| SETT-03 | Phase 1 | Pending |
+| IMPT-01 | Phase 2 | Pending |
+| IMPT-02 | Phase 2 | Pending |
+| IMPT-03 | Phase 2 | Pending |
+| IMPT-04 | Phase 2 | Pending |
+| IMPT-05 | Phase 2 | Pending |
+| PARSE-01 | Phase 2 | Pending |
+| PARSE-02 | Phase 2 | Pending |
+| PARSE-03 | Phase 2 | Pending |
+| PARSE-04 | Phase 2 | Pending |
+| PARSE-05 | Phase 2 | Pending |
+| PARSE-06 | Phase 2 | Pending |
+| SETT-01 | Phase 2 | Pending |
+| SETT-02 | Phase 2 | Pending |
+| RECUR-01 | Phase 3 | Pending |
+| RECUR-02 | Phase 3 | Pending |
+| RECUR-03 | Phase 3 | Pending |
+| RECUR-04 | Phase 3 | Pending |
+| REMND-01 | Phase 4 | Pending |
+| REMND-02 | Phase 4 | Pending |
+| REMND-03 | Phase 4 | Pending |
+| REMND-04 | Phase 4 | Pending |
+| REMND-05 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 28 total
-- Mapped to phases: pending
-- Unmapped: 28 ⚠️
+- v1 requirements: 30 total
+- Mapped to phases: 30/30 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-06-22*
-*Last updated: 2026-06-22 after initial definition*
+*Last updated: 2026-06-22 after roadmap creation*
