@@ -53,7 +53,8 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 **Goal:** 合并 Today + All 为 Home Tab，折叠展示；主界面切换为 Home + Action  
 **Mode:** mvp  
 **Requirements:** HOME-01, HOME-02, HOME-03, HOME-04, HOME-05, NAV-01  
-**UI hint:** yes
+**UI hint:** yes  
+**Status:** ✅ Complete (2026-06-22)
 
 **Success Criteria:**
 1. App 仅 Home + Action + Settings 三 Tab（或 Home + Action + gear Settings）
@@ -81,5 +82,5 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 |-------|-----------|----------------|--------|-----------|
 | 1. Agent Foundation & Text Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
 | 2. Multimodal Action Console | v2.0 | 1/1 | Complete | 2026-06-22 |
-| 3. Unified Home & Navigation | v2.0 | 0/TBD | Not started | - |
+| 3. Unified Home & Navigation | v2.0 | 1/1 | Complete | 2026-06-22 |
 | 4. NL Admin & Settings Slim | v2.0 | 0/TBD | Not started | - |

@@ -24,15 +24,15 @@
 
 ### Home Query (HOME)
 
-- [ ] **HOME-01**: 第一 Tab 合并原「今日」与「全部」为统一查询首页
-- [ ] **HOME-02**: 默认展示选中日期的任务，按科目分组
-- [ ] **HOME-03**: 支持日期选择器切换日期
-- [ ] **HOME-04**: 历史任务按日期分区展示，各区可折叠/展开
-- [ ] **HOME-05**: 首页可直接切换任务完成状态，无需表单
+- [x] **HOME-01**: 第一 Tab 合并原「今日」与「全部」为统一查询首页
+- [x] **HOME-02**: 默认展示选中日期的任务，按科目分组
+- [x] **HOME-03**: 支持日期选择器切换日期
+- [x] **HOME-04**: 历史任务按日期分区展示，各区可折叠/展开
+- [x] **HOME-05**: 首页可直接切换任务完成状态，无需表单
 
 ### Navigation (NAV)
 
-- [ ] **NAV-01**: 主界面改为 Home + Action 双 Tab，Settings 保留第三 Tab 或 gear 入口
+- [x] **NAV-01**: 主界面改为 Home + Action 双 Tab，Settings 保留第三 Tab 或 gear 入口
 - [ ] **NAV-02**: Settings 精简为提醒、API Key、关于；科目/重复任务表单入口移除
 
 ### Natural Language Admin (NLAD)
@@ -85,12 +85,12 @@
 | NLAD-03 | Phase 1 | Pending |
 | ACTN-04 | Phase 2 | Complete |
 | ACTN-05 | Phase 2 | Complete |
-| HOME-01 | Phase 3 | Pending |
-| HOME-02 | Phase 3 | Pending |
-| HOME-03 | Phase 3 | Pending |
-| HOME-04 | Phase 3 | Pending |
-| HOME-05 | Phase 3 | Pending |
-| NAV-01 | Phase 3 | Pending |
+| HOME-01 | Phase 3 | Complete |
+| HOME-02 | Phase 3 | Complete |
+| HOME-03 | Phase 3 | Complete |
+| HOME-04 | Phase 3 | Complete |
+| HOME-05 | Phase 3 | Complete |
+| NAV-01 | Phase 3 | Complete |
 | NLAD-01 | Phase 4 | Pending |
 | NLAD-02 | Phase 4 | Pending |
 | NAV-02 | Phase 4 | Pending |

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: AI Native
-status: Defining requirements
+status: In progress
 stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-06-22T11:24:06.362Z"
-last_activity: 2026-06-22 — Milestone v2.0 started
+last_updated: "2026-06-22T11:53:00Z"
+last_activity: 2026-06-22 — Completed Phase 3 unified home navigation
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 2
-  completed_plans: 2
-  percent: 50
+  completed_phases: 3
+  total_plans: 3
+  completed_plans: 3
+  percent: 75
 ---
 
 # Project State
@@ -21,20 +21,20 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-22)
 
 **Core value:** 手动提供作业内容后，App 能可靠地将信息转化为经用户确认的每日作业清单
-**Current focus:** Planning next milestone (v2.0)
+**Current focus:** Phase 4 — NL Admin & Settings Slim
 
 ## Current Position
 
-Phase: 2 — Multimodal Action Console (complete)
-Plan: 02-01 complete
-Status: Ready for Phase 3
-Last activity: 2026-06-22 — Completed Phase 2 multimodal Action Console
+Phase: 3 — Unified Home & Navigation (complete)
+Plan: 03-01 complete
+Status: Ready for Phase 4
+Last activity: 2026-06-22 — Completed Phase 3 unified Home tab
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 9
+- Total plans completed: 10
 - Average duration: —
 - Total execution time: 0 hours
 
@@ -58,9 +58,9 @@ Last activity: 2026-06-22 — Completed Phase 2 multimodal Action Console
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- generationKey format ruleId-yyyy-MM-dd for recurring task idempotency
-- ImportSourceType.recurring for generated recurring tasks
-- Reminder time stored in Phase 3; notification scheduling deferred to Phase 4
+- Home tab merges Today + All via HomeQueryView/ViewModel
+- MainTabView is Home + Action + Settings (three tabs)
+- TodayView/AllTasksView deprecated but files retained
 
 ### Pending Todos
 
@@ -80,15 +80,16 @@ Items acknowledged and deferred at milestone close on 2026-06-22:
 | verification | Phase 02 import/OCR/DeepSeek runtime test | human_needed |
 | verification | Phase 03 recurring generation simulator confirm | human_needed |
 | verification | Phase 04 notification delivery on device | human_needed |
+| cleanup | Remove deprecated TodayView/AllTasksView files | phase 4+ |
 | Extensions | Share Extension, ReplayKit 录屏 | v2 |
 | Enhancements | 桌面小组件、历史统计、VLM fallback | v2+ |
 
 ## Session Continuity
 
-Last session: 2026-06-22T11:23:00Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-06-22T11:53:00Z
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Execute Phase 4: NL Admin & Settings Slim
